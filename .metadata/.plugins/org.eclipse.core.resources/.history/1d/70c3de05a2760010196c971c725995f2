@@ -1,0 +1,34 @@
+package com.demo.controller;
+
+import java.util.List;
+
+import org.springframework.web.bind.annotation.*;
+
+import com.demo.models.Student;
+import com.demo.services.StudentService;
+
+@Controller
+@ResponseBody
+public class StudentController {
+
+    
+    StudentService studentService=new StudentService();
+
+    // Welcome endpoint
+    @GetMapping("/")
+    public String index() {
+        return "Welcome to Student REST API";
+    }
+
+    // Get all students
+    @GetMapping("/student")
+    public List<Student> getAllStudent() {
+        return studentService.getAllStudent();
+    }
+
+    // Get student by ID
+    @GetMapping("/student/{id}")
+    public Student getStudentById(@PathVariable int id) {
+        return studentService.getStudentById(id);
+    }
+}

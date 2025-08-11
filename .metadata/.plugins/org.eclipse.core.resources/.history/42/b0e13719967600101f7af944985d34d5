@@ -1,0 +1,3 @@
+spring.application.name=SpringDemoProject
+
+server.port=8004

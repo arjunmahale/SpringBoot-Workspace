@@ -1,0 +1,55 @@
+package com.demo.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.demo.models.Student;
+import com.demo.services.StudentService;
+import org.springframework.web.bind.annotation.RequestParam;
+
+
+
+@Controller
+@ResponseBody               //student api
+public class StudentController {
+
+	StudentService ss=new StudentService();
+	//handler
+	@RequestMapping(value = "/" ,method = RequestMethod.GET)
+	@GetMapping("/")
+	public String index()
+	{
+		return "welcome to student restapi";
+	}
+	
+	@RequestMapping(value = "/student" ,method = RequestMethod.GET)
+	
+	@GetMapping("/student") 
+ public	List<Student> getAllStudent()
+ {
+	ArrayList<Student> studentlist =(ArrayList<Student>) ss.getAllStudent();
+		
+	 return studentlist;
+ }
+	
+
+	public String getMethodName(@RequestParam String param) {
+		return new String();
+	}
+	
+		@GetMapping("/student/{id}")
+	 public static Student getstudentById(@PathVariable("id")int i)
+	{
+			Student student=ss.getstudentById(1);
+		 
+		return student;
+		
+	}
+}

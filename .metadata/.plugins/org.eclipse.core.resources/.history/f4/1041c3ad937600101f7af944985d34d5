@@ -1,0 +1,13 @@
+package com.demo.services;
+
+import java.util.List;
+
+import com.demo.models.Student;
+
+public class StudentService {
+
+	public List<Student> getAllStudent()
+	{
+		List<Student> list=new ArrayList();
+	}
+}

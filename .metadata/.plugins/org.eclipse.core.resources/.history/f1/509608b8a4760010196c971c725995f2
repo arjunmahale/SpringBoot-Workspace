@@ -1,0 +1,30 @@
+package com.demo.controller;
+
+import java.util.ArrayList;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.demo.model.Student;
+import com.demo.service.StudentService;
+
+@Controller
+@ResponseBody
+public class StudentController {
+
+	@GetMapping("/student")
+	public static ArrayList<Student> getAllStudent() {
+		
+		ArrayList<Student> student=StudentService.getAllStudent();
+		return student;
+	}
+	
+	@GetMapping("/student/{id}")
+public static Student getStudentById(int id) {
+	return StudentService.getStudentById(id);
+		
+		
+		
+	}
+}

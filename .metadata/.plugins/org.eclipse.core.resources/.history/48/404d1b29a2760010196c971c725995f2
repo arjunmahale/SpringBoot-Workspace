@@ -1,0 +1,8 @@
+package com.demo.controller;
+
+@controller
+@RequestResource
+public class StudentController {
+
+	
+}

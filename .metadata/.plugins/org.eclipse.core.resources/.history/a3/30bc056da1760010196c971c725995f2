@@ -1,0 +1,11 @@
+package com.demo.service;
+
+import com.demo.model.Student;
+
+public class StudentService {
+
+	public static Student getAllStudent()
+	{
+		
+	}
+}
