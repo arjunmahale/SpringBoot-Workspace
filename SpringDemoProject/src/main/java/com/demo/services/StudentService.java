@@ -3,6 +3,7 @@ package com.demo.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import com.demo.models.Student;
 
@@ -10,7 +11,7 @@ import com.demo.models.Student;
 public class StudentService {
 
     // Returns all students
-    public List<Student> getAllStudent() {
+    public static List<Student> getAllStudent() {
         List<Student> list = new ArrayList<>();
         list.add(new Student(1, "arjun", "nsk", "arjun@gmail.com"));
         list.add(new Student(2, "vaibhav", "pune", "vaibhav@gmail.com"));
@@ -27,4 +28,23 @@ public class StudentService {
         }
         return null; // Not found
     }
+    
+    //insertStudent
+    public static Student insertStudent(Student student) {
+        List<Student> list = new ArrayList<>();
+        list.add(student);
+        return student;
+    }
+
+    public static Student deleteStudent(int id)
+    {
+    	ArrayList<Student> stud= (ArrayList<Student>) getAllStudent();
+    	//stud.remove(id-1);
+    	Student student =stud.get(id-1);
+		return student;
+    	
+    }
 }
+    
+    
+
