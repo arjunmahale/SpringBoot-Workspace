@@ -1,0 +1,124 @@
+Spring Boot Notes with Annotations & JPA Repository Methods
+===========================================================
+
+HTTP Methods:
+-------------
+GET     -> Get resource (Read data)
+POST    -> Insert data (Create resource)
+PUT     -> Update existing data
+DELETE  -> Delete resource
+
+=========================================================================
+Annotations in Spring Boot (Commonly Used)
+------------------------------------------
+
+1. Spring Core / Bean Management
+---------------------------------
+@Component           -> Marks a class as a Spring component (managed bean).
+@Service             -> Marks class as a service (business logic layer).
+@Repository          -> Marks class as a DAO (Data Access Object layer).
+@Autowired           -> Injects dependencies automatically.
+
+2. Web Layer
+------------
+@Controller          -> Defines a controller for handling web requests (returns view).
+@RestController      -> Combines @Controller + @ResponseBody (returns data as JSON/XML).
+@RequestMapping      -> Maps HTTP requests to handler methods at class/method level.
+@GetMapping          -> Shortcut for @RequestMapping(method = RequestMethod.GET).
+@PostMapping         -> Shortcut for POST requests.
+@PutMapping          -> Shortcut for PUT requests.
+@DeleteMapping       -> Shortcut for DELETE requests.
+@ResponseBody        -> Sends method return value as HTTP response body.
+@PathVariable        -> Extracts values from URI path.
+@RequestParam        -> Extracts query parameters from URL.
+
+3. Validation Annotations (javax.validation / jakarta.validation)
+-----------------------------------------------------------------
+@NotNull             -> Field must not be null.
+@NotBlank            -> Field must not be null/empty.
+@Size(min, max)      -> String/collection size limits.
+@Min(value)          -> Minimum numeric value.
+@Max(value)          -> Maximum numeric value.
+@Pattern(regexp)     -> Regex-based validation.
+
+4. JPA/Hibernate Annotations
+-----------------------------
+@Entity              -> Marks class as JPA entity (maps to table).
+@Table(name="...")   -> Maps entity to specific table name.
+@Id                  -> Primary key field.
+@GeneratedValue      -> Strategy for PK generation (IDENTITY, SEQUENCE, AUTO).
+@Column(name="...")  -> Maps field to specific column.
+@Transient           -> Field is not persisted in DB.
+@Temporal            -> Specifies date/time type for Date fields.
+@Enumerated          -> Store enums as STRING or ORDINAL.
+
+=========================================================================
+Spring Boot Common Dependencies (Maven)
+----------------------------------------
+- spring-boot-starter-web       -> Web & REST APIs
+- spring-boot-devtools          -> Auto-restart on changes
+- spring-boot-starter-data-jpa  -> JPA & Hibernate support
+- mysql-connector-j             -> MySQL JDBC driver
+- spring-boot-starter-validation-> Bean validation
+
+=========================================================================
+JPA Repository Methods Cheat Sheet
+===================================
+
+1. Basic CRUD Methods (from CrudRepository)
+-------------------------------------------
+save(S entity)                       -> Insert or update entity
+saveAll(Iterable<S> entities)        -> Save multiple entities
+findById(ID id)                       -> Fetch entity by primary key
+existsById(ID id)                     -> Check if entity exists by ID
+findAll()                             -> Get all records
+findAllById(Iterable<ID> ids)         -> Get all records matching given IDs
+count()                               -> Count total records
+deleteById(ID id)                     -> Delete entity by ID
+delete(T entity)                      -> Delete entity object
+deleteAllById(Iterable<? extends ID>) -> Delete multiple by IDs
+deleteAll(Iterable<? extends T>)      -> Delete multiple entity objects
+deleteAll()                           -> Delete all records from table
+
+2. Pagination & Sorting (from PagingAndSortingRepository)
+---------------------------------------------------------
+findAll(Sort sort)                    -> Get all sorted by given field(s)
+findAll(Pageable pageable)            -> Get paginated + sorted results
+
+3. JPA-Specific Methods (from JpaRepository)
+--------------------------------------------
+flush()                               -> Flush changes to DB without committing
+saveAndFlush(S entity)                -> Save entity and immediately flush
+deleteAllInBatch()                    -> Delete all rows in one batch
+deleteAllInBatch(Iterable<T>)         -> Batch delete given entities
+deleteAllByIdInBatch(Iterable<ID>)    -> Batch delete given IDs
+getOne(ID id)                         -> Get entity reference (deprecated)
+getById(ID id)                        -> Get entity reference (lazy load)
+getReferenceById(ID id)               -> Lazily get entity reference
+
+4. Custom Query Method Examples
+-------------------------------
+findByName(String name)
+findByCompanyAndRole(String company, String role)
+findBySalaryGreaterThan(String salary)
+findByStatusOrderByNameAsc(String status)
+
+Usage Example
+-------------
+@Autowired
+private EmployeeRepository repo;
+
+// Save
+repo.save(new Employee());
+
+// Find by ID
+Optional<Employee> emp = repo.findById(1);
+
+// Sort
+repo.findAll(Sort.by("name"));
+
+// Pagination
+Page<Employee> page = repo.findAll(PageRequest.of(0, 5));
+
+// Delete
+repo.deleteById(3);
