@@ -1,9 +1,0 @@
-package com.demo.services;
-
-public class StudentService {
-
-	public List<Student> getAllStudent()
-	{
-		
-	}
-}

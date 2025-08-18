@@ -30,54 +30,66 @@ public class Employee_Controller {
     Employee_Controller(EmployeeRestApiApplication employeeRestApiApplication) {
         this.employeeRestApiApplication = employeeRestApiApplication;
     }
-	
-	
+
+
 	public String getMethodName(@RequestParam String param) {
 		return new String();
 	}
 	@GetMapping("/all")
 	public ResponseEntity<List<Employee>> getAllEmployee(){
 		List<Employee> employees= empService.getEmployees();
-		
+
 		return new ResponseEntity<>(employees,HttpStatus.OK);
-		
+
 	}
-	
+
 	@GetMapping("/empbyid/{id}")
 	public ResponseEntity<Employee> getEmployeeById(@PathVariable Integer id){
-		
+
 		try {
 			Employee empbyid= empService.getEmployeeById(id);
-			
-			
+
+
 			return new ResponseEntity<Employee>((Employee) empbyid, HttpStatus.OK);
 		} catch (Exception e) {
 			// TODO: handle exception
 			return new ResponseEntity<Employee>(HttpStatus.NOT_FOUND);
 		}
-		
-		
-		
+
+
+
 	}
-	
+
 	@PostMapping("/save")
 	public ResponseEntity<Employee> saveEmployee(@RequestBody Employee employee){
-		
-		
+
+
 		Employee empl=  empService.saveEmployee(employee);
-		
+
 		return new ResponseEntity<>(empl,HttpStatus.ACCEPTED);
-	
+
 	}
-	
-	
+
+
 	@GetMapping("/delete/{id}")
 	public ResponseEntity<Employee> saveEmployee(@PathVariable Integer id){
-		
-		
+
+
 		Employee emplo=  empService.delete(id);
-		
+
 		return new ResponseEntity<>(emplo,HttpStatus.OK);
-	
+
+	}
+
+
+
+	@PostMapping("/update")
+	public ResponseEntity<Employee> updateEmployee(@RequestBody Employee employee){
+
+
+		Employee empl=  empService.updateEmployee(employee);
+
+		return new ResponseEntity<>(empl,HttpStatus.ACCEPTED);
+
 	}
 }
