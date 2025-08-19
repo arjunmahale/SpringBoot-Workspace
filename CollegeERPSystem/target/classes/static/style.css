@@ -1,127 +1,155 @@
 @charset "UTF-8";
- body {
-      margin: 0;
-      padding: 0;
-      font-family: "Poppins", sans-serif;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
 
-    /* Floating background circles */
-    .circle {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.1);
-      animation: float 10s infinite ease-in-out;
-    }
-    .circle:nth-child(1) {
-      width: 120px;
-      height: 120px;
-      top: 10%;
-      left: 15%;
-      animation-delay: 0s;
-    }
-    .circle:nth-child(2) {
-      width: 200px;
-      height: 200px;
-      bottom: 15%;
-      right: 10%;
-      animation-delay: 2s;
-    }
-    .circle:nth-child(3) {
-      width: 80px;
-      height: 80px;
-      top: 70%;
-      left: 5%;
-      animation-delay: 4s;
-    }
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-30px); }
-    }
+/* Floating background circles */
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  animation: float 10s infinite ease-in-out;
+}
+.circle:nth-child(1) {
+  width: 120px;
+  height: 120px;
+  top: 10%;
+  left: 15%;
+  animation-delay: 0s;
+}
+.circle:nth-child(2) {
+  width: 200px;
+  height: 200px;
+  bottom: 15%;
+  right: 10%;
+  animation-delay: 2s;
+}
+.circle:nth-child(3) {
+  width: 80px;
+  height: 80px;
+  top: 70%;
+  left: 5%;
+  animation-delay: 4s;
+}
 
-    .login-container {
-      width: 380px;
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(12px);
-      border-radius: 20px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-      padding: 40px;
-      text-align: center;
-      color: #fff;
-      animation: fadeIn 1s ease;
-    }
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-30px); }
+}
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-50px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+.login-container {
+  width: 380px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+  padding: 40px;
+  text-align: center;
+  color: #fff;
+  animation: fadeIn 1s ease;
+}
 
-    .login-container h2 {
-      font-size: 28px;
-      margin-bottom: 20px;
-      font-weight: bold;
-      letter-spacing: 1px;
-    }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-50px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-    .login-container select,
-    .login-container input {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: none;
-      border-radius: 30px;
-      outline: none;
-      font-size: 14px;
-      transition: 0.3s;
-    }
+.login-container h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
 
-    .login-container input {
-      padding-left: 15px;
-    }
+/* Inputs + Dropdown */
+.login-container select,
+.login-container input {
+  width: 100%;
+  padding: 12px 15px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 30px;
+  outline: none;
+  font-size: 14px;
+  transition: 0.3s;
+  background: #fff;      /* white background */
+  color: #757575;        /* text color for user input */
+  appearance: none;      
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  box-sizing: border-box;
+}
 
-    .login-container select:focus,
-    .login-container input:focus {
-      transform: scale(1.05);
-      box-shadow: 0 0 8px rgba(255,255,255,0.7);
-    }
+/* Placeholder styling */
+.login-container input::placeholder {
+  color: #757575;  /* placeholder color */
+  opacity: 1;
+}
 
-    .btn {
-      width: 100%;
-      padding: 12px;
-      background: linear-gradient(90deg, #667eea, #764ba2);
-      border: none;
-      border-radius: 30px;
-      color: #fff;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 15px;
-      transition: all 0.3s ease;
-    }
+/* Custom dropdown arrow */
+.login-container select {
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%23757575' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 15px;
+  cursor: pointer;
+}
 
-    .btn:hover {
-      background: linear-gradient(90deg, #764ba2, #667eea);
-      transform: scale(1.05);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    }
+/* Dropdown list (options) */
+.login-container select option {
+  background: #fff;
+  color: #757575;
+  padding: 10px;
+  border: none;
+}
 
-    .login-container p {
-      margin-top: 15px;
-      font-size: 14px;
-    }
+/* Input focus + select focus */
+.login-container select:focus,
+.login-container input:focus {
+  transform: scale(1.05);
+  box-shadow: 0 0 8px rgba(255,255,255,0.7);
+}
 
-    .login-container a {
-      color: #ffd369;
-      text-decoration: none;
-      transition: 0.3s;
-    }
+.btn {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border: none;
+  border-radius: 30px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: all 0.3s ease;
+}
 
-    .login-container a:hover {
-      text-decoration: underline;
-    }
+.btn:hover {
+  background: linear-gradient(90deg, #764ba2, #667eea);
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+.login-container p {
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.login-container a {
+  color: #ffd369;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.login-container a:hover {
+  text-decoration: underline;
+}

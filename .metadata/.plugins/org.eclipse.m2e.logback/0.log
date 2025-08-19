@@ -4011,3 +4011,86 @@ org.eclipse.core.runtime.CoreException: Launch configuration PredictionMode.AltA
 2025-08-19 11:11:00,058 [Worker-28: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
 2025-08-19 11:11:00,071 [Worker-28: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
 2025-08-19 11:11:00,108 [Worker-28: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\Admin\Documents\GitHub\SpringBoot-Workspace\CollegeERPSystem\src\test\resources
+2025-08-19 11:15:37,501 [Worker-32: Building] INFO  o.e.m.c.i.l.LifecycleMappingFactory - Using org.eclipse.m2e.jdt.JarLifecycleMapping lifecycle mapping for MavenProject: com.erp:CollegeERPSystem:0.0.1-SNAPSHOT @ C:\Users\Admin\Documents\GitHub\SpringBoot-Workspace\CollegeERPSystem\pom.xml.
+2025-08-19 11:15:38,872 [Worker-32: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2025-08-19 11:15:38,893 [Worker-32: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2 resources from src\main\resources to target\classes
+2025-08-19 11:15:38,903 [Worker-32: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\Admin\Documents\GitHub\SpringBoot-Workspace\CollegeERPSystem\src\test\resources
+2025-08-19 11:15:50,565 [Stop Help Server] INFO  org.eclipse.jetty.server.Server - Stopped oejs.Server@51ce99cb{STOPPING}[12.0.9,sto=0]
+2025-08-19 11:15:50,568 [Stop Help Server] INFO  o.e.jetty.server.AbstractConnector - Stopped ServerConnector@7656d8e1{HTTP/1.1, (http/1.1)}{127.0.0.1:0}
+2025-08-19 11:16:08,139 [Worker-0: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.
+2025-08-19 11:16:39,998 [Worker-0: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2025-08-19 11:16:40,021 [Worker-0: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2 resources from src\main\resources to target\classes
+2025-08-19 11:16:40,030 [Worker-0: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\Admin\Documents\GitHub\SpringBoot-Workspace\CollegeERPSystem\src\test\resources
+2025-08-19 11:18:55,769 [Worker-11: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2025-08-19 11:18:55,801 [Worker-11: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2 resources from src\main\resources to target\classes
+2025-08-19 11:18:55,807 [Worker-11: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\Admin\Documents\GitHub\SpringBoot-Workspace\CollegeERPSystem\src\test\resources
+2025-08-19 11:19:39,622 [Worker-3: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2025-08-19 11:19:39,636 [Worker-3: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2 resources from src\main\resources to target\classes
+2025-08-19 11:19:39,641 [Worker-3: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\Admin\Documents\GitHub\SpringBoot-Workspace\CollegeERPSystem\src\test\resources
+2025-08-19 11:22:33,880 [Worker-17: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2025-08-19 11:22:33,883 [Worker-17: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2025-08-19 11:22:33,889 [Worker-17: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\Admin\Documents\GitHub\SpringBoot-Workspace\CollegeERPSystem\src\test\resources
+2025-08-19 11:23:51,650 [Worker-10: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2025-08-19 11:23:51,651 [Worker-10: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2025-08-19 11:23:51,656 [Worker-10: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\Admin\Documents\GitHub\SpringBoot-Workspace\CollegeERPSystem\src\test\resources
+2025-08-19 11:24:20,351 [Worker-20: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2025-08-19 11:24:20,354 [Worker-20: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2025-08-19 11:24:20,359 [Worker-20: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\Admin\Documents\GitHub\SpringBoot-Workspace\CollegeERPSystem\src\test\resources
+2025-08-19 11:24:33,864 [Worker-20: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2025-08-19 11:24:33,865 [Worker-20: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2025-08-19 11:24:33,872 [Worker-20: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\Admin\Documents\GitHub\SpringBoot-Workspace\CollegeERPSystem\src\test\resources
+2025-08-19 11:25:25,048 [Worker-20: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2025-08-19 11:25:25,050 [Worker-20: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2025-08-19 11:25:25,056 [Worker-20: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\Admin\Documents\GitHub\SpringBoot-Workspace\CollegeERPSystem\src\test\resources
+2025-08-19 11:25:45,944 [Worker-20: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2025-08-19 11:25:45,948 [Worker-20: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2025-08-19 11:25:45,957 [Worker-20: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\Admin\Documents\GitHub\SpringBoot-Workspace\CollegeERPSystem\src\test\resources
+2025-08-19 11:27:20,077 [Worker-21: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2025-08-19 11:27:20,079 [Worker-21: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2025-08-19 11:27:20,085 [Worker-21: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\Admin\Documents\GitHub\SpringBoot-Workspace\CollegeERPSystem\src\test\resources
+2025-08-19 11:27:28,008 [Worker-10: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2025-08-19 11:27:28,009 [Worker-10: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2025-08-19 11:27:28,017 [Worker-10: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\Admin\Documents\GitHub\SpringBoot-Workspace\CollegeERPSystem\src\test\resources
+2025-08-19 11:28:41,360 [Worker-23: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2025-08-19 11:28:41,361 [Worker-23: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2025-08-19 11:28:41,366 [Worker-23: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\Admin\Documents\GitHub\SpringBoot-Workspace\CollegeERPSystem\src\test\resources
+2025-08-19 11:29:20,302 [Worker-20: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2025-08-19 11:29:20,304 [Worker-20: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2025-08-19 11:29:20,309 [Worker-20: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\Admin\Documents\GitHub\SpringBoot-Workspace\CollegeERPSystem\src\test\resources
+2025-08-19 11:30:02,972 [Worker-22: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2025-08-19 11:30:02,974 [Worker-22: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2025-08-19 11:30:03,030 [Worker-22: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\Admin\Documents\GitHub\SpringBoot-Workspace\CollegeERPSystem\src\test\resources
+2025-08-19 11:33:18,181 [Worker-26: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2025-08-19 11:33:18,182 [Worker-26: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2025-08-19 11:33:18,187 [Worker-26: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\Admin\Documents\GitHub\SpringBoot-Workspace\CollegeERPSystem\src\test\resources
+2025-08-19 11:33:23,582 [Worker-23: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2025-08-19 11:33:23,584 [Worker-23: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2025-08-19 11:33:23,592 [Worker-23: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\Admin\Documents\GitHub\SpringBoot-Workspace\CollegeERPSystem\src\test\resources
+2025-08-19 11:35:57,737 [Worker-28: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2025-08-19 11:35:57,740 [Worker-28: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2025-08-19 11:35:57,747 [Worker-28: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\Admin\Documents\GitHub\SpringBoot-Workspace\CollegeERPSystem\src\test\resources
+2025-08-19 11:37:48,769 [Worker-26: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2025-08-19 11:37:48,777 [Worker-26: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2 resources from src\main\resources to target\classes
+2025-08-19 11:37:48,781 [Worker-26: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\Admin\Documents\GitHub\SpringBoot-Workspace\CollegeERPSystem\src\test\resources
+2025-08-19 11:37:50,137 [Start Help Server] INFO  org.eclipse.jetty.server.Server - jetty-12.0.9; built: 2024-05-03T13:03:17.262Z; git: efe8023327e67287f9bfd006700e6a71d45b5dd6; jvm 22.0.2+9
+2025-08-19 11:37:50,294 [Start Help Server] INFO  o.e.j.server.handler.ContextHandler - Started oeje8n.ContextHandler$CoreContextHandler@2de98ac4{/help,/help,b=null,a=AVAILABLE,h=oeje8n.ContextHandler$CoreContextHandler$CoreToNestedHandler@4beb8535{STARTED}}
+2025-08-19 11:37:50,295 [Start Help Server] INFO  o.e.j.s.DefaultSessionIdManager - Session workerName=node0
+2025-08-19 11:37:50,323 [Start Help Server] INFO  o.e.jetty.server.AbstractConnector - Started ServerConnector@4d346416{HTTP/1.1, (http/1.1)}{127.0.0.1:2262}
+2025-08-19 11:37:50,381 [Start Help Server] INFO  org.eclipse.jetty.server.Server - Started oejs.Server@491b0d5f{STARTING}[12.0.9,sto=0] @1318272ms
+2025-08-19 11:37:58,889 [Worker-26: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2025-08-19 11:37:58,898 [Worker-26: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 2 resources from src\main\resources to target\classes
+2025-08-19 11:37:58,903 [Worker-26: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\Admin\Documents\GitHub\SpringBoot-Workspace\CollegeERPSystem\src\test\resources
+2025-08-19 11:44:40,742 [Worker-33: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2025-08-19 11:44:40,744 [Worker-33: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2025-08-19 11:44:40,807 [Worker-33: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\Admin\Documents\GitHub\SpringBoot-Workspace\CollegeERPSystem\src\test\resources
+2025-08-19 11:44:54,137 [Worker-26: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src\main\resources to target\classes
+2025-08-19 11:44:54,139 [Worker-26: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2025-08-19 11:44:54,144 [Worker-26: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\Admin\Documents\GitHub\SpringBoot-Workspace\CollegeERPSystem\src\test\resources
+2025-08-19 11:45:39,249 [Worker-32: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2025-08-19 11:45:39,268 [Worker-32: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 3 resources from src\main\resources to target\classes
+2025-08-19 11:45:39,273 [Worker-32: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\Admin\Documents\GitHub\SpringBoot-Workspace\CollegeERPSystem\src\test\resources
+2025-08-19 11:47:02,181 [Worker-37: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src\main\resources to target\classes
+2025-08-19 11:47:02,187 [Worker-37: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 3 resources from src\main\resources to target\classes
+2025-08-19 11:47:02,192 [Worker-37: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - skip non existing resourceDirectory C:\Users\Admin\Documents\GitHub\SpringBoot-Workspace\CollegeERPSystem\src\test\resources
+2025-08-19 11:47:11,307 [Stop Help Server] INFO  org.eclipse.jetty.server.Server - Stopped oejs.Server@491b0d5f{STOPPING}[12.0.9,sto=0]
+2025-08-19 11:47:11,310 [Stop Help Server] INFO  o.e.jetty.server.AbstractConnector - Stopped ServerConnector@4d346416{HTTP/1.1, (http/1.1)}{127.0.0.1:0}
