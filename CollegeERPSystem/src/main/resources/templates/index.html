@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Role Based Login</title>
+
+</head>
+<body>
+  <!-- Floating animated circles -->
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+
+  <!-- Login Box -->
+  <div class="login-container">
+    <h2>Role Based Login</h2>
+    <form>
+      <select required>
+        <option value="">Select Role</option>
+        <option value="admin">Admin</option>
+        <option value="faculty">Faculty</option>
+        <option value="student">Student</option>
+      </select>
+      <input type="text" placeholder="Username" required>
+      <input type="password" placeholder="Password" required>
+      <button class="btn" type="submit">Login</button>
+      <p>Forgot password? <a href="#">Click here</a></p>
+    </form>
+  </div>
+</body>
+</html>
