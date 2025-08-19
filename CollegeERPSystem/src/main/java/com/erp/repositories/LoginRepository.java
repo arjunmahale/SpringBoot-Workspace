@@ -1,0 +1,9 @@
+package com.erp.repositories;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.erp.model.Login;
+
+public interface LoginRepository extends JpaRepository<Login, Integer> {
+	Login findByName(String name);
+}

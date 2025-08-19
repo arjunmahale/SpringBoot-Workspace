@@ -1,11 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Role Based Login</title>
-
+  <style>
+    .alert {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #e74c3c;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 6px;
+      font-weight: bold;
+      box-shadow: 0px 4px 6px rgba(0,0,0,0.2);
+      display: none;
+      animation: fadeIn 0.5s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
 <body>
   <!-- Floating animated circles -->
@@ -16,6 +34,7 @@
   <!-- Login Box -->
   <div class="login-container">
     <h2>Role Based Login</h2>
+<<<<<<< HEAD
    <form action="/login" method="post">
   <select name="role" required>
     <option value="">Select Role</option>
@@ -30,7 +49,29 @@
   <button class="btn" type="submit">Login</button>
   <p>Forgot password? <a href="#">Click here</a></p>
 </form>
+=======
+    <form action="/login" method="post">
+      <select name="role" required>
+        <option value="">Select Role</option>
+        <option value="admin">Admin</option>
+        <option value="faculty">Faculty</option>
+        <option value="student">Student</option>
+      </select>
+
+      <input type="text" name="name" placeholder="Username" required>
+      <input type="password" name="password" placeholder="Password" required>
+
+      <button class="btn" type="submit">Login</button>
+      <p>Forgot password? <a href="#">Click here</a></p>
+    </form>
+
+>>>>>>> 0b93287291bffad2f5b9394da26823e08c417803
 
   </div>
+ <!-- Alert Box -->
+  <div class="alert" th:if="${error}" th:text="${error}" style="display:block"></div>
+
+
+
 </body>
 </html>

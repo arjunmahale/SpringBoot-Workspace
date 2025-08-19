@@ -133,6 +133,7 @@ body {
   transition: all 0.3s ease;
 }
 
+<<<<<<< HEAD
 .btn:hover {
   background: linear-gradient(90deg, #764ba2, #667eea);
   transform: scale(1.05);
@@ -152,4 +153,13 @@ body {
 
 .login-container a:hover {
   text-decoration: underline;
+=======
+    .login-container a:hover {
+      text-decoration: underline;
+    }
+
+
+    .alert {
+  display: block; /* let Thymeleaf th:if control visibility */
+>>>>>>> 0b93287291bffad2f5b9394da26823e08c417803
 }
