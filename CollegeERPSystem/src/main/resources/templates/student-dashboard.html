@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <script>
+    function loadModule(moduleName) {
+      const content = document.getElementById("main-content");
+      switch(moduleName) {
+        case "profile":
+          content.innerHTML = "<h2>My Profile</h2><p>View and update your personal details.</p>";
+          break;
+        case "attendance":
+          content.innerHTML = "<h2>Attendance</h2><p>Check your attendance records.</p>";
+          break;
+        case "marks":
+          content.innerHTML = "<h2>Marks</h2><p>View your exam results and grades.</p>";
+          break;
+        case "notifications":
+          content.innerHTML = "<h2>Notifications</h2><p>Latest updates and notices will appear here.</p>";
+          break;
+        default:
+          content.innerHTML = "<h2>Welcome, Student!</h2><p>Select a module from the sidebar to get started.</p>";
+      }
+    }
+  </script>
+</head>
+<body onload="loadModule()">
+  <!-- Floating Background -->
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+
+  <header>Student Dashboard</header>
+  <div class="container">
+    <nav class="sidebar">
+      <a href="#" onclick="loadModule('profile')">My Profile</a>
+      <a href="#" onclick="loadModule('attendance')">Attendance</a>
+      <a href="#" onclick="loadModule('marks')">Marks</a>
+      <a href="#" onclick="loadModule('notifications')">Notifications</a>
+    </nav>
+    <main class="main" id="main-content"></main>
+  </div>
+  <footer>&copy; 2025 College ERP System | Student</footer>
+</body>
+</html>

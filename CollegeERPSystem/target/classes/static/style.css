@@ -125,3 +125,8 @@
     .login-container a:hover {
       text-decoration: underline;
     }
+
+
+    .alert {
+  display: block; /* let Thymeleaf th:if control visibility */
+}

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <script>
+    function loadModule(moduleName) {
+      const content = document.getElementById("main-content");
+      switch(moduleName) {
+        case "students":
+          content.innerHTML = "<h2>Student Management</h2><p>Here you can add, edit, or view students.</p>";
+          break;
+        case "courses":
+          content.innerHTML = "<h2>Course Management</h2><p>Manage courses and subjects here.</p>";
+          break;
+        case "attendance":
+          content.innerHTML = "<h2>Attendance</h2><p>Track attendance records here.</p>";
+          break;
+        case "exams":
+          content.innerHTML = "<h2>Exams & Results</h2><p>Manage exam schedules and results.</p>";
+          break;
+        case "fees":
+          content.innerHTML = "<h2>Fee Management</h2><p>Handle fee payment records here.</p>";
+          break;
+        case "timetable":
+          content.innerHTML = "<h2>Timetable</h2><p>View and assign timetable schedules.</p>";
+          break;
+        case "reports":
+          content.innerHTML = "<h2>Reports</h2><p>Generate student and course reports.</p>";
+          break;
+        default:
+          content.innerHTML = "<h2>Welcome, Admin!</h2><p>Select a module from the sidebar.</p>";
+      }
+    }
+  </script>
+</head>
+<body onload="loadModule()">
+  <!-- Floating Background -->
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+
+  <header>Admin Dashboard</header>
+  <div class="container">
+    <nav class="sidebar">
+      <a href="#" onclick="loadModule('students')">Student Management</a>
+      <a href="#" onclick="loadModule('courses')">Course Management</a>
+      <a href="#" onclick="loadModule('attendance')">Attendance</a>
+      <a href="#" onclick="loadModule('exams')">Exams & Results</a>
+      <a href="#" onclick="loadModule('fees')">Fee Management</a>
+      <a href="#" onclick="loadModule('timetable')">Timetable</a>
+      <a href="#" onclick="loadModule('reports')">Reports</a>
+    </nav>
+    <main class="main" id="main-content"></main>
+  </div>
+  <footer>&copy; 2025 College ERP System | Admin</footer>
+</body>
+</html>
