@@ -5,6 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.erp.model.Login;
 import com.erp.services.LoginService;
 
@@ -16,7 +18,7 @@ public class LoginController {
 	public String login(@ModelAttribute Login login, Model model) {
 
 	    Login dbUser = loginServ.getUserByName(login.getName());
-
+	    model.addAttribute("name", dbUser.getName());
 	    if (dbUser != null
 	        && login.getPassword().equals(dbUser.getPassword())
 	        && login.getRole().equals(dbUser.getRole())) {

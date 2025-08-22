@@ -1,33 +1,20 @@
+=\=\=\=\=\=\=
+<<<<<<<=HEAD
+>>>>>>>=0b93287291bffad2f5b9394da26823e08c417803
 eclipse.preferences.version=1
-<<<<<<< HEAD
-org.springframework.ide.eclipse.boot.wizard.PopularityTracker.data-jpa=2
-org.springframework.ide.eclipse.boot.wizard.PopularityTracker.devtools=4
-org.springframework.ide.eclipse.boot.wizard.PopularityTracker.mysql=2
-org.springframework.ide.eclipse.boot.wizard.PopularityTracker.thymeleaf=1
-org.springframework.ide.eclipse.boot.wizard.PopularityTracker.web=8
-org.springframework.ide.eclipse.boot.wizard.PreferredSelections.artifactId=CollegeERPSystem
-org.springframework.ide.eclipse.boot.wizard.PreferredSelections.bootVersion=3.5.4
-org.springframework.ide.eclipse.boot.wizard.PreferredSelections.description=first project of springboot
-org.springframework.ide.eclipse.boot.wizard.PreferredSelections.groupId=com.erp
-org.springframework.ide.eclipse.boot.wizard.PreferredSelections.javaVersion=17
-org.springframework.ide.eclipse.boot.wizard.PreferredSelections.language=java
-org.springframework.ide.eclipse.boot.wizard.PreferredSelections.name=CollegeERPSystem
-org.springframework.ide.eclipse.boot.wizard.PreferredSelections.packageName=com.erp
-=======
 org.springframework.ide.eclipse.boot.wizard.PopularityTracker.data-jpa=3
-org.springframework.ide.eclipse.boot.wizard.PopularityTracker.devtools=5
+org.springframework.ide.eclipse.boot.wizard.PopularityTracker.devtools=6
 org.springframework.ide.eclipse.boot.wizard.PopularityTracker.mysql=3
-org.springframework.ide.eclipse.boot.wizard.PopularityTracker.thymeleaf=1
-org.springframework.ide.eclipse.boot.wizard.PopularityTracker.web=9
-org.springframework.ide.eclipse.boot.wizard.PreferredSelections.artifactId=MVCdemoSpringboot
+org.springframework.ide.eclipse.boot.wizard.PopularityTracker.thymeleaf=2
+org.springframework.ide.eclipse.boot.wizard.PopularityTracker.web=10
+org.springframework.ide.eclipse.boot.wizard.PreferredSelections.artifactId=demosystem
 org.springframework.ide.eclipse.boot.wizard.PreferredSelections.bootVersion=3.5.4
 org.springframework.ide.eclipse.boot.wizard.PreferredSelections.description=Demo project for Spring Boot
-org.springframework.ide.eclipse.boot.wizard.PreferredSelections.groupId=com.thymeleafdemo
+org.springframework.ide.eclipse.boot.wizard.PreferredSelections.groupId=com.demos
 org.springframework.ide.eclipse.boot.wizard.PreferredSelections.javaVersion=17
 org.springframework.ide.eclipse.boot.wizard.PreferredSelections.language=java
-org.springframework.ide.eclipse.boot.wizard.PreferredSelections.name=MVCdemoSpringboot
-org.springframework.ide.eclipse.boot.wizard.PreferredSelections.packageName=com.thymeleafdemo
->>>>>>> 0b93287291bffad2f5b9394da26823e08c417803
+org.springframework.ide.eclipse.boot.wizard.PreferredSelections.name=demosystem
+org.springframework.ide.eclipse.boot.wizard.PreferredSelections.packageName=com.demos
 org.springframework.ide.eclipse.boot.wizard.PreferredSelections.packaging=jar
 org.springframework.ide.eclipse.boot.wizard.PreferredSelections.type=MAVEN
 org.springframework.ide.eclipse.boot.wizard.PreferredSelections.version=0.0.1-SNAPSHOT

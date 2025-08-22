@@ -1,35 +1,52 @@
 package com.erp.Controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+
+import com.erp.model.Course;
+import com.erp.model.Student;
+import com.erp.services.StudentService;
+import com.erp.services.courseService;
 
 @Controller
+
 public class ErpController {
 
+	@Autowired
+	private StudentService studserv;
+	@Autowired
+	private courseService courseServ;
 	@GetMapping("/")
 	public String index()
 	{
 		return "index";
 	}
 	
-	  @PostMapping("/login")
-	    public String login(
-	            @RequestParam("role") String role,
-	            @RequestParam("username") String username,
-	            @RequestParam("password") String password) {
+	@GetMapping("/student-management")
+	public  String  showStudents( Model model) {
+		
 
-	        // Example check
-	        if ("admin".equals(role) && "admin".equals(username) && "1234".equals(password)) {
-	            return "redirect:/admin-dashboard";
-	        } else if ("faculty".equals(role)) {
-	            return "redirect:/faculty-dashboard";
-	        } else if ("student".equals(role)) {
-	            return "redirect:/student-dashboard";
-	        } else {
-	            return "redirect:/login?error"; // invalid login
-	        }
-	    }
+		List<Student> students= studserv.getAllStudent();
+		        model.addAttribute("students", students);
+		        
+		        List<Course> courses= courseServ.getAllcourses();
+		        model.addAttribute("courses", courses);
+		return "student-management";
+		
+	}
+	@PostMapping("/students/save")
+	public  String  saveStudents(@ModelAttribute Student student) {
+		
+		
+		studserv.saveStudent(student);
+		
+		return "redirect:/student-management";
+		
+	}
 }

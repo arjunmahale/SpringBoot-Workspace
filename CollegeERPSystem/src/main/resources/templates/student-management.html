@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css"> <!-- ✅ this applies the modern design -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha512-DxV+EoADOkOygM4IR9yXP8Sb2qwgidEmeqAEmDKIOfPRQZOWbXCzLC6vjbZyy0vPisbH2SyW27+ddLVCN+OMzQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Bootstrap CSS -->
+  
+
+</head>
+<body>
+  <header><u>Admin Dashboard</u></header>
+  <div class="container">
+    <nav class="sidebar">
+      <div class="profile">
+        <img src="profile.jpg" alt="Admin Profile" class="profile-pic" >
+        <h3 class="profile-name">Admin User</h3>
+      </div>
+      <a href="/student-management" >Student Management</a>
+      <a href="/course-management" >Course Management</a>
+      <a href="/attendence" >Attendance</a>
+      <a href="#">Exams & Results</a>
+      <a href="#" >Fee Management</a>
+      <a href="#" >Timetable</a>
+      <a href="#" >Reports</a>
+    </nav>
+    <main class="main" id="main-content">
+    <center>
+    </center>
+    
+   <div class="student-table-container">
+  <h2 class="table-heading">Student List</h2>
+
+  <table class="student-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Course</th>
+        <th>Age</th>
+        <th>Take Action</th>
+      
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="student : ${students}">
+        <td th:text="${student.id}"></td>
+        <td th:text="${student.name}"></td>
+       <td th:text="${student.name}"></td>
+
+        <td th:text="${student.age}"></td>
+        <td><button style="padding:5px;background-color:#118AB2;border:none;color:white;border-radius: 5px"><i class="fa-solid fa-trash"></i><span>     </span>delete student</button>
+        <button style="padding:5px;background-color:#118AB2;border:none;color:white;border-radius: 5px"><i class="fa-solid fa-pen-to-square"></i><span>     </span>update student</button>
+        </td>
+       
+      </tr>
+    </tbody>
+  </table>
+</div>
+   
+   <div style="display: flex; justify-content: center; align-items: center; width:100%;">
+ 
+ 
+    
+
+<form th:action="@{/students/save}"  method="post"
+      style="width: 50%; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background: #f9f9f9;">
+ <h2 style="margin-bottom: 15px;display: flex; justify-content: center; align-items: center;">Add Student</h2>
+    <!-- Hidden ID field (used when editing student) -->
+    <input type="hidden">
+
+    <label for="name" style="font-weight: bold; display: block; margin-top: 10px;">Name:</label>
+    <input type="text" id="name" name="name"  required
+           style="width: 100%; padding: 8px; margin-top: 6px; border-radius: 4px; border: 1px solid #ccc;">
+<!-- 
+    <label for="roll_no" style="font-weight: bold; display: block; margin-top: 10px;">Roll No:</label>
+    <input type="number" id="roll_no"  required
+           style="width: 100%; padding: 8px; margin-top: 6px; border-radius: 4px; border: 1px solid #ccc;">
+ -->
+    <label for="email" style="font-weight: bold; display: block; margin-top: 10px;">Email:</label>
+    <input type="email" id="email" name="email"  required
+           style="width: 100%; padding: 8px; margin-top: 6px; border-radius: 4px; border: 1px solid #ccc;">
+
+    <label for="mobile" style="font-weight: bold; display: block; margin-top: 10px;">Mobile:</label>
+    <input type="number" id="mobile" name="mobile" required
+           style="width: 100%; padding: 8px; margin-top: 6px; border-radius: 4px; border: 1px solid #ccc;">
+
+    <label for="gender" style="font-weight: bold; display: block; margin-top: 10px;">Gender:</label>
+    <select id="gender" name="gender"  required
+            style="width: 100%; padding: 8px; margin-top: 6px; border-radius: 4px; border: 1px solid #ccc;">
+        <option value="" disabled selected>-- Select Gender --</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+    </select>
+
+    <label for="age" style="font-weight: bold; display: block; margin-top: 10px;">Age:</label>
+    <input type="number" id="age" name="age" required
+           style="width: 100%; padding: 8px; margin-top: 6px; border-radius: 4px; border: 1px solid #ccc;">
+
+    <label for="profile_desc" style="font-weight: bold; display: block; margin-top: 10px;">Profile Description:</label>
+    <textarea id="profile_desc" name="profile_desc" rows="3"
+              style="width: 100%; padding: 8px; margin-top: 6px; border-radius: 4px; border: 1px solid #ccc;"></textarea>
+
+    <label for="course" style="font-weight: bold; display: block; margin-top: 10px;">Select Course:</label>
+    <select id="course"  required
+            style="width: 100%; padding: 8px; margin-top: 6px; border-radius: 4px; border: 1px solid #ccc;">
+        <option value="" name="course_id" disabled selected>-- Select Course --</option>
+        <option th:each="course : ${courses}"
+                th:value="${course.id}"
+                th:text="${course.name}">
+        </option>
+    </select>
+
+    <button type="submit"
+            style="margin-top: 15px; width: 100%; padding: 8px; border-radius: 4px; border: none;
+                   background: #007bff; color: white; cursor: pointer;"
+            onmouseover="this.style.background='#0056b3'"
+            onmouseout="this.style.background='#007bff'">
+        Save Student
+    </button>
+</form>
+</div>
+   
+  
+    
+    </main>
+  </div>
+  <footer>
+  <div class="footer-container">
+    <div class="footer-section">
+      <h4>College ERP System</h4>
+      <p>&copy; 2025 All Rights Reserved</p>
+    </div>
+
+    <div class="footer-section">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#">Student Management</a></li>
+        <li><a href="#">Courses</a></li>
+        <li><a href="#">Attendance</a></li>
+        <li><a href="#">Exams & Results</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-section">
+      <h4>Contact</h4>
+      <p>Email: support@collegeerp.com</p>
+      <p>Phone: +91-9876543210</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
