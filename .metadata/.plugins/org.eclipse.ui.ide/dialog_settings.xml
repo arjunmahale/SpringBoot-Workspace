@@ -116,6 +116,9 @@
 		<item key="SmartImportRootWizardPage.STORE_NESTED_PROJECTS" value="true"/>
 		<item key="SmartImportRootWizardPage.STORE_CONFIGURE_NATURES" value="true"/>
 		<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+			<item value="C:\Users\HP\eclipse-workspace\SpringBoot-Workspace\com.demo"/>
+			<item value="C:\Users\HP\eclipse-workspace\SpringBoot-Workspace\EmployeeRestApi"/>
+			<item value="C:\Users\HP\eclipse-workspace\SpringBoot-Workspace\MVCdemoSpringboot"/>
 			<item value="C:\Users\Admin\Downloads\JagdishTranspoart"/>
 			<item value="C:\Users\Admin\Documents\GitHub\SpringBoot-Workspace\MVCdemoSpringboot"/>
 			<item value="C:\Users\HP\eclipse-workspace\SpringBoot-Workspace\CollegeERPSystem"/>

@@ -1,0 +1,148 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="../dashboard.css">
+    <link rel="stylesheet" th:href="@{/student-form.css}">
+     <style>
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr; /* 2 equal columns */
+      gap: 15px 30px; /* row gap & column gap */
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 8px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    /* Make wide fields span across both columns */
+    .full-width {
+      grid-column: span 2;
+    }
+
+    .submit-btn {
+      grid-column: span 2;
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 4px;
+      border: none;
+      background: #007bff;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header><u>Admin Dashboard</u></header>
+  <div class="container">
+    <nav class="sidebar">
+      <div class="profile">
+        <img src="../profile.jpg" alt="Admin Profile" class="profile-pic">
+        <h3 class="profile-name">Admin User</h3>
+      </div>
+            <a href="/admin-dashboard">Admin Dashboard</a>
+      <a href="/student-management">Student Management</a>
+      <a href="/course-management">Course Management</a>
+      <a href="/faculty-management">Faculty Management</a>
+
+      <a href="/attendence">Attendance</a>
+      <a href="#">Exams & Results</a>
+      <a href="#">Fee Management</a>
+      <a href="#">Timetable</a>
+      <a href="#">Reports</a>
+    </nav>
+
+    <main class="main" id="main-content">
+      <!-- ✅ Add Student Button -->
+       <form th:action="@{${formAction}}" method="post"
+            style="width: 90%; margin:2%; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background: #f9f9f9;">
+        <h2 th:text="${title}" style="margin-bottom: 15px;text-align:center;"></h2>
+
+        <input type="hidden" name="id" th:value="${student.id}" />
+        <input type="hidden" name="roll_no" th:value="${student.roll_no}" />
+
+        <div class="form-grid">
+
+          <div class="form-group">
+            <label>Name:</label>
+            <input type="text" name="name" th:value="${student.name}" placeholder="Enter name" required />
+          </div>
+
+          <div class="form-group">
+            <label>Email:</label>
+            <input type="email" name="email" th:value="${student.email}" placeholder="Enter email" required />
+          </div>
+
+          <div class="form-group">
+            <label>Mobile:</label>
+            <input type="tel" name="mobile"
+                   th:value="${student.mobile}"
+                   placeholder="Enter 10-digit mobile"
+                   pattern="[0-9]{10}"
+                   maxlength="10"
+                   required
+                   title="Mobile number must be 10 digits" />
+          </div>
+
+          <div class="form-group">
+            <label>Gender:</label>
+            <select name="gender" required>
+              <option value="" disabled>Select Gender</option>
+              <option value="Male" th:selected="${student.gender == 'Male'}">Male</option>
+              <option value="Female" th:selected="${student.gender == 'Female'}">Female</option>
+              <option value="Other" th:selected="${student.gender == 'Other'}">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Age:</label>
+            <input type="number" name="age"
+                   th:value="${student.age}"
+                   placeholder="Enter age"
+                   min="1" max="99"
+                   required
+                   title="Age must be between 1 and 99" />
+          </div>
+
+          <div class="form-group">
+            <label>Course:</label>
+            <select name="course" required>
+              <option value="" disabled>Select Course</option>
+              <option th:each="course : ${courses}"
+                      th:value="${course.id}"
+                      th:text="${course.name}">
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label>Profile Description:</label>
+            <textarea name="profile_desc" th:text="${student.profile_desc}" rows="3"
+                      placeholder="Enter description"></textarea>
+          </div>
+
+          <button type="submit" class="submit-btn">Save</button>
+        </div>
+      </form>
+    </main>
+  </div>
+</body>
+</html>

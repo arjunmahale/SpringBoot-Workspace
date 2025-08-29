@@ -6,4 +6,13 @@ import com.erp.model.Login;
 
 public interface LoginRepository extends JpaRepository<Login, Integer> {
 	Login findByName(String name);
+
+	
+
+
+	boolean existsByNameAndEmail(String name, String email);
+
+
+
+
 }

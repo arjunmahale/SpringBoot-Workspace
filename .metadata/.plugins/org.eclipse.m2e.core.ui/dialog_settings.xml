@@ -25,16 +25,10 @@
 	</section>
 	<section name="Maven2ProjectWizardArchifactPage">
 		<list key="package">
-			<item value="com.demo.Spring_demo"/>
-			<item value="Spring_demo.com.demo"/>
 		</list>
 		<list key="groupId">
-			<item value="com.demo"/>
-			<item value="Spring-demo"/>
 		</list>
 		<list key="artifactId">
-			<item value="Spring-demo"/>
-			<item value="com.demo"/>
 		</list>
 		<list key="projectNameTemplate">
 			<item value="[artifactId]"/>

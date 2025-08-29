@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="../../dashboard.css">
+    <link rel="stylesheet" th:href="@{../student-form.css}">
+</head>
+<body>
+  <header><u>Admin Dashboard</u></header>
+  <div class="container">
+    <nav class="sidebar">
+      <div class="profile">
+        <img src="../profile.jpg" alt="Admin Profile" class="profile-pic">
+        <h3 class="profile-name">Admin User</h3>
+      </div>
+            <a href="/admin-dashboard">Admin Dashboard</a>
+      <a href="/student-management">Student Management</a>
+      <a href="/course-management">Course Management</a>
+      <a href="/faculty-management">Faculty Management</a>
+
+      <a href="/attendence">Attendance</a>
+      <a href="#">Exams & Results</a>
+      <a href="#">Fee Management</a>
+      <a href="#">Timetable</a>
+      <a href="#">Reports</a>
+    </nav>
+
+    <main class="main" id="main-content">
+      <!-- ✅ Add Student Button -->
+      <form th:action="@{${formAction}}" method="post"
+          style="width: 50%; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background: #f9f9f9;">
+      <h2 th:text="${title}" style="margin-bottom: 15px;text-align:center;"></h2>
+
+      <input type="hidden" name="id" th:value="${course.id}" />
+
+      <label>Name:</label>
+      <input type="text" name="name" th:value="${course.name}" placeholder="Enter name" required />
+
+
+      <label>Course Description:</label>
+      <textarea name="description" th:text="${course.description}" rows="3"
+                placeholder="Enter description" required></textarea>
+
+
+
+      <button type="submit"
+              style="margin-top: 15px; width: 100%; padding: 8px; border-radius: 4px; border: none;
+                     background: #007bff; color: white; cursor: pointer;">
+        Save
+      </button>
+    </form>
+    </main>
+  </div>
+</body>
+</html>

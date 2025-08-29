@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="../dashboard.css">
+
+  <!-- ✅ Success popup -->
+  <script th:if="${message}">
+      alert('[[${message}]]');
+  </script>
+</head>
+<body>
+  <header><u>Admin Dashboard</u></header>
+  <div class="container">
+    <nav class="sidebar">
+      <div class="profile">
+        <img src="../profile.jpg" alt="Admin Profile" class="profile-pic">
+        <h3 class="profile-name">Admin User</h3>
+      </div>
+      <a href="/admin-dashboard">Admin Dashboard</a>
+      <a href="/student-management">Student Management</a>
+      <a href="/course-management">Course Management</a>
+      <a href="/faculty-management">Faculty Management</a>
+      <a href="/attendence">Attendance</a>
+      <a href="#">Exams & Results</a>
+      <a href="#">Fee Management</a>
+      <a href="#">Timetable</a>
+      <a href="#">Reports</a>
+    </nav>
+
+    <main class="main" id="main-content">
+      <center><h1>Student Record</h1></center>
+
+      <!-- ✅ Add Student Button -->
+      <div style="display: flex; justify-content: flex-start; margin-bottom: 15px;">
+        <a href="/add-student"
+           style="padding:8px 15px;background-color:#28a745;color:white;border-radius:6px;text-decoration:none;margin-left:0px;">
+          <i class="fa-solid fa-user-plus"></i> Add Student
+        </a>
+      </div>
+
+      <!-- ✅ Search Bar -->
+      <div style="margin-bottom: 15px; display:flex; gap:10px;">
+        <input type="text" id="searchInput" placeholder="Enter Student ID"
+               style="padding:8px;border:1px solid #ccc;border-radius:5px;flex:1;">
+        <button onclick="searchStudent()"
+                style="padding:8px 15px;background-color:#007bff;color:white;border:none;border-radius:5px;">
+          Search
+        </button>
+        <button onclick="resetTable()"
+                style="padding:8px 15px;background-color:#6c757d;color:white;border:none;border-radius:5px;">
+          Refresh
+        </button>
+      </div>
+
+      <!-- ✅ Print & Sort Controls -->
+      <div style="margin-bottom: 15px; text-align:right; display:flex; justify-content:flex-end; gap:10px;">
+        <select id="sortDropdown" onchange="applySort()"
+                style="padding:8px;border:1px solid #ccc;border-radius:5px;">
+          <option value="id">Sort by ID</option>
+          <option value="name">Sort by Name</option>
+          <option value="course">Sort by Course</option>
+          <option value="roll">Sort by Roll No</option>
+          <option value="mobile">Sort by Mobile</option>
+        </select>
+        <button onclick="printTable()"
+                style="padding:8px 15px;background-color:#17a2b8;color:white;border:none;border-radius:5px;">
+          🖨️ Print Student List
+        </button>
+      </div>
+
+      <!-- ✅ Student Count -->
+      <div style="margin-bottom: 10px; text-align:left;">
+        <strong id="studentCount">Total Students: 0</strong>
+      </div>
+
+      <!-- ✅ Student Table -->
+      <table class="student-table" border="1" cellspacing="0" cellpadding="8"
+             style="width:100%; border-collapse: collapse;">
+        <thead>
+          <tr>
+            <th>Sr. No.</th>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Course</th>
+            <th>Roll No.</th>
+            <th>Mobile No.</th>
+            <th>Delete</th>
+            <th>Update</th>
+          </tr>
+        </thead>
+        <tbody id="studentTableBody">
+          <tr th:each="student : ${students}">
+            <td></td> <!-- Sr. No. will be filled dynamically -->
+            <td th:text="${student.id}"></td>
+            <td th:text="${student.name}"></td>
+            <td th:text="${student.course != null ? student.course.name : 'N/A'}"></td>
+            <td th:text="${student.roll_no}"></td>
+            <td th:text="${student.mobile}"></td>
+            <td>
+              <form th:action="@{/delete}" method="post">
+                <input type="hidden" name="id" th:value="${student.id}" />
+                <button type="submit"
+                        style="padding:5px;background-color:#dc3545;border:none;color:white;border-radius: 5px">
+                  <i class="fa-solid fa-trash"></i> Delete
+                </button>
+              </form>
+            </td>
+            <td>
+              <a th:href="@{'/update/' + ${student.id}}"
+                 style="padding:5px;background-color:#118AB2;color:white;border-radius:5px;text-decoration:none;">
+                <i class="fa-solid fa-pen-to-square"></i> Update
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- ✅ JS Logic -->
+      <script>
+        // Add Sr. No. dynamically
+        function updateSrNo() {
+          const rows = document.querySelectorAll("#studentTableBody tr");
+          let visibleCount = 0;
+          rows.forEach((row, index) => {
+            if (row.style.display !== "none") {
+              visibleCount++;
+              row.querySelector("td:first-child").textContent = visibleCount;
+            }
+          });
+          document.getElementById("studentCount").innerText = "Total Students: " + visibleCount;
+        }
+
+        // 🔍 Search
+        function searchStudent() {
+          const input = document.getElementById("searchInput").value.trim();
+          const rows = document.querySelectorAll("#studentTableBody tr");
+
+          rows.forEach(row => {
+            const idCell = row.children[1].textContent.trim();
+            if (input === "" || idCell === input) {
+              row.style.display = "";
+            } else {
+              row.style.display = "none";
+            }
+          });
+          updateSrNo();
+        }
+
+        function resetTable() {
+          document.getElementById("searchInput").value = "";
+          const rows = document.querySelectorAll("#studentTableBody tr");
+          rows.forEach(row => row.style.display = "");
+          updateSrNo();
+        }
+
+        // 📊 Sorting
+        function applySort() {
+          const sortBy = document.getElementById("sortDropdown").value;
+          const tbody = document.getElementById("studentTableBody");
+          const rows = Array.from(tbody.querySelectorAll("tr"));
+
+          const colIndexMap = {
+            id: 1,
+            name: 2,
+            course: 3,
+            roll: 4,
+            mobile: 5
+          };
+
+          const colIndex = colIndexMap[sortBy];
+
+          rows.sort((a, b) => {
+            let valA = a.children[colIndex].textContent.trim();
+            let valB = b.children[colIndex].textContent.trim();
+
+            if (!isNaN(valA) && !isNaN(valB)) {
+              valA = Number(valA);
+              valB = Number(valB);
+            }
+
+            if (valA < valB) return -1;
+            if (valA > valB) return 1;
+            return 0;
+          });
+
+          tbody.innerHTML = "";
+          rows.forEach(row => tbody.appendChild(row));
+          updateSrNo();
+        }
+
+        // 🖨️ Print
+        function printTable() {
+          const table = document.querySelector(".student-table").outerHTML;
+          const newWin = window.open("", "", "width=800,height=600");
+          newWin.document.write(`
+            <html>
+              <head>
+                <title>Student List</title>
+                <style>
+                  table { width:100%; border-collapse: collapse; }
+                  th, td { border:1px solid #333; padding:8px; text-align:left; }
+                  th { background-color:#f2f2f2; }
+                  h2 { text-align:center; }
+                </style>
+              </head>
+              <body>
+                <h2>Student List</h2>
+                ${table}
+              </body>
+            </html>
+          `);
+          newWin.document.close();
+          newWin.print();
+        }
+
+        // ✅ On page load: sort by ID (descending) + update Sr. No. + student count
+        window.onload = function() {
+          const tbody = document.getElementById("studentTableBody");
+          const rows = Array.from(tbody.querySelectorAll("tr"));
+
+          rows.sort((a, b) => {
+            let idA = Number(a.children[1].textContent.trim());
+            let idB = Number(b.children[1].textContent.trim());
+            return idB - idA;
+          });
+
+          tbody.innerHTML = "";
+          rows.forEach(row => tbody.appendChild(row));
+          updateSrNo();
+        };
+      </script>
+    </main>
+  </div>
+</body>
+</html>

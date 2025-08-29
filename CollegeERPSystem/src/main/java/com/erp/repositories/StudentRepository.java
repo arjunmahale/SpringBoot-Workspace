@@ -7,6 +7,8 @@ import com.erp.model.Student;
 
 public interface StudentRepository extends JpaRepository<Student, Integer>{
 
+	Student findAllById(Long id);
+
 	
 
 

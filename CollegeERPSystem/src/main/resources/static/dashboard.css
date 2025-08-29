@@ -15,8 +15,8 @@ body {
 
 /* Header */
 header {
-  background: white;
-  color: black;
+  background: #10a5d6;
+  color: white;
   padding: 15px 25px;
   font-size: 22px;
   font-weight: 600;
@@ -24,7 +24,7 @@ header {
   border-bottom	:1px solid  #118ab2;
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
   letter-spacing: 0.5px;
-  
+
 }
 
 /* Container */
@@ -86,17 +86,37 @@ header {
 
 /* Main Content */
 .main {
+  position: relative; /* needed for pseudo-element */
   flex: 1;
   padding: 30px;
+  padding-top:0px;
+  margin-top:0px;
   background: #fff;
+  border-left: 2px solid #06d6a0;
+  overflow: hidden;
+}
+
+.main::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background-image: url("bg.png");
   background-size: cover;
   background-repeat: no-repeat;
-  border-left: 2px solid #06d6a0;
+  opacity: 0.3; /* makes only the bg slightly dim */
+  z-index: 0;
 }
 
+.main > * {
+  position: relative;
+  z-index: 1; /* keeps text above the background */
+}
+.main h1,
 .main h2 {
-  font-size: 22px;
+
   margin-bottom: 12px;
   color: #118ab2; /* teal heading */
 }

@@ -1,0 +1,111 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="../../dashboard.css">
+    <link rel="stylesheet" th:href="@{../student-form.css}">
+    <!-- Success message -->
+<div th:if="${message}" class="alert alert-success" role="alert">
+    <span th:text="${message}"></span>
+</div>
+
+<!-- Error message  -->
+<div th:if="${error}" class="alert alert-danger" role="alert">
+    <span th:text="${error}"></span>
+</div>
+
+</head>
+<body>
+  <header><u>Admin Dashboard</u></header>
+  <div class="container">
+    <nav class="sidebar">
+      <div class="profile">
+        <img src="../profile.jpg" alt="Admin Profile" class="profile-pic">
+        <h3 class="profile-name">Admin User</h3>
+      </div>
+            <a href="/admin-dashboard">Admin Dashboard</a>
+      <a href="/student-management">Student Management</a>
+      <a href="/course-management">Course Management</a>
+      <a href="/faculty-management">Faculty Management</a>
+
+      <a href="/attendence">Attendance</a>
+      <a href="#">Exams & Results</a>
+      <a href="#">Fee Management</a>
+      <a href="#">Timetable</a>
+      <a href="#">Reports</a>
+    </nav>
+
+    <main class="main" id="main-content">
+      <!-- ✅ Add Student Button -->
+      <form th:action="@{${formAction}}" method="post"
+          style="width: 50%; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background: #f9f9f9;">
+      <h2 th:text="${title}" style="margin-bottom: 15px;text-align:center;"></h2>
+
+      <input type="hidden" name="id" th:value="${faculty.id}" />
+
+      <label>Name:</label>
+      <input type="text" name="name" th:value="${faculty.name}" placeholder="Enter name" required />
+
+
+
+      <label>Email :</label>
+      <input type="email" name="email" th:value="${faculty.email}" placeholder="Enter email" required />
+
+
+
+      <label>Subject:</label>
+      <input type="text" name="subject" th:value="${faculty.subject}" placeholder="Enter subject" required />
+
+      <label>Mobile:</label>
+      <input type="tel" name="mobile"
+       th:value="${faculty.mobile}"
+       placeholder="Enter 10-digit mobile"
+       pattern="[0-9]{10}"
+       maxlength="10"
+       required
+       title="Mobile number must be 10 digits"  />
+
+      <label>Gender:</label>
+      <select name="gender" required>
+        <option value="" disabled>Select Gender</option>
+        <option value="Male" th:selected="${faculty.gender == 'Male'}">Male</option>
+        <option value="Female" th:selected="${faculty.gender == 'Female'}">Female</option>
+        <option value="Other" th:selected="${faculty.gender == 'Other'}">Other</option>
+      </select>
+     <label>Age:</label>
+<input type="number" name="age"
+       th:value="${faculty.age}"
+       placeholder="Enter age"
+       min="1" max="99"
+       required
+       title="Age must be between 1 and 99" />
+
+    <label>Profile Description:</label>
+      <textarea name="profile_desc" th:text="${faculty.profile_desc}" rows="3"
+                placeholder="Enter description"></textarea>
+
+
+
+       <label>Course:</label>
+      <select name="course" required>
+        <option value="" disabled>Select Course</option>
+        <option th:each="course : ${courses}"
+                th:value="${course.id}"
+                th:text="${course.name}"
+               >
+        </option>
+      </select>
+
+
+      <button type="submit"
+              style="margin-top: 15px; width: 100%; padding: 8px; border-radius: 4px; border: none;
+                     background: #007bff; color: white; cursor: pointer;">
+        Save
+      </button>
+    </form>
+    </main>
+  </div>
+</body>
+</html>
