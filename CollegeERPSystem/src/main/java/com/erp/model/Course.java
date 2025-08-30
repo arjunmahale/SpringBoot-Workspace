@@ -15,17 +15,27 @@ public class Course {
     private String description;
 
     // ✅ One course can have many students
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "course")
     private List<Student> students = new ArrayList<>();
+
+    @OneToOne(mappedBy = "course")
+    // foreign key in course table
+    private Faculty faculty;
 
     public Course() {}
 
-    public Course(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
+  
 
-    // --- Getters & Setters ---
+    public Course(int id, String name, String description, List<Student> students, Faculty faculty) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.description = description;
+		this.students = students;
+		this.faculty = faculty;
+	}
+
+	// --- Getters & Setters ---
     public int getId() {
         return id;
     }
@@ -58,7 +68,19 @@ public class Course {
         this.students = students;
     }
 
-    // Helper method to add a student to course
+    public Faculty getFaculty() {
+		return faculty;
+	}
+
+
+
+	public void setFaculty(Faculty faculty) {
+		this.faculty = faculty;
+	}
+
+
+
+	// Helper method to add a student to course
     public void addStudent(Student student) {
         students.add(student);
         student.setCourse(this);

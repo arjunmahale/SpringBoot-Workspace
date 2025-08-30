@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="../dashboard.css">
+  <!-- Success popup -->
+<script th:if="${message}">
+    alert('[[${message}]]');
+</script>
+
+<!-- Error popup-->
+<script th:if="${error}">
+    alert('[[${error}]]');
+</script>
+   
+</head>
+<body>
+  <header><u>Admin Dashboard</u></header>
+  <div class="container">
+    <nav class="sidebar">
+      <div class="profile">
+        <img src="../profile.jpg" alt="Admin Profile" class="profile-pic">
+        <h3 class="profile-name">Admin User</h3>
+      </div>
+      <a href="/student-management">Student Management</a>
+      <a href="/course-management">Course Management</a>
+      <a href="/faculty-management">Faculty Management</a>
+      
+      <a href="/attendence">Attendance</a>
+      <a href="#">Exams & Results</a>
+      <a href="#">Fee Management</a>
+      <a href="#">Timetable</a>
+      <a href="#">Reports</a>
+    </nav>
+
+    <main class="main" id="main-content">
+    <center><h1>Faculty Record</h1></center>
+     <!-- ✅ Add Student Button -->
+      <div style="display: flex; justify-content: flex-start; margin-bottom: 15px;">
+        <a href="/add-faculty" 
+           style="padding:8px 15px;background-color:#28a745;color:white;border-radius:6px;text-decoration:none;">
+          <i class="fa-solid fa-user-plus"></i> Add Faculty
+        </a>
+      </div>
+
+      <!-- ✅ Add Student Button -->
+     <!-- ✅ Search Form (no backend call, only frontend filtering) -->
+<!-- ✅ Search Bar -->
+<div style="margin-bottom: 15px; display:flex; gap:10px;">
+  <input type="text" id="searchInput" placeholder="Enter course ID"
+         style="padding:8px;border:1px solid #ccc;border-radius:5px;flex:1;">
+  <button onclick="searchStudent()" 
+          style="padding:8px 15px;background-color:#007bff;color:white;border:none;border-radius:5px;">
+    Search
+  </button>
+  <button onclick="resetTable()" 
+          style="padding:8px 15px;background-color:#6c757d;color:white;border:none;border-radius:5px;">
+    Refresh
+  </button>
+</div>
+<!-- ✅ Print Button for Course List -->
+<div style="margin-bottom: 15px; text-align:right;">
+  <button onclick="printCourseTable()" 
+          style="padding:8px 15px;background-color:#17a2b8;color:white;border:none;border-radius:5px;">
+    🖨️ Print Faculty List
+  </button>
+</div>
+
+<table class="student-table" border="1" cellspacing="0" cellpadding="8" style="width:100%; border-collapse: collapse;">
+  <thead>
+    <tr>
+      <th onclick="sortTable(0)">ID ⬍</th>
+      <th onclick="sortTable(1)">Faculty Name ⬍</th>
+      <th onclick="sortTable(2)">Email ⬍</th>
+      <th onclick="sortTable(3)">Subject ⬍</th>
+      <th onclick="sortTable(4)">Course ⬍</th>
+     
+      <th>Delete</th>
+      <th>Update</th>
+    </tr>
+  </thead>
+  <tbody id="studentTableBody">
+    <tr th:each="faculty : ${faculties}">
+      <td th:text="${faculty.id}"></td>
+      <td th:text="${faculty.name}"></td>
+      <td th:text="${faculty.email}"></td>
+      <td th:text="${faculty.subject}"></td>
+      <td th:text="${faculty.course.name}"></td>
+     
+      <td>
+        <form th:action="@{/delete-faculty}" method="post">
+          <input type="hidden" name="id" th:value="${faculty.id}" />
+          <button type="submit"
+                  style="padding:5px;background-color:#dc3545;border:none;color:white;border-radius: 5px">
+            <i class="fa-solid fa-trash"></i> Delete
+          </button>
+        </form>
+      </td>
+      <td>
+        <a th:href="@{'/update-faculty/' + ${faculty.id}}"
+           style="padding:5px;background-color:#118AB2;color:white;border-radius:5px;text-decoration:none;">
+          <i class="fa-solid fa-pen-to-square"></i> Update
+        </a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</main>
+<!-- ✅ JS Logic -->
+<script>
+  // 🔍 Search
+  function searchStudent() {
+    const input = document.getElementById("searchInput").value.trim();
+    const rows = document.querySelectorAll("#studentTableBody tr");
+
+    rows.forEach(row => {
+      const idCell = row.querySelector("td:first-child").textContent.trim();
+      if (input === "" || idCell === input) {
+        row.style.display = "";
+      } else {
+        row.style.display = "none";
+      }
+    });
+  }
+
+  function resetTable() {
+    document.getElementById("searchInput").value = "";
+    const rows = document.querySelectorAll("#studentTableBody tr");
+    rows.forEach(row => row.style.display = "");
+  }
+
+  // 📊 Sorting
+  let sortDirection = {}; // store per-column sorting direction
+
+  function sortTable(colIndex) {
+    const tbody = document.getElementById("studentTableBody");
+    const rows = Array.from(tbody.querySelectorAll("tr"));
+
+    // toggle direction
+    sortDirection[colIndex] = !sortDirection[colIndex];
+
+    rows.sort((a, b) => {
+      let valA = a.children[colIndex].textContent.trim();
+      let valB = b.children[colIndex].textContent.trim();
+
+      // convert to numbers if possible
+      if (!isNaN(valA) && !isNaN(valB)) {
+        valA = Number(valA);
+        valB = Number(valB);
+      }
+
+      if (valA < valB) return sortDirection[colIndex] ? -1 : 1;
+      if (valA > valB) return sortDirection[colIndex] ? 1 : -1;
+      return 0;
+    });
+
+    // re-append sorted rows
+    rows.forEach(row => tbody.appendChild(row));
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  function printCourseTable() {
+	  // Get the course table element
+	  const table = document.querySelector(".student-table").outerHTML;
+
+	  // Open a new window
+	  const newWin = window.open("", "", "width=800,height=600");
+
+	  // Write table content to new window
+	  newWin.document.write(`
+	    <html>
+	      <head>
+	        <title>Course List</title>
+	        <style>
+	          table { width:100%; border-collapse: collapse; }
+	          th, td { border:1px solid #333; padding:8px; text-align:left; }
+	          th { background-color:#f2f2f2; }
+	          h2 { text-align:center; }
+	        </style>
+	      </head>
+	      <body>
+	        <h2>Course List</h2>
+	        ${table}
+	      </body>
+	    </html>
+	  `);
+
+	  newWin.document.close();
+	  newWin.print();
+	}
+
+</script>
+
+
+      </div>
+   
+</body>
+</html>

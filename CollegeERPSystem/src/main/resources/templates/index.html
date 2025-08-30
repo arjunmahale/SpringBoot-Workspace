@@ -1,60 +1,300 @@
 <!DOCTYPE html>
-<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" href="style.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Role Based Login</title>
-  <style>
-    .alert {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: #e74c3c;
-      color: white;
-      padding: 12px 20px;
-      border-radius: 6px;
-      font-weight: bold;
-      box-shadow: 0px 4px 6px rgba(0,0,0,0.2);
-      display: none;
-      animation: fadeIn 0.5s;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Role Based Login</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Navbar */
+.navbar {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 12px 40px;
+  box-shadow: 0px 3px 10px rgba(0,0,0,0.1);
+}
+.navbar-brand {
+  font-weight: 600;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+}
+.navbar-brand i {
+  margin-right: 8px;
+  color: #007bff;
+}
+.navbar-nav .nav-link {
+  font-weight: 500;
+  margin-left: 15px;
+}
+
+/* Split screen */
+.container-fluid {
+  flex: 1;
+  display: flex;
+  height: 100%;
+}
+.left-side, .right-side {
+  flex: 1;
+  display: flex;
+  
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+.left-side {
+  color: white;
+  background: linear-gradient(120deg, #667eea, #764ba2);
+  flex-direction: column;
+  text-align: center;
+  animation: fadeInLeft 1s ease;
+}
+.left-side h1 {
+  font-size: 36px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+.left-side p {
+  font-size: 16px;
+  line-height: 1.6;
+}
+.left-side i {
+  font-size: 40px;
+  margin: 15px;
+  animation: float 3s infinite ease-in-out;
+}
+@keyframes fadeInLeft {
+  from { opacity: 0; transform: translateX(-30px);}
+  to { opacity: 1; transform: translateX(0);}
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0);}
+  50% { transform: translateY(-5px);}
+}
+
+/* Right-side login */
+.login-box {
+  width: 100%;
+  max-width: 400px;
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0px 5px 20px rgba(0,0,0,0.15);
+  animation: fadeInRight 1s ease;
+}
+.login-box h2 {
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+.login-box select, 
+.login-box input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+.login-box button {
+  width: 100%;
+  padding: 12px;
+  background: #007bff;
+  border: none;
+  color: white;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+.login-box button:hover {
+  background: #0056b3;
+}
+.login-box p {
+  text-align: center;
+  margin-top: 10px;
+}
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(30px);}
+  to { opacity: 1; transform: translateX(0);}
+}
+
+/* Floating circles animation (background) */
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  animation: floatCircle 8s infinite ease-in-out;
+}
+.circle:nth-child(1){ width: 100px; height: 100px; top: 20%; left: 10%; }
+.circle:nth-child(2){ width: 150px; height: 150px; top: 60%; left: 20%; animation-delay: 2s; }
+.circle:nth-child(3){ width: 80px; height: 80px; top: 40%; left: 70%; animation-delay: 4s; }
+@keyframes floatCircle {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+/* Alert */
+.alert {
+	position: fixed;
+	top: 80px;
+	right: 20px;
+	background: #e74c3c;
+	color: white;
+	padding: 12px 20px;
+	border-radius: 6px;
+	font-weight: bold;
+	box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+	display: none;
+	opacity: 0;
+	transition: opacity 0.6s ease;
+}
+.alert.show {
+	display: block;
+	opacity: 1;
+}
+/* Existing styles stay same... */
+
+/* --- New Animations --- */
+@keyframes fallFromTop {
+  0% { opacity: 0; transform: translateY(-150px); }
+  60% { opacity: 1; transform: translateY(10px); }
+  100% { transform: translateY(0); }
+}
+
+/* Apply fall animation to left-side heading and paragraph */
+.left-side h1{
+  animation: fallFromTop 1s ease forwards;
+}
+.left-side h1 { animation-delay: 0.5s; }
+
+
+/* Keep right side login sliding in */
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(200px)}
+  to { opacity: 1; transform: translateX(0);}
+}
+.login-box {
+  animation: fadeInLeft 1s ease forwards;
+  animation-delay: 0.1s; /* comes after text */
+}
+ /* Hide model-viewer default progress bar */
+  model-viewer::part(default-progress-bar) {
+    display: none;
+  }
+  .visme_d{
+  
+  }
+  
+  tspan{
+  display: none;}
+</style>
+
+<script>
+  window.onload = function() {
+    let alertBox = document.querySelector('.alert');
+    if(alertBox){
+      alertBox.classList.add("show");
+      setTimeout(() => {
+        alertBox.style.opacity = "0";
+        setTimeout(() => { alertBox.style.display = "none"; }, 600);
+      }, 2000);
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
+  }
+</script>
 </head>
 <body>
-  <!-- Floating animated circles -->
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="#"><i class="fa-solid fa-graduation-cap"></i> MyEduPortal</a>
+    <div class="ms-auto">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Background Circles -->
   <div class="circle"></div>
   <div class="circle"></div>
   <div class="circle"></div>
 
-  <!-- Login Box -->
-  <div class="login-container">
-    <h2>Role Based Login</h2>
 
-    <form action="/login" method="post">
-      <select name="role" required>
-        <option value="">Select Role</option>
-        <option value="admin">Admin</option>
-        <option value="faculty">Faculty</option>
-        <option value="student">Student</option>
-      </select>
+  <!-- Split layout -->
+  <div class="container-fluid">
+    <!-- Left Info Side -->
+    <div class="left-side">
+      <h1>Welcome to MyEduPortal</h1>
+      <p>Your all-in-one education management system.  
+      Manage courses, track attendance, check results, and more.</p>
+      
+      <!-- 
+     <script src="https://static-bundles.visme.co/visme-embed.js"></script><div class="visme_d"  data-url="019wkmg6-untitled-project" data-w="300" data-full-h="false" data-h="500"></div>
+      -->
+     
+      <div>
+        <i class="fa-solid fa-book-open"></i>
+        <i class="fa-solid fa-users"></i>
+        <i class="fa-solid fa-chart-line"></i>
+      </div>
+    </div>
+ <!-- 3D Model -->
+  <!-- Import the component -->
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
 
-      <input type="text" name="name" placeholder="Username" required>
-      <input type="password" name="password" placeholder="Password" required>
+<!-- Use it like any other HTML element -->
 
-      <button class="btn" type="submit">Login</button>
-      <p>Forgot password? <a href="#">Click here</a></p>
-    </form>
+    <!-- Right Login Side -->
+    <div class="right-side">
+      <div class="login-box">
+        <h2>Login</h2>
+        <form action="/login" method="post">
+          <select name="role" required>
+            <option value="">Select Role</option>
+            <option value="admin">Admin</option>
+            <option value="faculty">Faculty</option>
+            <option value="student">Student</option>
+          </select>
+          <input type="text" name="name" placeholder="Username" required>
+          <input type="password" name="password" placeholder="Password" required>
+          <button type="submit">Login</button>
+          <p>Forgot password? <a href="#">Click here</a></p>
+        </form>
+      </div>
+     
+ 
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 
+<model-viewer src="Untitled.glb" 
+              alt="model"
+              autoplay
+          
+              shadow-intensity="1" 
+              loading="eager" 
+              reveal="auto"
+              style="width: 100%; height: 600px; transform:translateX(-35%)">
+</model-viewer>
+
+ <!-- 3D Model, same height as login box 
+<script src="https://static-bundles.visme.co/visme-embed.js"></script><div class="visme_d" data-url="8kvweyrm-7-ways-to-start-an-online-presentation-infographic" data-w="300" data-full-h="false" data-h="215"></div>-->
+    </div>
   </div>
- <!-- Alert Box -->
-  <div class="alert" th:if="${error}" th:text="${error}" style="display:block"></div>
 
-
-
+  <!-- Alerts -->
+  <div class="alert" th:if="${name != null and error != null}" th:text="${name + ' ' + error}"></div>
+  <div class="alert" th:if="${name == null and error != null}" th:text="${error}"></div>
 </body>
 </html>

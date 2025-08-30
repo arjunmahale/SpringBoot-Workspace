@@ -71,7 +71,23 @@ body {
 }
 
 /* Inputs + Dropdown */
-.login-container select,
+
+.login-container select{
+	 width: 100%;
+  padding: 12px 15px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 30px;
+  outline: none;
+  font-size: 14px;
+  transition: 0.3s;
+  background: #fff;      /* white background */
+  color: #757575;        /* text color for user input */
+  appearance: none;      
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  box-sizing: border-box;
+}
 .login-container input {
   width: 100%;
   padding: 12px 15px;
@@ -119,7 +135,7 @@ body {
   box-shadow: 0 0 8px rgba(255,255,255,0.7);
 }
 
-.btn {
+.btn1 {
   width: 100%;
   padding: 12px;
   background: linear-gradient(90deg, #667eea, #764ba2);
@@ -133,8 +149,8 @@ body {
   transition: all 0.3s ease;
 }
 
-<<<<<<< HEAD
-.btn:hover {
+
+.btn1:hover {
   background: linear-gradient(90deg, #764ba2, #667eea);
   transform: scale(1.05);
   box-shadow: 0 8px 20px rgba(0,0,0,0.3);
@@ -153,7 +169,7 @@ body {
 
 .login-container a:hover {
   text-decoration: underline;
-=======
+
     .login-container a:hover {
       text-decoration: underline;
     }
@@ -161,5 +177,5 @@ body {
 
     .alert {
   display: block; /* let Thymeleaf th:if control visibility */
->>>>>>> 0b93287291bffad2f5b9394da26823e08c417803
+
 }

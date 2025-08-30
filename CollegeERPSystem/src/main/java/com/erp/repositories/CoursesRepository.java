@@ -6,4 +6,6 @@ import com.erp.model.Course;
 
 public interface CoursesRepository extends JpaRepository<Course, Integer>{
 
+	Course findAllById(Long id);
+
 }
