@@ -24,7 +24,7 @@ header {
   border-bottom	:1px solid  #118ab2;
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
   letter-spacing: 0.5px;
-  
+
 }
 
 /* Container */
@@ -89,6 +89,8 @@ header {
   position: relative; /* needed for pseudo-element */
   flex: 1;
   padding: 30px;
+  padding-top:0px;
+  margin-top:0px;
   background: #fff;
   border-left: 2px solid #06d6a0;
   overflow: hidden;
@@ -114,7 +116,11 @@ header {
 }
 .main h1,
 .main h2 {
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> 6c1a6d69560234e6c98e66ab1dcc912923cde5fd
   margin-bottom: 12px;
   color: #118ab2; /* teal heading */
 }

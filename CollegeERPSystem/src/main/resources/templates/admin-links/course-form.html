@@ -15,10 +15,18 @@
         <img src="../profile.jpg" alt="Admin Profile" class="profile-pic">
         <h3 class="profile-name">Admin User</h3>
       </div>
+<<<<<<< HEAD
       <a href="/student-management">Student Management</a>
       <a href="/course-management">Course Management</a>
       <a href="/faculty-management">Faculty Management</a>
       
+=======
+            <a href="/admin-dashboard">Admin Dashboard</a>
+      <a href="/student-management">Student Management</a>
+      <a href="/course-management">Course Management</a>
+      <a href="/faculty-management">Faculty Management</a>
+
+>>>>>>> 6c1a6d69560234e6c98e66ab1dcc912923cde5fd
       <a href="/attendence">Attendance</a>
       <a href="#">Exams & Results</a>
       <a href="#">Fee Management</a>
@@ -27,7 +35,11 @@
     </nav>
 
     <main class="main" id="main-content">
+<<<<<<< HEAD
       <!-- ✅ Add Student Button -->	
+=======
+      <!-- ✅ Add Student Button -->
+>>>>>>> 6c1a6d69560234e6c98e66ab1dcc912923cde5fd
       <form th:action="@{${formAction}}" method="post"
           style="width: 50%; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background: #f9f9f9;">
       <h2 th:text="${title}" style="margin-bottom: 15px;text-align:center;"></h2>
@@ -37,12 +49,20 @@
       <label>Name:</label>
       <input type="text" name="name" th:value="${course.name}" placeholder="Enter name" required />
 
+<<<<<<< HEAD
      
+=======
+
+>>>>>>> 6c1a6d69560234e6c98e66ab1dcc912923cde5fd
       <label>Course Description:</label>
       <textarea name="description" th:text="${course.description}" rows="3"
                 placeholder="Enter description" required></textarea>
 
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 6c1a6d69560234e6c98e66ab1dcc912923cde5fd
 
       <button type="submit"
               style="margin-top: 15px; width: 100%; padding: 8px; border-radius: 4px; border: none;

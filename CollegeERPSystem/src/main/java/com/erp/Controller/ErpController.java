@@ -39,13 +39,26 @@ public class ErpController {
     // Student management - only list of students
     @GetMapping("/student-management")
     public String showStudents(Model model) {
+<<<<<<< HEAD
     	
+=======
+
+>>>>>>> 6c1a6d69560234e6c98e66ab1dcc912923cde5fd
         List<Student> students = studserv.getAllStudent();
         model.addAttribute("students", students);
 
         return "admin-links/student-management"; // ✅ table page only
     }
 
+<<<<<<< HEAD
+=======
+    @GetMapping("/admin-dashboard")
+    public String showadminDashboard(Model model) {
+        return "admin-links/admin-dashboard"; // template name, no redirect
+    }
+
+
+>>>>>>> 6c1a6d69560234e6c98e66ab1dcc912923cde5fd
     // Open form to add student
     @GetMapping("/add-student")
     public String showStudentForm(Model model) {
@@ -108,6 +121,7 @@ public class ErpController {
     // Delete student
     @PostMapping("/delete")
     public String deleteStudent(@ModelAttribute Student student, RedirectAttributes redirectAttributes) {
+<<<<<<< HEAD
     	
         studserv.deleteStudent(student);
 
@@ -118,6 +132,18 @@ public class ErpController {
     }
     
     
+=======
+
+        studserv.deleteStudent(student);
+
+
+
+        redirectAttributes.addFlashAttribute("message", "Student deleted successfully!");
+        return "redirect:/student-management";
+    }
+
+
+>>>>>>> 6c1a6d69560234e6c98e66ab1dcc912923cde5fd
 //    @GetMapping("/search-student/{id}")
 //    public String searchStudent(@PathVariable Long id, Model model) {
 //        Student student = studserv.getStudentById(id);

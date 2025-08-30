@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
+<<<<<<< HEAD
 	<item key="org.eclipse.jdt.debug.ui.jre_preference_page_context.columnWidth0" value="74"/>
 	<item key="org.eclipse.jdt.debug.ui.jre_preference_page_context.columnWidth1" value="617"/>
+=======
+	<item key="org.eclipse.jdt.debug.ui.jre_preference_page_context.columnWidth0" value="173"/>
+	<item key="org.eclipse.jdt.debug.ui.jre_preference_page_context.columnWidth1" value="597"/>
+>>>>>>> 6c1a6d69560234e6c98e66ab1dcc912923cde5fd
 	<item key="org.eclipse.jdt.debug.ui.jre_preference_page_context.columnWidth2" value="82"/>
 	<item key="org.eclipse.jdt.debug.ui.jre_preference_page_context.sortColumn" value="1"/>
 	<section name="org.eclipse.jdt.debug.ui.MAIN_METHOD_SELECTION_DIALOG">

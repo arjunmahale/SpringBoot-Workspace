@@ -1,3 +1,9 @@
+<<<<<<< HEAD
 2025/08/29-12:10:21.342 28d8 Reusing MANIFEST C:\Users\Admin\Documents\GitHub\SpringBoot-Workspace\.metadata\.plugins\org.eclipse.swt\EBWebView\Default\Site Characteristics Database/MANIFEST-000001
 2025/08/29-12:10:21.345 28d8 Recovering log #6
 2025/08/29-12:10:21.346 28d8 Reusing old log C:\Users\Admin\Documents\GitHub\SpringBoot-Workspace\.metadata\.plugins\org.eclipse.swt\EBWebView\Default\Site Characteristics Database/000006.log 
+=======
+2025/08/29-15:54:38.843 37d4 Reusing MANIFEST C:\Users\HP\eclipse-workspace\SpringBoot-Workspace\.metadata\.plugins\org.eclipse.swt\EBWebView\Default\Site Characteristics Database/MANIFEST-000001
+2025/08/29-15:54:38.846 37d4 Recovering log #6
+2025/08/29-15:54:38.847 37d4 Reusing old log C:\Users\HP\eclipse-workspace\SpringBoot-Workspace\.metadata\.plugins\org.eclipse.swt\EBWebView\Default\Site Characteristics Database/000006.log 
+>>>>>>> 6c1a6d69560234e6c98e66ab1dcc912923cde5fd

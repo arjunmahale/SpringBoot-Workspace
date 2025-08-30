@@ -1,6 +1,11 @@
 eclipse.preferences.version=1
+<<<<<<< HEAD
 org.eclipse.jdt.core.classpathVariable.JRE_LIB=C\:/Program Files/Java/jdk-23/lib/jrt-fs.jar
 org.eclipse.jdt.core.classpathVariable.JRE_SRC=C\:/Program Files/Java/jdk-23/lib/src.zip
+=======
+org.eclipse.jdt.core.classpathVariable.JRE_LIB=C\:/Program Files/Java/jdk-21/lib/jrt-fs.jar
+org.eclipse.jdt.core.classpathVariable.JRE_SRC=C\:/Program Files/Java/jdk-21/lib/src.zip
+>>>>>>> 6c1a6d69560234e6c98e66ab1dcc912923cde5fd
 org.eclipse.jdt.core.classpathVariable.JRE_SRCROOT=
 org.eclipse.jdt.core.codeComplete.visibilityCheck=enabled
 org.eclipse.jdt.core.compiler.codegen.targetPlatform=21

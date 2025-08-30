@@ -3,6 +3,7 @@
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.GetMapping"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestMapping"/>
     <fullyQualifiedTypeName name="org.springframework.ui.Model"/>
+<<<<<<< HEAD
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.ModelAttribute"/>
     <fullyQualifiedTypeName name="org.springframework.stereotype.Service"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PathVariable"/>
@@ -14,6 +15,11 @@
     <fullyQualifiedTypeName name="jakarta.persistence.GeneratedValue"/>
     <fullyQualifiedTypeName name="jakarta.persistence.GenerationType"/>
     <fullyQualifiedTypeName name="java.lang.String"/>
+=======
+    <fullyQualifiedTypeName name="jakarta.persistence.Entity"/>
+    <fullyQualifiedTypeName name="jakarta.persistence.Id"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.ModelAttribute"/>
+>>>>>>> 6c1a6d69560234e6c98e66ab1dcc912923cde5fd
     <fullyQualifiedTypeName name="org.springframework.data.jpa.repository.JpaRepository"/>
     <fullyQualifiedTypeName name="com.erp.services.FacultyService"/>
     <fullyQualifiedTypeName name="jakarta.persistence.Entity"/>
@@ -22,6 +28,16 @@
     <fullyQualifiedTypeName name="com.erp.model.Login"/>
     <fullyQualifiedTypeName name="com.erp.services.courseService"/>
     <fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Autowired"/>
+<<<<<<< HEAD
     <fullyQualifiedTypeName name="com.erp.repositories.CoursesRepository"/>
     <fullyQualifiedTypeName name="com.erp.model.Faculty"/>
+=======
+    <fullyQualifiedTypeName name="org.springframework.stereotype.Service"/>
+    <fullyQualifiedTypeName name="com.erp.model.Student"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PathVariable"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="com.erp.model.Course"/>
+    <fullyQualifiedTypeName name="java.lang.String"/>
+    <fullyQualifiedTypeName name="sdfsdf.DemoLombok"/>
+>>>>>>> 6c1a6d69560234e6c98e66ab1dcc912923cde5fd
 </qualifiedTypeNameHistroy>

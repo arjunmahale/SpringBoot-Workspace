@@ -39,7 +39,11 @@ public class LoginController {
 
 	    // ✅ Correct login
 	    if ("admin".equals(dbUser.getRole())) {
+<<<<<<< HEAD
 	        return "admin-dashboard";
+=======
+	        return "/admin-links/admin-dashboard";
+>>>>>>> 6c1a6d69560234e6c98e66ab1dcc912923cde5fd
 	    } else if ("faculty".equals(dbUser.getRole())) {
 	        return "faculty-dashboard";
 	    } else if ("student".equals(dbUser.getRole())) {

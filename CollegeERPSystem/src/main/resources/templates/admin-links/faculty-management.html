@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Admin Dashboard</title>
   <link rel="stylesheet" href="../dashboard.css">
+<<<<<<< HEAD
   <!-- Success popup -->
 <script th:if="${message}">
     alert('[[${message}]]');
@@ -14,6 +15,18 @@
     alert('[[${error}]]');
 </script>
    
+=======
+
+  <!-- Success popup -->
+  <script th:if="${message}">
+      alert('[[${message}]]');
+  </script>
+
+  <!-- Error popup-->
+  <script th:if="${error}">
+      alert('[[${error}]]');
+  </script>
+>>>>>>> 6c1a6d69560234e6c98e66ab1dcc912923cde5fd
 </head>
 <body>
   <header><u>Admin Dashboard</u></header>
@@ -23,10 +36,17 @@
         <img src="../profile.jpg" alt="Admin Profile" class="profile-pic">
         <h3 class="profile-name">Admin User</h3>
       </div>
+<<<<<<< HEAD
       <a href="/student-management">Student Management</a>
       <a href="/course-management">Course Management</a>
       <a href="/faculty-management">Faculty Management</a>
       
+=======
+      <a href="/admin-dashboard">Admin Dashboard</a>
+      <a href="/student-management">Student Management</a>
+      <a href="/course-management">Course Management</a>
+      <a href="/faculty-management">Faculty Management</a>
+>>>>>>> 6c1a6d69560234e6c98e66ab1dcc912923cde5fd
       <a href="/attendence">Attendance</a>
       <a href="#">Exams & Results</a>
       <a href="#">Fee Management</a>
@@ -35,15 +55,24 @@
     </nav>
 
     <main class="main" id="main-content">
+<<<<<<< HEAD
     <center><h1>Faculty Record</h1></center>
      <!-- ✅ Add Student Button -->
       <div style="display: flex; justify-content: flex-start; margin-bottom: 15px;">
         <a href="/add-faculty" 
+=======
+      <center><h1>Faculty Record</h1></center>
+
+      <!-- ✅ Add Faculty Button -->
+      <div style="display: flex; justify-content: flex-start; margin-bottom: 15px;">
+        <a href="/add-faculty"
+>>>>>>> 6c1a6d69560234e6c98e66ab1dcc912923cde5fd
            style="padding:8px 15px;background-color:#28a745;color:white;border-radius:6px;text-decoration:none;">
           <i class="fa-solid fa-user-plus"></i> Add Faculty
         </a>
       </div>
 
+<<<<<<< HEAD
       <!-- ✅ Add Student Button -->
      <!-- ✅ Search Form (no backend call, only frontend filtering) -->
 <!-- ✅ Search Bar -->
@@ -201,5 +230,160 @@
 
       </div>
    
+=======
+      <!-- ✅ Search Bar -->
+      <div style="margin-bottom: 15px; display:flex; gap:10px;">
+        <input type="text" id="searchInput" placeholder="Enter Faculty ID"
+               style="padding:8px;border:1px solid #ccc;border-radius:5px;flex:1;">
+        <button onclick="searchFaculty()"
+                style="padding:8px 15px;background-color:#007bff;color:white;border:none;border-radius:5px;">
+          Search
+        </button>
+        <button onclick="resetTable()"
+                style="padding:8px 15px;background-color:#6c757d;color:white;border:none;border-radius:5px;">
+          Refresh
+        </button>
+      </div>
+
+      <!-- ✅ Count + Print -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <h4 id="facultyCount">Total Faculties: 0</h4>
+        <button onclick="printFacultyTable()"
+                style="padding:8px 15px;background-color:#17a2b8;color:white;border:none;border-radius:5px;">
+          🖨️ Print Faculty List
+        </button>
+      </div>
+
+      <table class="student-table" border="1" cellspacing="0" cellpadding="8" style="width:100%; border-collapse: collapse;">
+        <thead>
+          <tr>
+            <th onclick="sortTable(0)">ID ⬍</th>
+            <th onclick="sortTable(1)">Faculty Name ⬍</th>
+            <th onclick="sortTable(2)">Email ⬍</th>
+            <th onclick="sortTable(3)">Subject ⬍</th>
+            <th onclick="sortTable(4)">Course ⬍</th>
+            <th>Delete</th>
+            <th>Update</th>
+          </tr>
+        </thead>
+        <tbody id="facultyTableBody">
+          <tr th:each="faculty : ${faculties}">
+            <td th:text="${faculty.id}"></td>
+            <td th:text="${faculty.name}"></td>
+            <td th:text="${faculty.email}"></td>
+            <td th:text="${faculty.subject}"></td>
+            <td th:text="${faculty.course.name}"></td>
+
+            <td>
+              <form th:action="@{/delete-faculty}" method="post">
+                <input type="hidden" name="id" th:value="${faculty.id}" />
+                <button type="submit"
+                        style="padding:5px;background-color:#dc3545;border:none;color:white;border-radius: 5px">
+                  <i class="fa-solid fa-trash"></i> Delete
+                </button>
+              </form>
+            </td>
+            <td>
+              <a th:href="@{'/update-faculty/' + ${faculty.id}}"
+                 style="padding:5px;background-color:#118AB2;color:white;border-radius:5px;text-decoration:none;">
+                <i class="fa-solid fa-pen-to-square"></i> Update
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+
+    <!-- ✅ JS Logic -->
+    <script>
+      // 🔍 Search
+      function searchFaculty() {
+        const input = document.getElementById("searchInput").value.trim();
+        const rows = document.querySelectorAll("#facultyTableBody tr");
+
+        rows.forEach(row => {
+          const idCell = row.querySelector("td:first-child").textContent.trim();
+          if (input === "" || idCell === input) {
+            row.style.display = "";
+          } else {
+            row.style.display = "none";
+          }
+        });
+        updateFacultyCount();
+      }
+
+      function resetTable() {
+        document.getElementById("searchInput").value = "";
+        const rows = document.querySelectorAll("#facultyTableBody tr");
+        rows.forEach(row => row.style.display = "");
+        updateFacultyCount();
+      }
+
+      // 📊 Sorting
+      let sortDirection = {};
+
+      function sortTable(colIndex) {
+        const tbody = document.getElementById("facultyTableBody");
+        const rows = Array.from(tbody.querySelectorAll("tr"));
+
+        sortDirection[colIndex] = !sortDirection[colIndex];
+
+        rows.sort((a, b) => {
+          let valA = a.children[colIndex].textContent.trim();
+          let valB = b.children[colIndex].textContent.trim();
+
+          if (!isNaN(valA) && !isNaN(valB)) {
+            valA = Number(valA);
+            valB = Number(valB);
+          }
+
+          if (valA < valB) return sortDirection[colIndex] ? -1 : 1;
+          if (valA > valB) return sortDirection[colIndex] ? 1 : -1;
+          return 0;
+        });
+
+        rows.forEach(row => tbody.appendChild(row));
+        updateFacultyCount();
+      }
+
+      // 📊 Count Faculties
+      function updateFacultyCount() {
+        const rows = Array.from(document.querySelectorAll("#facultyTableBody tr"));
+        const visibleRows = rows.filter(row => row.style.display !== "none");
+        document.getElementById("facultyCount").innerText = "Total Faculties: " + visibleRows.length;
+      }
+
+      // 🖨️ Print
+      function printFacultyTable() {
+        const table = document.querySelector(".student-table").outerHTML;
+        const newWin = window.open("", "", "width=800,height=600");
+
+        newWin.document.write(`
+          <html>
+            <head>
+              <title>Faculty List</title>
+              <style>
+                table { width:100%; border-collapse: collapse; }
+                th, td { border:1px solid #333; padding:8px; text-align:left; }
+                th { background-color:#f2f2f2; }
+                h2 { text-align:center; }
+              </style>
+            </head>
+            <body>
+              <h2>Faculty List</h2>
+              ${table}
+            </body>
+          </html>
+        `);
+
+        newWin.document.close();
+        newWin.print();
+      }
+
+      // ✅ Run on load
+      updateFacultyCount();
+    </script>
+  </div>
+>>>>>>> 6c1a6d69560234e6c98e66ab1dcc912923cde5fd
 </body>
 </html>

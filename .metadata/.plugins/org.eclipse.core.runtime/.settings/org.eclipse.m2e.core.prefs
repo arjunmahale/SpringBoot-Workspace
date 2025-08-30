@@ -1,2 +1,7 @@
+eclipse.m2.defaultRuntime=EMBEDDED
 eclipse.m2.downloadJavadoc=true
+eclipse.m2.runtimes=apache-maven-3.9.11
+eclipse.m2.runtimesNodes/apache-maven-3.9.11/extensions=P/CollegeERPSystem
+eclipse.m2.runtimesNodes/apache-maven-3.9.11/location=C\:\\Program Files\\apache-maven-3.9.11
+eclipse.m2.runtimesNodes/apache-maven-3.9.11/type=EXTERNAL
 eclipse.preferences.version=1
