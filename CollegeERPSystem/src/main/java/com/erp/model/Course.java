@@ -13,6 +13,8 @@ public class Course {
 
     private String name;
     private String description;
+    private int duration;
+    private int credits;
 
     // ✅ One course can have many students
     @OneToMany(mappedBy = "course")
@@ -26,14 +28,53 @@ public class Course {
 
   
 
-    public Course(int id, String name, String description, List<Student> students, Faculty faculty) {
+   
+
+	public Course(int id, String name, String description, int duration, int credits, List<Student> students,
+			Faculty faculty) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.description = description;
+		this.duration = duration;
+		this.credits = credits;
 		this.students = students;
 		this.faculty = faculty;
 	}
+
+
+
+	public int getDuration() {
+		return duration;
+	}
+
+
+
+
+
+	public void setDuration(int duration) {
+		this.duration = duration;
+	}
+
+
+
+
+
+	public int getCredits() {
+		return credits;
+	}
+
+
+
+
+
+	public void setCredits(int credits) {
+		this.credits = credits;
+	}
+
+
+
+
 
 	// --- Getters & Setters ---
     public int getId() {

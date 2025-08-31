@@ -70,7 +70,7 @@ public class FacultyController {
         // ✅ Check if course already assigned to another faculty
         Faculty assignedFaculty = facultyServ.getFacultyByCourse(faculty.getCourse());
         if (assignedFaculty != null && (faculty.getId() == 0 || assignedFaculty.getId() != faculty.getId())) {
-            redirectAttributes.addFlashAttribute("error", "Course is already assigned to another faculty!");
+            redirectAttributes.addFlashAttribute("error", "Course is already assigned to another faculty! Please use another course or You can simply add new Course");
             return "redirect:/faculty-management"; // back without saving
         }
 

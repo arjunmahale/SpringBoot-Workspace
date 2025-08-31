@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.erp.model.Login;
 
-public interface LoginRepository extends JpaRepository<Login, Integer> {
+public interface LoginRepository extends JpaRepository<Login, Long> {
 	Login findByName(String name);
 
 	

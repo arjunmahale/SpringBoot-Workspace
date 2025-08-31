@@ -39,7 +39,7 @@ public class FacultyService {
 	@Transactional
 	public void deleteFaculty(Faculty faculty) {
 	    // First, fetch the faculty with courses
-	    Faculty existingFaculty = facultyRepo.findById((int) faculty.getId()).orElse(null);
+	    Faculty existingFaculty = facultyRepo.findById( faculty.getId()).orElse(null);
 	    if (existingFaculty != null) {
 	        // Set faculty null in related course(s)
 	        if (existingFaculty.getCourse() != null) {
@@ -62,4 +62,11 @@ public class FacultyService {
     public Faculty getFacultyByCourse(Course course) {
         return facultyRepo.findByCourse(course);
     }
+
+
+    // Count total faculty members
+    public long countFaculty() {
+        return facultyRepo.count();
+    }
+
 }

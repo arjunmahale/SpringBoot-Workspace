@@ -50,5 +50,9 @@ public class courseService {
 		Course course = courseRepo.findAllById(id);
 		return course;
 	}
-	
+
+	   // Count total courses
+    public long countCourses() {
+        return courseRepo.count();
+    }
 }

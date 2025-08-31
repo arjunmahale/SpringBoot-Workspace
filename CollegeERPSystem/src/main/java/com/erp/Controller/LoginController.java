@@ -5,15 +5,26 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.erp.model.Login;
+import com.erp.services.FacultyService;
 import com.erp.services.LoginService;
+import com.erp.services.StudentService;
+import com.erp.services.courseService;
 
 @Controller
 public class LoginController {
 	@Autowired
 	private LoginService loginServ;
+	
+	@Autowired
+	private StudentService studentService;
+	
+	@Autowired
+	private courseService courseService;
+	
+	@Autowired
+	private FacultyService facultyService;
+	
 	@PostMapping("/login")
 	public String login(@ModelAttribute Login login, Model model) {
 	    Login dbUser = loginServ.getUserByName(login.getName());
@@ -39,11 +50,28 @@ public class LoginController {
 
 	    // ✅ Correct login
 	    if ("admin".equals(dbUser.getRole())) {
-<<<<<<< HEAD
-	        return "admin-dashboard";
-=======
+	    	
+	    	long totalStudents = studentService.countStudents();
+	    	long totalCourses = courseService.countCourses();
+	    	long totalFaculty = facultyService.countFaculty();
+
+	    	System.out.println("Students: " + totalStudents);
+	    	System.out.println("Courses: " + totalCourses);
+	    	System.out.println("Faculty: " + totalFaculty);
+
+	    	model.addAttribute("totalStudents", totalStudents);
+	    	model.addAttribute("totalCourses", totalCourses);
+	    	model.addAttribute("totalFaculty", totalFaculty);
+	    	
+	    	
+
+	    	   model.addAttribute("students", studentService.getRecentStudents()); // maybe last 5
+	    	    model.addAttribute("courses", courseService.getAllcourses());
+	    	    model.addAttribute("faculties", facultyService.getAllfaculties());
+	    	    
+	    	    
+
 	        return "/admin-links/admin-dashboard";
->>>>>>> 6c1a6d69560234e6c98e66ab1dcc912923cde5fd
 	    } else if ("faculty".equals(dbUser.getRole())) {
 	        return "faculty-dashboard";
 	    } else if ("student".equals(dbUser.getRole())) {

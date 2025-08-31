@@ -1,6 +1,7 @@
 package com.erp.services;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.hibernate.engine.jdbc.spi.TypeNullability;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,12 @@ public class StudentService {
 	private StudentRepository studRepo;
 
 	public List<Student> getAllStudent() {
+		
 		List<Student> student = studRepo.findAll();
 		if (student == null) {
 			System.out.println("empty list");
 		}
+		
 		return student;
 
 	}
@@ -47,4 +50,18 @@ public class StudentService {
 		Student student = studRepo.findAllById(id);
 		return student;
 	}
+
+	public long countStudents() {
+	    System.out.println("Inside countStudents()"); // debug
+	    return studRepo.count(); // just count rows in DB
+	}
+
+    // Get last 5 students added
+    public List<Student> getRecentStudents() {
+        return studRepo.findAll()
+                       .stream()
+                       .sorted((s1, s2) -> Long.compare(s2.getId(), s1.getId())) // descending by ID
+                       .limit(5)
+                       .collect(Collectors.toList());
+    }
 }

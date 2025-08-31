@@ -17,6 +17,7 @@ public class Faculty {
 	private long id;
 	private String name;
 	private String email;
+	private String department;
 	private String subject;
 	private long mobile;
 	private String gender;
@@ -35,12 +36,15 @@ public class Faculty {
 		super();
 	}
 
-	public Faculty(long id, String name, String email, String subject, long mobile, String gender, int age,
-			String profile_desc, String password, Course course, Login login) {
+
+
+	public Faculty(long id, String name, String email, String department, String subject, long mobile, String gender,
+			int age, String profile_desc, String password, Course course, Login login) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
+		this.department = department;
 		this.subject = subject;
 		this.mobile = mobile;
 		this.gender = gender;
@@ -139,11 +143,24 @@ public class Faculty {
 		this.login = login;
 	}
 
+	
+	public String getDepartment() {
+		return department;
+	}
+
+
+
+	public void setDepartment(String department) {
+		this.department = department;
+	}
+
+
+
 	@Override
 	public String toString() {
-		return "Faculty [id=" + id + ", name=" + name + ", email=" + email + ", subject=" + subject + ", mobile="
-				+ mobile + ", gender=" + gender + ", age=" + age + ", profile_desc=" + profile_desc + ", password="
-				+ password + ", course=" + course + ", login=" + login + "]";
+		return "Faculty [id=" + id + ", name=" + name + ", email=" + email + ", department=" + department + ", subject="
+				+ subject + ", mobile=" + mobile + ", gender=" + gender + ", age=" + age + ", profile_desc="
+				+ profile_desc + ", password=" + password + ", course=" + course + ", login=" + login + "]";
 	}
 
 }
