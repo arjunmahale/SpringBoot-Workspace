@@ -90,6 +90,8 @@
             <th>ID</th>
             <th>Course Name</th>
             <th>Description</th>
+            <th>Duration</th>
+            <th>Credit</th>
             <th>Delete</th>
             <th>Update</th>
           </tr>
@@ -100,6 +102,8 @@
             <td th:text="${course.id}"></td>
             <td th:text="${course.name}"></td>
             <td th:text="${course.description}"></td>
+            <td th:text="${course.duration}"></td>
+            <td th:text="${course.credits}"></td>
             <td>
               <form th:action="@{/delete-course}" method="post">
                 <input type="hidden" name="id" th:value="${course.id}" />
