@@ -1,4 +1,5 @@
-bin/
-.metadata/*
+*.metadata/
+*.settings/
+*.bin/
+*.log
 *.class
-/.metadata/
