@@ -143,10 +143,12 @@ public class Student {
 	}
 
 	@Override
-    public String toString() {
-        return "Student [id=" + id + ", name=" + name + ", roll_no=" + roll_no +
-               ", email=" + email + ", mobile=" + mobile + ", gender=" + gender +
-               ", age=" + age + ", profile_desc=" + profile_desc + ", course=" + course +
-               ", password=" + password + "]";
-    }
+	public String toString() {
+	    return "Student [id=" + id + ", name=" + name + ", roll_no=" + roll_no + 
+	           ", email=" + email + ", mobile=" + mobile + ", gender=" + gender + 
+	           ", age=" + age + ", profile_desc=" + profile_desc + 
+	           ", course=" + (course != null ? course.getName() : "null") +
+	           ", password=" + password + 
+	           ", loginId=" + (login != null ? login.getId() : "null") + "]";
+	}
 }

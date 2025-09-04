@@ -64,4 +64,20 @@ public class StudentService {
                        .limit(5)
                        .collect(Collectors.toList());
     }
+
+    
+    
+    
+    //for faculty dashboard
+    
+    
+    public List<Student> getAllStudentByCourse(String name) {
+    	List<Student> students = studRepo.findByCourse_Name(name);
+
+        if (students.isEmpty()) {
+            System.out.println("No students found for course: " + name);
+        }
+        return students;
+    }
+
 }

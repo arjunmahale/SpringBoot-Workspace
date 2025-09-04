@@ -1,15 +1,20 @@
 package com.erp.Controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import com.erp.model.Login;
+import com.erp.model.Student;
 import com.erp.services.FacultyService;
 import com.erp.services.LoginService;
 import com.erp.services.StudentService;
 import com.erp.services.courseService;
+
 
 @Controller
 public class LoginController {
@@ -29,6 +34,7 @@ public class LoginController {
 	public String login(@ModelAttribute Login login, Model model) {
 	    Login dbUser = loginServ.getUserByName(login.getName());
 
+	  
 	    if (dbUser == null) {
 	        // Username not found → include entered name
 	        model.addAttribute("name", login.getName());
@@ -73,7 +79,33 @@ public class LoginController {
 
 	        return "/admin-links/admin-dashboard";
 	    } else if ("faculty".equals(dbUser.getRole())) {
-	        return "faculty-dashboard";
+	    	
+	    	//long totalStudents = studentService.countStudents();
+	    	
+
+	   
+	   
+	    	
+	    List<Student> s1 =	studentService.getAllStudent();
+	    List<Student> s2 = new ArrayList<>();
+
+	    long cnt=0;
+	    for (Student stu : s1) {
+	        if (stu.getCourse() != null && "mcs".equalsIgnoreCase(stu.getCourse().getName())) {
+	            s2.add(stu);
+	            
+	            cnt++;
+	        }
+	    }
+
+	    long totalStudents=cnt;
+	    	model.addAttribute("totalStudents", totalStudents);
+
+
+	    	model.addAttribute("students", s2);
+	    	
+ 
+	        return "faculty-links/faculty-dashboard";
 	    } else if ("student".equals(dbUser.getRole())) {
 	        return "student-dashboard";
 	    }
