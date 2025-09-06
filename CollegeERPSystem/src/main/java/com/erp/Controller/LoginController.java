@@ -1,5 +1,6 @@
 package com.erp.Controller;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import com.erp.model.Course;
 import com.erp.model.Login;
 import com.erp.model.Student;
 import com.erp.services.FacultyService;
@@ -35,6 +38,8 @@ public class LoginController {
 	    Login dbUser = loginServ.getUserByName(login.getName());
 
 	  
+	  
+	   // LocalDate selectedDate = (date == null) ? today : date;
 	    if (dbUser == null) {
 	        // Username not found → include entered name
 	        model.addAttribute("name", login.getName());
@@ -53,7 +58,7 @@ public class LoginController {
 	        model.addAttribute("error", "role is wrong");
 	        return "index";
 	    }
-
+	  
 	    // ✅ Correct login
 	    if ("admin".equals(dbUser.getRole())) {
 	    	
@@ -69,20 +74,21 @@ public class LoginController {
 	    	model.addAttribute("totalCourses", totalCourses);
 	    	model.addAttribute("totalFaculty", totalFaculty);
 	    	
-	    	
+	    	  LocalDate today = LocalDate.now();
+	    model.addAttribute("today",today.toString());
 
 	    	   model.addAttribute("students", studentService.getRecentStudents()); // maybe last 5
 	    	    model.addAttribute("courses", courseService.getAllcourses());
 	    	    model.addAttribute("faculties", facultyService.getAllfaculties());
 	    	    
-	    	    
+	    	 
 
 	        return "/admin-links/admin-dashboard";
 	    } else if ("faculty".equals(dbUser.getRole())) {
 	    	
 	    	//long totalStudents = studentService.countStudents();
 	    	
-
+ String course= dbUser.getFaculty().getCourse().getName();
 	   
 	   
 	    	
@@ -91,7 +97,7 @@ public class LoginController {
 
 	    long cnt=0;
 	    for (Student stu : s1) {
-	        if (stu.getCourse() != null && "mcs".equalsIgnoreCase(stu.getCourse().getName())) {
+	        if (stu.getCourse() != null && course.equalsIgnoreCase(stu.getCourse().getName())) {
 	            s2.add(stu);
 	            
 	            cnt++;
@@ -101,10 +107,12 @@ public class LoginController {
 	    long totalStudents=cnt;
 	    	model.addAttribute("totalStudents", totalStudents);
 
-
+	    	  LocalDate today = LocalDate.now();
+	  	    model.addAttribute("today",today.toString());
 	    	model.addAttribute("students", s2);
-	    	
+	    	System.out.println(today.toString());
  
+	    	model.addAttribute("user",dbUser.getName());
 	        return "faculty-links/faculty-dashboard";
 	    } else if ("student".equals(dbUser.getRole())) {
 	        return "student-dashboard";

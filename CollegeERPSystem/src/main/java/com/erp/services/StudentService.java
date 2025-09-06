@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.erp.model.Student;
+import com.erp.repositories.AttendanceRepository;
 import com.erp.repositories.StudentRepository;
 
 @Service
@@ -15,6 +16,9 @@ public class StudentService {
 
 	@Autowired
 	private StudentRepository studRepo;
+	
+	@Autowired
+	private AttendanceRepository attendanceRepository;
 
 	public List<Student> getAllStudent() {
 		
@@ -40,6 +44,9 @@ public class StudentService {
 	}
 
 	public void deleteStudent(Student student) {
+		
+		
+        
 		studRepo.delete(student);
 		;
 
