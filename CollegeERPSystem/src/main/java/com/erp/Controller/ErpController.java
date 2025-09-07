@@ -1,6 +1,10 @@
 package com.erp.Controller;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,13 +16,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.erp.model.Attendance;
 import com.erp.model.Course;
 import com.erp.model.Login;
 import com.erp.model.Student;
+import com.erp.services.AttendanceService;
 import com.erp.services.FacultyService;
 import com.erp.services.LoginService;
 import com.erp.services.StudentService;
 import com.erp.services.courseService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class ErpController {
@@ -38,6 +46,9 @@ public class ErpController {
 	
 	@Autowired
 	private FacultyService facultyService;
+	
+	@Autowired
+	private AttendanceService attendanceService;
     // Home page
     @GetMapping("/")
     public String index() {
@@ -54,6 +65,7 @@ public class ErpController {
         return "admin-links/student-management"; // ✅ table page only
     }
 
+   
     @GetMapping("/admin-dashboard")
     public String showadminDashboard(Model model) {
     	long totalStudents = studserv.countStudents();
@@ -74,7 +86,81 @@ public class ErpController {
         return "admin-links/admin-dashboard"; // template name, no redirect
     }
 
+    @GetMapping("/attendance-list")
+	public String showAttendance(HttpSession session,Model model) {
+    	  // Check if user is logged in
+        if (session.getAttribute("loggedInUser") == null) {
+            return "redirect:/"; // redirect to login page if not logged in
+        }
+	    LocalDate today = LocalDate.now();
+	    model.addAttribute("today", today.toString());
+String user1=(String) session.getAttribute("user");
+		
+		model.addAttribute("user",user1);
+	    // ✅ Get all students
+	    List<Student> s1 = studserv.getAllStudent();
+	    List<Student> s2 = new ArrayList<>();
 
+	    // ✅ Filter students of course "MCS"
+	    for (Student stu : s1) {
+	        if (stu.getCourse() != null && "mcs".equalsIgnoreCase(stu.getCourse().getName())) {
+	            s2.add(stu);
+	        }
+	    }
+
+	    // ✅ Attendance map (only for students in MCS)
+	    Map<Long, String> attendanceMap = new HashMap<>();
+	    List<Attendance> todayAttendance = attendanceService.getByDate(today);
+
+	    for (Attendance att : todayAttendance) {
+	        if (att.getStudent().getCourse() != null &&
+	            "mcs".equalsIgnoreCase(att.getStudent().getCourse().getName())) {
+	            attendanceMap.put(att.getStudent().getId(), att.getStatus());
+	        }
+	    }
+
+	    model.addAttribute("students", s2);
+	    model.addAttribute("attendanceMap", attendanceMap);
+	    model.addAttribute("totalStudents", s2.size());
+
+	    return "admin-links/attendance-list"; // ✅ return view
+	}
+    @GetMapping("/total-attendance-list")
+    public String showAttendanceAllTime(HttpSession session,Model model) {
+    	LocalDate today = LocalDate.now();
+    	model.addAttribute("today", today.toString());
+    	String user1=(String) session.getAttribute("user");
+    	
+    	model.addAttribute("user",user1);
+    	// ✅ Get all students
+    	List<Student> s1 = studserv.getAllStudent();
+    	List<Student> s2 = new ArrayList<>();
+    	
+    	// ✅ Filter students of course "MCS"
+    	for (Student stu : s1) {
+    		if (stu.getCourse() != null && "mcs".equalsIgnoreCase(stu.getCourse().getName())) {
+    			s2.add(stu);
+    		}
+    	}
+    	
+    	// ✅ Attendance map (only for students in MCS)
+    	Map<Long, String> attendanceMap = new HashMap<>();
+    	List<Attendance> todayAttendance = attendanceService.getByDate(today);
+    	
+    	for (Attendance att : todayAttendance) {
+    		if (att.getStudent().getCourse() != null &&
+    				"mcs".equalsIgnoreCase(att.getStudent().getCourse().getName())) {
+    			attendanceMap.put(att.getStudent().getId(), att.getStatus());
+    		}
+    	}
+    	
+    	model.addAttribute("students", s1);
+    	model.addAttribute("attendanceMap", attendanceMap);
+    	model.addAttribute("totalStudents", s1.size());
+    	
+    	return "admin-links/total-attendance-list"; // ✅ return view
+    }
+	
     // Open form to add student
     @GetMapping("/add-student")
     public String showStudentForm(Model model) {

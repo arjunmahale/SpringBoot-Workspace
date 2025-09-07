@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -17,6 +16,8 @@ import com.erp.model.Attendance;
 import com.erp.model.Student;
 import com.erp.services.AttendanceService;
 import com.erp.services.StudentService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class FacultyDashController {
@@ -28,11 +29,15 @@ public class FacultyDashController {
 	private AttendanceService attendanceService;
 
 	@GetMapping("/faculty-dashboard")
-	public String showadminDashboard(Model model) {
+	public String showadminDashboard( HttpSession session,Model model) {
 
+		String user1=(String) session.getAttribute("user");
+		
+		model.addAttribute("user",user1);
 		List<Student> s1 = studentService.getAllStudent();
 		List<Student> s2 = new ArrayList<>();
 
+		
 		long cnt = 0;
 		for (Student stu : s1) {
 			if (stu.getCourse() != null && "mcs".equalsIgnoreCase(stu.getCourse().getName())) {
@@ -46,16 +51,30 @@ public class FacultyDashController {
 		model.addAttribute("totalStudents", totalStudents);
 
 		model.addAttribute("students", s2);
-
-		//model.addAttribute("user",dbUser.getName());
+		 LocalDate today = LocalDate.now();
+		    model.addAttribute("today", today.toString());
+		
 		return "faculty-links/faculty-dashboard"; // template name, no redirect
 	}
 	
+	 @GetMapping("/student-list")
+	    public String showStudentstoFaculty(HttpSession session,Model model) {
+		 String user1=(String) session.getAttribute("user");
+			
+			model.addAttribute("user",user1);
+	        List<Student> students = studentService.getAllStudent();
+	        model.addAttribute("students", students);
+
+	        return "faculty-links/student-list"; // ✅ table page only
+	    }
+	
 	@GetMapping("/attendance")
-	public String showAttendance(Model model) {
+	public String showAttendance(HttpSession session,Model model) {
 	    LocalDate today = LocalDate.now();
 	    model.addAttribute("today", today.toString());
-
+String user1=(String) session.getAttribute("user");
+		
+		model.addAttribute("user",user1);
 	    // ✅ Get all students
 	    List<Student> s1 = studentService.getAllStudent();
 	    List<Student> s2 = new ArrayList<>();
@@ -85,6 +104,42 @@ public class FacultyDashController {
 	    return "faculty-links/attendance"; // ✅ return view
 	}
 	
+	
+	@GetMapping("/total-attendance")
+	public String showAllAttendance(HttpSession session,Model model) {
+	    LocalDate today = LocalDate.now();
+	    model.addAttribute("today", today.toString());
+String user1=(String) session.getAttribute("user");
+		
+		model.addAttribute("user",user1);
+	    // ✅ Get all students
+	    List<Student> s1 = studentService.getAllStudent();
+	    List<Student> s2 = new ArrayList<>();
+
+	    // ✅ Filter students of course "MCS"
+	    for (Student stu : s1) {
+	        if (stu.getCourse() != null && "mcs".equalsIgnoreCase(stu.getCourse().getName())) {
+	            s2.add(stu);
+	        }
+	    }
+
+	    // ✅ Attendance map (only for students in MCS)
+	    Map<Long, String> attendanceMap = new HashMap<>();
+	    List<Attendance> todayAttendance = attendanceService.getByDate(today);
+
+	    for (Attendance att : todayAttendance) {
+	        if (att.getStudent().getCourse() != null &&
+	            "mcs".equalsIgnoreCase(att.getStudent().getCourse().getName())) {
+	            attendanceMap.put(att.getStudent().getId(), att.getStatus());
+	        }
+	    }
+
+	    model.addAttribute("students", s1);
+	    model.addAttribute("attendanceMap", attendanceMap);
+	    model.addAttribute("totalStudents", s1.size());
+
+	    return "faculty-links/total-attendance"; // ✅ return view
+	}
 	
 	@PostMapping("/attendance/save")
 	public String saveAttendance(@RequestParam Long studentId,

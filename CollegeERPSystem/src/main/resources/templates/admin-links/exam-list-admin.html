@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="../dashboard.css">
+  <!-- include SweetAlert2 (put in head or before using it) -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<!-- hidden containers that contain raw HTML message (th:utext so <b> remains) -->
+<div id="flashSuccess" th:if="${message}" th:utext="${message}" style="display:none;"></div>
+<div id="flashError" th:if="${error}" th:utext="${error}" style="display:none;"></div>
+
+<!-- show SweetAlert popups by reading innerHTML from hidden divs -->
+<script>
+  // show error if any
+  (function() {
+    var errDiv = document.getElementById('flashError');
+    if (errDiv) {
+      var html = errDiv.innerHTML || '';
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        html: html,   // accepts HTML
+        confirmButtonText: 'OK'
+      });
+    }
+
+    var successDiv = document.getElementById('flashSuccess');
+    if (successDiv) {
+      var html2 = successDiv.innerHTML || '';
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        html: html2,
+        confirmButtonText: 'OK'
+      });
+    }
+  })();
+</script>
+  
+  <style>
+    .summary-cards {
+      display: flex;
+      gap: 20px;
+      margin: 20px 0;
+      justify-content: space-around;
+    }
+    .card {
+      flex: 1;
+      background: #f8f9fa;
+      padding: 20px;
+      text-align: center;
+      border-radius: 10px;
+      box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+    }
+    .card h2 {
+      margin: 10px 0;
+      font-size: 24px;
+      color: #007bff;
+    }
+    .data-section {
+      margin: 20px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+
+</head>
+<body>
+<header><u>Admin Dashboard</u></header>
+<div class="container">
+    <nav class="sidebar">
+    <div class="profile">
+      <img src="../profile.jpg" alt="Admin Profile" class="profile-pic">
+      <h3 class="profile-name">Admin User</h3>
+    </div>
+    <a href="/admin-dashboard">Admin Dashboard</a>
+    <a href="/student-management">Student Management</a>
+    <a href="/course-management">Course Management</a>
+    <a href="/faculty-management">Faculty Management</a>
+    <a href="/attendance-list">Attendance</a>
+    <a href="/admin/exams">Exams & Results</a>
+    <a href="#">Notifications / Notice Board
+</a>
+    <a href="#">Timetable</a>
+    <a href="#">Reports</a>
+  </nav>
+
+<main class="main" id="main-content">
+  <h1 style="display:flex; justify-content:center; align-items:center;">
+    Exam List
+  </h1>
+
+  <!-- ✅ Add Exam Button -->
+  <div style="display: flex; justify-content: flex-start; margin-bottom: 15px;">
+    <a href="/admin/exams/new"
+       style="padding:8px 15px;background-color:#28a745;color:white;border-radius:6px;text-decoration:none;margin-left:20px;">
+      <i class="fa-solid fa-plus"></i> Schedule Exam
+    </a>
+    
+  </div>
+ 
+
+  <!-- ✅ Search Bar -->
+  <div style="margin-bottom: 15px; display:flex; gap:10px;">
+    <input type="text" id="searchInput" placeholder="Enter Exam ID"
+           style="padding:8px;border:1px solid #ccc;border-radius:5px;flex:1;">
+    <button onclick="searchExam()"
+            style="padding:8px 15px;background-color:#007bff;color:white;border:none;border-radius:5px;">
+      Search
+    </button>
+    <button onclick="resetTable()"
+            style="padding:8px 15px;background-color:#6c757d;color:white;border:none;border-radius:5px;">
+      Refresh
+    </button>
+  </div>
+
+  <!-- ✅ Print & Sort Controls -->
+  <div style="margin-bottom: 15px; text-align:right; display:flex; justify-content:flex-end; gap:10px;">
+    <select id="sortDropdown" onchange="applySort()"
+            style="padding:8px;border:1px solid #ccc;border-radius:5px;">
+      <option value="id">Sort by Exam ID</option>
+      <option value="course">Sort by Course</option>
+      <option value="subject">Sort by Subject</option>
+      <option value="date">Sort by Exam Date</option>
+    </select>
+    <button onclick="printTable()"
+            style="padding:8px 15px;background-color:#17a2b8;color:white;border:none;border-radius:5px;">
+      🖨️ Print Exam List
+    </button>
+  </div>
+
+  <!-- ✅ Exam Count -->
+  <div style="margin-bottom: 10px; text-align:left;">
+    <strong id="examCount">Total Exams: 0</strong>
+  </div>
+
+  <!-- ✅ Exam Table -->
+  <table class="exam-table" border="1" cellspacing="0" cellpadding="8"
+         style="width:100%; border-collapse: collapse;">
+    <thead>
+      <tr>
+        <th>Sr. No.</th>
+        <th>Exam ID</th>
+        <th>Course</th>
+        <th>Subject</th>
+        <th>Exam Date</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody id="examTableBody">
+      <tr th:each="exam : ${exams}">
+        <td></td> <!-- Sr. No. will be filled dynamically -->
+        <td th:text="${exam.id}"></td>
+        <td th:text="${exam.course}"></td>
+        <td th:text="${exam.subject}"></td>
+        <td th:text="${exam.examDate}"></td>
+        <td>
+          <form th:action="@{/admin/exams/delete/{id}(id=${exam.id})}" method="get">
+            <button type="submit"
+                    style="padding:5px;background-color:#dc3545;border:none;color:white;border-radius: 5px">
+              🗑️ Delete
+            </button>
+          </form>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ✅ JS Logic -->
+  <script>
+    // Add Sr. No. dynamically
+    function updateSrNo() {
+      const rows = document.querySelectorAll("#examTableBody tr");
+      let visibleCount = 0;
+      rows.forEach((row, index) => {
+        if (row.style.display !== "none") {
+          visibleCount++;
+          row.querySelector("td:first-child").textContent = visibleCount;
+        }
+      });
+      document.getElementById("examCount").innerText = "Total Exams: " + visibleCount;
+    }
+
+    // 🔍 Search
+    function searchExam() {
+      const input = document.getElementById("searchInput").value.trim();
+      const rows = document.querySelectorAll("#examTableBody tr");
+
+      rows.forEach(row => {
+        const idCell = row.children[1].textContent.trim();
+        if (input === "" || idCell === input) {
+          row.style.display = "";
+        } else {
+          row.style.display = "none";
+        }
+      });
+      updateSrNo();
+    }
+
+    function resetTable() {
+      document.getElementById("searchInput").value = "";
+      const rows = document.querySelectorAll("#examTableBody tr");
+      rows.forEach(row => row.style.display = "");
+      updateSrNo();
+    }
+
+    // 📊 Sorting
+    function applySort() {
+      const sortBy = document.getElementById("sortDropdown").value;
+      const tbody = document.getElementById("examTableBody");
+      const rows = Array.from(tbody.querySelectorAll("tr"));
+
+      const colIndexMap = {
+        id: 1,
+        course: 2,
+        subject: 3,
+        date: 4
+      };
+
+      const colIndex = colIndexMap[sortBy];
+
+      rows.sort((a, b) => {
+        let valA = a.children[colIndex].textContent.trim();
+        let valB = b.children[colIndex].textContent.trim();
+
+        if (sortBy === "id") {
+          valA = Number(valA);
+          valB = Number(valB);
+        }
+
+        if (valA < valB) return -1;
+        if (valA > valB) return 1;
+        return 0;
+      });
+
+      tbody.innerHTML = "";
+      rows.forEach(row => tbody.appendChild(row));
+      updateSrNo();
+    }
+
+    // 🖨️ Print
+    function printTable() {
+      const table = document.querySelector(".exam-table").outerHTML;
+      const newWin = window.open("", "", "width=800,height=600");
+      newWin.document.write(`
+        <html>
+          <head>
+            <title>Exam List</title>
+            <style>
+              table { width:100%; border-collapse: collapse; }
+              th, td { border:1px solid #333; padding:8px; text-align:left; }
+              th { background-color:#f2f2f2; }
+              h2 { text-align:center; }
+            </style>
+          </head>
+          <body>
+            <h2>Exam List</h2>
+            ${table}
+          </body>
+        </html>
+      `);
+      newWin.document.close();
+      newWin.print();
+    }
+
+    // ✅ On page load: sort by ID (descending) + update Sr. No. + exam count
+    window.onload = function() {
+      const tbody = document.getElementById("examTableBody");
+      const rows = Array.from(tbody.querySelectorAll("tr"));
+
+      rows.sort((a, b) => {
+        let idA = Number(a.children[1].textContent.trim());
+        let idB = Number(b.children[1].textContent.trim());
+        return idB - idA;
+      });
+
+      tbody.innerHTML = "";
+      rows.forEach(row => tbody.appendChild(row));
+      updateSrNo();
+    };
+  </script>
+</main>
+
+</div>
+
+<footer>
+  <div class="footer-container">
+    <div class="footer-section">
+      <h4>College ERP System</h4>
+      <p>&copy; 2025 All Rights Reserved</p>
+    </div>
+    <div class="footer-section">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="/student-management">Student Management</a></li>
+     
+        <li><a href="/attendence">Attendance</a></li>
+        <li><a href="/reports">Reports</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h4>Contact</h4>
+      <p>Email: support@collegeerp.com</p>
+      <p>Phone: +91-9876543210</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

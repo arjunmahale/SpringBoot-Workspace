@@ -2,45 +2,106 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Admin Dashboard</title>
-  <link rel="stylesheet" href="../dashboard.css">
-
-  <!-- ✅ Success popup -->
-  <script th:if="${message}">
-      alert('[[${message}]]');
-  </script>
+  <title>Faculty Dashboard</title>
+  <link rel="stylesheet" href="../../dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    .summary-cards {
+      display: flex;
+      gap: 20px;
+      margin: 20px 0;
+      justify-content: space-around;
+    }
+    .card {
+      flex: 1;
+      background: #f8f9fa;
+      padding: 20px;
+      text-align: center;
+      border-radius: 10px;
+      box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+    }
+    .card h2 {
+      margin: 10px 0;
+      font-size: 24px;
+      color: #007bff;
+    }
+    .data-section {
+      margin: 20px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+     .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px 30px;
+    }
+    .form-group { display: flex; flex-direction: column; }
+    .form-group label { font-weight: bold; margin-bottom: 5px; }
+    .form-group input, .form-group select, .form-group textarea {
+      padding: 8px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .full-width { grid-column: span 2; }
+    .submit-btn {
+      grid-column: span 2;
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 4px;
+      border: none;
+      background: #007bff;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-  <header><u>Admin Dashboard</u></header>
-  <div class="container">
-   <nav class="sidebar">
+<header><u>Faculty Dashboard</u></header>
+<div class="container">
+  <nav class="sidebar">
     <div class="profile">
-      <img src="profile.jpg" alt="Admin Profile" class="profile-pic">
-      <h3 class="profile-name">Admin User</h3>
+      <img src="../../profile.jpg" alt="Admin Profile" class="profile-pic">
+      <h3 class="profile-name" th:text="${user}"></h3>
     </div>
-    <a href="/admin-dashboard">Admin Dashboard</a>
-    <a href="/student-management">Student Management</a>
-    <a href="/course-management">Course Management</a>
-    <a href="/faculty-management">Faculty Management</a>
-    <a href="/attendance-list">Attendance</a>
-    <a href="/admin/exams">Exams & Results</a>
+    <a href="/faculty-dashboard">Faculty Dashboard</a>
+    <a href="/student-list">Student Management</a>
+
+    
+    <a href="/attendance">Attendance</a>
+    <a href="/exams">Exams & Results</a>
     <a href="#">Notifications / Notice Board
-</a>
+    </a>
     <a href="#">Timetable</a>
     <a href="#">Reports</a>
   </nav>
 
-    <main class="main" id="main-content">
-      <center><h1>Student Record</h1></center>
+<main class="main" id="main-content">
+      <h1 style="display:flex; justify-content:center; align-items:center;">
+ Student List
+</h1>
 
-      <!-- ✅ Add Student Button -->
+
+      <!-- ✅ Add Student Button 
       <div style="display: flex; justify-content: flex-start; margin-bottom: 15px;">
         <a href="/add-student"
            style="padding:8px 15px;background-color:#28a745;color:white;border-radius:6px;text-decoration:none;margin-left:0px;">
           <i class="fa-solid fa-user-plus"></i> Add Student
         </a>
       </div>
-
+		-->
       <!-- ✅ Search Bar -->
       <div style="margin-bottom: 15px; display:flex; gap:10px;">
         <input type="text" id="searchInput" placeholder="Enter Student ID"
@@ -87,8 +148,9 @@
             <th>Course</th>
             <th>Roll No.</th>
             <th>Mobile No.</th>
-            <th>Delete</th>
-            <th>Update</th>
+            <th>Marks</th>
+          <!--  <th>Delete</th>
+            <th>Update</th>  --> 
           </tr>
         </thead>
         <tbody id="studentTableBody">
@@ -99,7 +161,17 @@
             <td th:text="${student.course != null ? student.course.name : 'N/A'}"></td>
             <td th:text="${student.roll_no}"></td>
             <td th:text="${student.mobile}"></td>
-            <td>
+            <td> <form th:action="@{/exams/marks/entry}" method="get">
+            
+                <input type="hidden" name="student_id" th:value="${student.id}" />
+                <input type="hidden" name="student_name" th:value="${student.name}" />
+                
+                <button type="submit"
+                        style="padding:5px;background-color:#dc3545;border:none;color:white;border-radius: 5px">
+                 <i class="fa-solid fa-pen-to-square"></i> Edit
+                </button>
+              </form></td>
+          <!--   <td>
               <form th:action="@{/delete}" method="post">
                 <input type="hidden" name="id" th:value="${student.id}" />
                 <button type="submit"
@@ -113,7 +185,7 @@
                  style="padding:5px;background-color:#118AB2;color:white;border-radius:5px;text-decoration:none;">
                 <i class="fa-solid fa-pen-to-square"></i> Update
               </a>
-            </td>
+            </td>  -->
           </tr>
         </tbody>
       </table>
@@ -232,7 +304,33 @@
           updateSrNo();
         };
       </script>
+   
     </main>
+ 
+
+</div>
+
+<footer>
+  <div class="footer-container">
+    <div class="footer-section">
+      <h4>College ERP System</h4>
+      <p>&copy; 2025 All Rights Reserved</p>
+    </div>
+    <div class="footer-section">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="/student-management">Student Management</a></li>
+     
+        <li><a href="/attendence">Attendance</a></li>
+        <li><a href="/reports">Reports</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h4>Contact</h4>
+      <p>Email: support@collegeerp.com</p>
+      <p>Phone: +91-9876543210</p>
+    </div>
   </div>
+</footer>
 </body>
 </html>

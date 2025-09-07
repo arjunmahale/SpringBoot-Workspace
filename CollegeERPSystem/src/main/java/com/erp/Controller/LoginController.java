@@ -3,7 +3,7 @@ package com.erp.Controller;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,7 +34,7 @@ public class LoginController {
 	private FacultyService facultyService;
 	
 	@PostMapping("/login")
-	public String login(@ModelAttribute Login login, Model model) {
+	public String login(@ModelAttribute Login login,HttpSession session, Model model) {
 	    Login dbUser = loginServ.getUserByName(login.getName());
 
 	  
@@ -61,7 +61,8 @@ public class LoginController {
 	  
 	    // ✅ Correct login
 	    if ("admin".equals(dbUser.getRole())) {
-	    	
+	    	session.setAttribute("loggedInUser", dbUser);
+	        session.setAttribute("user", dbUser.getName());
 	    	long totalStudents = studentService.countStudents();
 	    	long totalCourses = courseService.countCourses();
 	    	long totalFaculty = facultyService.countFaculty();
@@ -85,6 +86,10 @@ public class LoginController {
 
 	        return "/admin-links/admin-dashboard";
 	    } else if ("faculty".equals(dbUser.getRole())) {
+	    	
+	    	  // store dbUser in session
+	        session.setAttribute("loggedInUser", dbUser);
+	        session.setAttribute("user", dbUser.getName());
 	    	
 	    	//long totalStudents = studentService.countStudents();
 	    	
@@ -115,6 +120,9 @@ public class LoginController {
 	    	model.addAttribute("user",dbUser.getName());
 	        return "faculty-links/faculty-dashboard";
 	    } else if ("student".equals(dbUser.getRole())) {
+	    	
+	    	session.setAttribute("loggedInUser", dbUser);
+	        session.setAttribute("user", dbUser.getName());
 	        return "student-dashboard";
 	    }
 

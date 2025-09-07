@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="../../dashboard.css">
+  <style>
+    .summary-cards {
+      display: flex;
+      gap: 20px;
+      margin: 20px 0;
+      justify-content: space-around;
+    }
+    .card {
+      flex: 1;
+      background: #f8f9fa;
+      padding: 20px;
+      text-align: center;
+      border-radius: 10px;
+      box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+    }
+    .card h2 {
+      margin: 10px 0;
+      font-size: 24px;
+      color: #007bff;
+    }
+    .data-section {
+      margin: 20px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+     .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px 30px;
+    }
+    .form-group { display: flex; flex-direction: column; }
+    .form-group label { font-weight: bold; margin-bottom: 5px; }
+    .form-group input, .form-group select, .form-group textarea {
+      padding: 8px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .full-width { grid-column: span 2; }
+    .submit-btn {
+      grid-column: span 2;
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 4px;
+      border: none;
+      background: #007bff;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+<header><u>Admin Dashboard</u></header>
+<div class="container">
+   <nav class="sidebar">
+    <div class="profile">
+      <img src="../../profile.jpg" alt="Admin Profile" class="profile-pic">
+      <h3 class="profile-name">Admin User</h3>
+    </div>
+    <a href="/admin-dashboard">Admin Dashboard</a>
+    <a href="/student-management">Student Management</a>
+    <a href="/course-management">Course Management</a>
+    <a href="/faculty-management">Faculty Management</a>
+    <a href="/attendance-list">Attendance</a>
+    <a href="/admin/exams">Exams & Results</a>
+    <a href="#">Notifications / Notice Board
+</a>
+    <a href="#">Timetable</a>
+    <a href="#">Reports</a>
+  </nav>
+
+  <main class="main" id="main-content">
+    <form th:action="@{${formAction}}" method="post"
+          style="width: 90%; margin:2%; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background: #f9f9f9;">
+      <h2 th:text="${title}" style="margin-bottom: 15px;text-align:center;"></h2>
+
+      <input type="hidden" name="id" th:value="${exam.id}" />
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label>Subject:</label>
+          <input type="text" name="subject" th:value="${exam.subject}" placeholder="Enter subject" required />
+        </div>
+
+        <div class="form-group">
+          <label>Date:</label>
+          <input type="date" name="examDate" th:value="${exam.examDate}" required />
+        </div>
+
+        <div class="form-group">
+          <label>Time:</label>
+          <input type="text" name="time" th:value="${exam.time}" placeholder="e.g. 10:00 AM " required />
+        </div>
+
+        <div class="form-group">
+          <label>Course:</label>
+          <select name="course" required>
+            <option value="" disabled>Select Course</option>
+            <option th:each="course : ${courses}"
+                    th:value="${course.name}"
+                    th:text="${course.name}">
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group full-width">
+          <label>Description:</label>
+          <textarea name="description" th:text="${exam.description}" rows="3"
+                    placeholder="Enter description"></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">Save</button>
+      </div>
+    </form>
+  </main>
+
+</div>
+
+<footer>
+  <div class="footer-container">
+    <div class="footer-section">
+      <h4>College ERP System</h4>
+      <p>&copy; 2025 All Rights Reserved</p>
+    </div>
+    <div class="footer-section">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="/student-management">Student Management</a></li>
+     
+        <li><a href="/attendence">Attendance</a></li>
+        <li><a href="/reports">Reports</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h4>Contact</h4>
+      <p>Email: support@collegeerp.com</p>
+      <p>Phone: +91-9876543210</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

@@ -59,22 +59,27 @@
   <nav class="sidebar">
     <div class="profile">
       <img src="profile.jpg" alt="Admin Profile" class="profile-pic">
-      <h3 class="profile-name">Faculty User</h3>
+      <h3 class="profile-name" th:text="${user}"></h3>
     </div>
     <a href="/faculty-dashboard">Faculty Dashboard</a>
-    <a href="/student-management">Student Management</a>
+    <a href="/student-list">Student Management</a>
 
     
     <a href="/attendance">Attendance</a>
-    <a href="#">Exams & Results</a>
-    <a href="#">Fee Management</a>
+    <a href="/exams">Exams & Results</a>
+    <a href="#">Notifications / Notice Board
+    </a>
     <a href="#">Timetable</a>
     <a href="#">Reports</a>
   </nav>
 
+
   <main class="main" id="main-content">
     
 
+ <h1 style="display:flex; justify-content:center; align-items:center;">
+Attendance
+</h1>
 
 
 <!-- ✅ Search Bar -->
@@ -119,7 +124,7 @@
  
 
   <!-- ✅ Extra button to view all previous attendance -->
-  <form action="/attendance/all" method="get">
+  <form action="/total-attendance" method="get">
     <button type="submit"
             style="padding:8px 12px; background:#6c757d; color:white; border:none; border-radius:5px;">
       📅 View All Previous Attendance
