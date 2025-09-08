@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Faculty Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <script>
+    function loadModule(moduleName) {
+      const content = document.getElementById("main-content");
+      switch(moduleName) {
+        case "attendance":
+          content.innerHTML = "<h2>Attendance</h2><p>Mark and manage student attendance records here.</p>";
+          break;
+        case "marks":
+          content.innerHTML = "<h2>Marks</h2><p>Upload and update student marks.</p>";
+          break;
+        case "timetable":
+          content.innerHTML = "<h2>Timetable</h2><p>View and manage class schedules.</p>";
+          break;
+        case "communication":
+          content.innerHTML = "<h2>Communication</h2><p>Send announcements and interact with students.</p>";
+          break;
+        default:
+          content.innerHTML = "<h2>Welcome, Faculty!</h2><p>Select a module from the sidebar to get started.</p>";
+      }
+    }
+  </script>
+</head>
+<body onload="loadModule()">
+  <!-- Floating Background -->
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+
+  <header>Faculty Dashboard</header>
+  <div class="container">
+    <nav class="sidebar">
+    <!-- Profile Section -->
+  <div class="profile">
+    <img src="profile.jpg" alt="Admin Profile" class="profile-pic">
+    <h3 class="profile-name">Admin Name</h3>
+  </div>
+      <a href="#" onclick="loadModule('attendance')">Attendance</a>
+      <a href="#" onclick="loadModule('marks')">Marks</a>
+      <a href="#" onclick="loadModule('timetable')">Timetable</a>
+      <a href="#" onclick="loadModule('communication')">Communication</a>
+    </nav>
+    <main class="main" id="main-content"></main>
+  </div>
+  <footer>&copy; 2025 College ERP System | Faculty</footer>
+</body>
+</html>

@@ -1,30 +1,30 @@
-1:32:37 Microsoft.Shutdown.TabStripModel.CloseWebContentses_FastShutdown
-1:32:37 Microsoft.Shutdown.TabStripModel.ShouldRunUnloadListenerBeforeClosing_false
-1:32:37 Tab34 RenderProcessGone
-1:32:37 Microsoft.UnloadController.ClearUnloadState
-1:32:37 Microsoft.Shutdown.TabStripModel.RunUnloadListenerBeforeClosing_false
-1:32:37 Microsoft.Shutdown.TabStripModel.InternalCloseTabsImpl_ClosedAll
-1:32:37 Microsoft.Shutdown.TabStripModel.SendDetachWebContentsNotifications
-1:32:37 Microsoft.UnloadController.ClearUnloadState
-1:32:37 Browser34 Close Tab34 at 0
-1:32:37 Tab34 WebContentsDestroyed
-1:32:37 Microsoft.UnloadController.TabStripEmpty
-1:32:37 Microsoft.UnloadController.IsUnclosableApp_IsNotWebApp
-1:32:37 Microsoft.UnloadController.HasCompletedUnloadProcessing_True
-1:32:37 Microsoft.Shutdown.OnWindowClosing
-1:32:37 Microsoft.UnloadController.IsUnclosableApp_IsNotWebApp
-1:32:37 Microsoft.UnloadController.HasCompletedUnloadProcessing_True
-1:32:37 Microsoft.Shutdown.OnWindowClosingPostClearBrowsingData_NoBrowsingDataCleared
-1:32:37 Widget Closed: BrowserFrame
-1:32:37 Microsoft.UnloadController.HasCompletedUnloadProcessing_True
-1:32:37 Microsoft.Shutdown.OnWindowClosing
-1:32:37 Microsoft.Shutdown.OnWindowClosing_DeleteScheduled
-1:32:37 Microsoft.Last_Browser_Removed
-1:32:37 Microsoft.Shutdown.ShutdownIfNoBrowsers
-1:32:37 Microsoft.Shutdown.SetTryingToQuit_Quitting
-1:32:37 Microsoft.Shutdown.NotifyAppTerminating
-1:32:37 Microsoft.Shutdown.OnAppExiting
-1:32:37 Microsoft.Shutdown.HandleAppExitingForPlatform_Aura
-1:32:37 Microsoft.Shutdown.HandleAppExitingForPlatform_Aura.NotificationUIManager_StartShutdown
-1:32:37 Microsoft.Shutdown.HandleAppExitingForPlatform_Aura.CloseAllSecondaryWidgets
-1:32:38 Shutdown
+0:28:30 Tab2 StartNav114 #typed
+0:28:30 Tab2 FinishNav114
+0:28:30 Tab2 PageLoad
+0:28:33 Tab2 StartNav115 #typed
+0:28:33 Tab2 FinishNav115
+0:28:33 Tab2 PageLoad
+0:28:35 Tab2 StartNav116 #typed
+0:28:36 Tab2 FinishNav116
+0:28:36 Tab2 PageLoad
+0:28:57 Tab2 StartNav117 #typed
+0:28:57 Tab2 FinishNav117
+0:28:57 Tab2 PageLoad
+0:28:59 Tab2 StartNav118 #typed
+0:28:59 Tab2 FinishNav118
+0:28:59 Tab2 PageLoad
+0:29:02 Tab2 StartNav119 #typed
+0:29:02 Tab2 FinishNav119
+0:29:02 Tab2 PageLoad
+0:29:33 Tab2 StartNav120 #typed
+0:29:33 Tab2 FinishNav120
+0:29:33 Tab2 PageLoad
+0:29:34 Tab2 StartNav121 #typed
+0:29:34 Tab2 FinishNav121
+0:29:34 Tab2 PageLoad
+0:29:35 Tab2 StartNav122 #typed
+0:29:35 Tab2 FinishNav122
+0:29:35 Tab2 PageLoad
+0:31:18 Memory Pressure: Moderate
+0:31:43 Memory Pressure: Moderate
+0:51:40 Microsoft.UnloadController.IsUnclosableApp_IsNotWebApp

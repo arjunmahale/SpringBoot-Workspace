@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <title>Faculty Dashboard</title>
-  <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="dashboard.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <script th:inline="javascript">
   window.onload = function() {
     // update table numbering & count
     updateSrNo();
 
     // check if a student was saved and mark it
-   
+
   };
 </script>
 
@@ -52,6 +52,12 @@
       background-color: #f2f2f2;
     }
   </style>
+  <script>
+  setInterval(() => {
+    location.reload();
+  }, 30000); // refresh every 30 sec
+</script>
+
 </head>
 <body>
 <header><u>Faculty Dashboard</u></header>
@@ -64,7 +70,7 @@
     <a href="/faculty-dashboard">Faculty Dashboard</a>
     <a href="/student-list">Student Management</a>
 
-    
+
     <a href="/attendance">Attendance</a>
     <a href="/exams">Exams & Results</a>
     <a href="#">Notifications / Notice Board
@@ -75,12 +81,36 @@
 
 
   <main class="main" id="main-content">
-    
 
  <h1 style="display:flex; justify-content:center; align-items:center;">
 Attendance
 </h1>
 
+<div style="text-align:center; margin:15px 0;">
+  <strong>Status:</strong>
+  <span th:text="${canMark} ? 'LIVE' : 'CLOSED'"></span>
+</div>
+<!-- ✅ Attendance Controls -->
+<div style="margin:15px 0; display:flex; gap:10px; justify-content:center;">
+  <form action="/allow-attendance" method="get">
+    <button type="submit"
+            style="padding:8px 12px; background:green; color:white; border:none; border-radius:5px;">
+      ✅ Start Attendance
+    </button>
+  </form>
+
+  <form action="/attendance/stop" method="get">
+    <button type="submit"
+            style="padding:8px 12px; background:red; color:white; border:none; border-radius:5px;">
+      ⛔ Stop Attendance
+    </button>
+  </form>
+  <!-- 
+  <form action="/allow-attendance" method="get">
+  <button type="submit">Allow Attendance</button>
+</form> -->
+
+</div>
 
 <!-- ✅ Search Bar -->
 <div style="margin-bottom: 15px; display:flex; gap:10px; margin-top: 30px">
@@ -120,8 +150,8 @@ Attendance
     <strong>Date: </strong>
     <span th:text="${today}"></span>
   </div>
-  
- 
+
+
 
   <!-- ✅ Extra button to view all previous attendance -->
   <form action="/total-attendance" method="get">
@@ -130,12 +160,20 @@ Attendance
       📅 View All Previous Attendance
     </button>
   </form>
+
+  <!-- ✅ Extra button to allows attendance
+  <form action="/allow-attendance" method="get">
+    <button type="submit"
+            style="padding:8px 12px; background:#6c757d; color:white; border:none; border-radius:5px;">
+      <i class="fa-solid fa-square-share-nodes"></i> Allow Attendance
+    </button>
+  </form> -->
 </div>
 
-  
-  
-  
-  
+
+
+
+
 <!-- ✅ Attendance Table -->
 <!-- ✅ Attendance Table -->
 <table class="student-table" border="1" cellspacing="0" cellpadding="8"
@@ -151,7 +189,7 @@ Attendance
   </tr>
 </thead>
 <tbody id="studentTableBody">
-  <tr th:each="student, iterStat : ${students}" 
+  <tr th:each="student, iterStat : ${students}"
       th:attr="data-student-id=${student.id}">
     <td th:text="${iterStat.count}"></td>
     <td th:text="${student.id}"></td>
@@ -165,7 +203,7 @@ Attendance
         <input type="hidden" name="name" th:value="${student.name}">
         <input type="hidden" name="course" th:value="${student.course.name}">
         <input type="hidden" name="status" value="Present">
-        <button type="submit" 
+        <button type="submit"
                 style="padding:5px 10px; border:none; border-radius:5px; background:green; color:white; cursor:pointer;">
           Present
         </button>
@@ -176,21 +214,22 @@ Attendance
         <input type="hidden" name="studentId" th:value="${student.id}">
         <input type="hidden" name="date" th:value="${today}">
                 <input type="hidden" name="name" th:value="${student.name}">
-        <input type="hidden" name="course" th:value="${student.course}">
-        
+        <input type="hidden" name="course" th:value="${student.course.name}">
+
         <input type="hidden" name="status" value="Absent">
-        <button type="submit" 
+        <button type="submit"
                 style="padding:5px 10px; border:none; border-radius:5px; background:red; color:white; cursor:pointer;">
           Absent
         </button>
       </form>
     </td>
     <!-- ✅ Status Column -->
-  <td class="status-cell" 
+ <td class="status-cell"
     th:text="${attendanceMap[student.id] != null ? attendanceMap[student.id] : 'Not Marked'}"
-    th:style="${attendanceMap[student.id] == 'Present' ? 'color:green;font-weight:bold;' 
+    th:style="${attendanceMap[student.id] == 'Present' ? 'color:green;font-weight:bold;'
                : (attendanceMap[student.id] == 'Absent' ? 'color:red;font-weight:bold;' : '')}">
 </td>
+
 
   </tr>
 </tbody>
@@ -295,10 +334,10 @@ Attendance
   }
 
   // ✅ On page load update Sr. No. + student count (natural order)
- 
+
 </script>
 
-   
+
   </main>
 </div>
 
@@ -312,7 +351,7 @@ Attendance
       <h4>Quick Links</h4>
       <ul>
         <li><a href="/student-management">Student Management</a></li>
-     
+
         <li><a href="/attendence">Attendance</a></li>
         <li><a href="/reports">Reports</a></li>
       </ul>

@@ -18,10 +18,10 @@ public class Attendance {
     private String status;
 
     private String name;
-    
+
     private String course;
 
-    
+
     // Relation with Student (Many attendance records belong to one student)
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
