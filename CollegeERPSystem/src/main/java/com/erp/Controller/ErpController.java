@@ -39,14 +39,14 @@ public class ErpController {
 
     @Autowired
     private LoginService loginServ;
-    
-    
+
+
     @Autowired
     private FacultyService facultyService1;
-	
+
 	@Autowired
 	private FacultyService facultyService;
-	
+
 	@Autowired
 	private AttendanceService attendanceService;
     // Home page
@@ -65,7 +65,7 @@ public class ErpController {
         return "admin-links/student-management"; // ✅ table page only
     }
 
-   
+
     @GetMapping("/admin-dashboard")
     public String showadminDashboard(Model model) {
     	long totalStudents = studserv.countStudents();
@@ -76,13 +76,13 @@ public class ErpController {
     	model.addAttribute("totalCourses", totalCourses);
     	model.addAttribute("totalFaculty", totalFaculty);
 
-    	
+
     	   model.addAttribute("students", studserv.getRecentStudents()); // maybe last 5
     	    model.addAttribute("courses", courseServ.getAllcourses());
     	    model.addAttribute("faculties", facultyService1.getAllfaculties());
-    	    
-    	    
-    	    
+
+
+
         return "admin-links/admin-dashboard"; // template name, no redirect
     }
 
@@ -95,7 +95,7 @@ public class ErpController {
 	    LocalDate today = LocalDate.now();
 	    model.addAttribute("today", today.toString());
 String user1=(String) session.getAttribute("user");
-		
+
 		model.addAttribute("user",user1);
 	    // ✅ Get all students
 	    List<Student> s1 = studserv.getAllStudent();
@@ -130,37 +130,37 @@ String user1=(String) session.getAttribute("user");
     	LocalDate today = LocalDate.now();
     	model.addAttribute("today", today.toString());
     	String user1=(String) session.getAttribute("user");
-    	
+
     	model.addAttribute("user",user1);
     	// ✅ Get all students
     	List<Student> s1 = studserv.getAllStudent();
     	List<Student> s2 = new ArrayList<>();
-    	
+
     	// ✅ Filter students of course "MCS"
     	for (Student stu : s1) {
     		if (stu.getCourse() != null && "mcs".equalsIgnoreCase(stu.getCourse().getName())) {
     			s2.add(stu);
     		}
     	}
-    	
+
     	// ✅ Attendance map (only for students in MCS)
     	Map<Long, String> attendanceMap = new HashMap<>();
     	List<Attendance> todayAttendance = attendanceService.getByDate(today);
-    	
+
     	for (Attendance att : todayAttendance) {
     		if (att.getStudent().getCourse() != null &&
     				"mcs".equalsIgnoreCase(att.getStudent().getCourse().getName())) {
     			attendanceMap.put(att.getStudent().getId(), att.getStatus());
     		}
     	}
-    	
+
     	model.addAttribute("students", s1);
     	model.addAttribute("attendanceMap", attendanceMap);
     	model.addAttribute("totalStudents", s1.size());
-    	
+
     	return "admin-links/total-attendance-list"; // ✅ return view
     }
-	
+
     // Open form to add student
     @GetMapping("/add-student")
     public String showStudentForm(Model model) {
@@ -171,6 +171,8 @@ String user1=(String) session.getAttribute("user");
         return "admin-links/student-form"; // ✅ new Thymeleaf template
     }
 
+    
+    //student update and delete will be managed by faculty only 
     // Open form to update student
     @GetMapping("/update/{id}")
     public String editStudentForm(@PathVariable() Long id, Model model) {

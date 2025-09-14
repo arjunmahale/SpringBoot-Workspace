@@ -53,7 +53,7 @@
     <a href="/faculty-dashboard">Faculty Dashboard</a>
     <a href="/student-list">Student Management</a>
 
-    
+
     <a href="/attendance">Attendance</a>
     <a href="/exams">Exams & Results</a>
     <a href="#">Notifications / Notice Board
@@ -63,15 +63,15 @@
   </nav>
 
   <main class="main" id="main-content">
-  
-  
+
+
   <!-- 📅 Date Selector -->
 <div style="margin:15px 0; ; justify-content:space-between; align-items:center;">
   <div>
     <strong>Date: </strong>
     <span th:text="${today}"></span>
   </div>
-  
+
   <h2 style="display:flex; justify-content:center; align-items:center;">
   Welcome, <span th:text="${user}"></span>
 </h2>
@@ -82,7 +82,7 @@
     <h4>Total Students</h4>
     <h2 th:text="${totalStudents}">0</h2>
   </div>
- 
+
 </div>
 
 <!-- ✅ Search Bar -->
@@ -111,6 +111,11 @@
           style="padding:8px 15px;background-color:#17a2b8;color:white;border:none;border-radius:5px;">
     🖨️ Print Attendance
   </button>
+   <!-- ✅ Added Export to excel Button -->
+        <button onclick="exportToExcel()"
+                style="padding:8px 15px;background-color:#28a745;color:white;border:none;border-radius:5px;">
+          ⬇️ Download as Excel
+        </button>
 </div>
 
 <!-- ✅ Student Count -->
@@ -130,7 +135,7 @@
             <th>Course</th>
             <th>Roll No.</th>
             <th>Mobile No.</th>
-          
+
           </tr>
         </thead>
         <tbody id="studentTableBody">
@@ -141,11 +146,11 @@
             <td th:text="${student.course != null ? student.course.name : 'N/A'}"></td>
             <td th:text="${student.roll_no}"></td>
             <td th:text="${student.mobile}"></td>
-           
+
           </tr>
         </tbody>
       </table>
- 
+
 
 
 <!-- ✅ JS Logic -->
@@ -248,12 +253,30 @@
   window.onload = function() {
     updateSrNo();
   };
+
+
+//✅ Export to Excel
+  function exportToExcel() {
+    const table = document.querySelector(".student-table");
+    let html = table.outerHTML;
+
+    // Excel needs a special MIME type
+    let uri = 'data:application/vnd.ms-excel;charset=utf-8,' + encodeURIComponent(html);
+
+    let fileDownload = document.createElement("a");
+    document.body.appendChild(fileDownload);
+    fileDownload.href = uri;
+    fileDownload.download = 'faculty-list.xls';  // 📂 Excel file
+    fileDownload.click();
+    document.body.removeChild(fileDownload);
+  }
+
 </script>
 
-   
+
   </main>
-  
-  
+
+
 </div>
 
 <footer>
@@ -266,7 +289,7 @@
       <h4>Quick Links</h4>
       <ul>
         <li><a href="/student-management">Student Management</a></li>
-     
+
         <li><a href="/attendence">Attendance</a></li>
         <li><a href="/reports">Reports</a></li>
       </ul>

@@ -105,7 +105,7 @@ Attendance
       ⛔ Stop Attendance
     </button>
   </form>
-  <!-- 
+  <!--
   <form action="/allow-attendance" method="get">
   <button type="submit">Allow Attendance</button>
 </form> -->
@@ -138,6 +138,11 @@ Attendance
           style="padding:8px 15px;background-color:#17a2b8;color:white;border:none;border-radius:5px;">
     🖨️ Print Attendance
   </button>
+   <!-- ✅ Added Export to excel Button -->
+        <button onclick="exportToExcel()"
+                style="padding:8px 15px;background-color:#28a745;color:white;border:none;border-radius:5px;">
+          ⬇️ Download as Excel
+        </button>
 </div>
 
 <!-- ✅ Student Count -->
@@ -184,7 +189,7 @@ Attendance
     <th>ID</th>
     <th>Name</th>
     <th>Roll No.</th>
-    <th>Action</th>
+ 
     <th>Status</th> <!-- ✅ New column -->
   </tr>
 </thead>
@@ -195,8 +200,8 @@ Attendance
     <td th:text="${student.id}"></td>
     <td th:text="${student.name}"></td>
     <td th:text="${student.roll_no}"></td>
-    <td>
-      <!-- ✅ Present -->
+  <!--    <td>
+     ✅ Present 
       <form th:action="@{/attendance/save}" method="post" style="display:inline;">
         <input type="hidden" name="studentId" th:value="${student.id}">
         <input type="hidden" name="date" th:value="${today}">
@@ -208,8 +213,8 @@ Attendance
           Present
         </button>
       </form>
-
-      <!-- ✅ Absent -->
+-->
+      <!-- ✅ Absent
       <form th:action="@{/attendance/save}" method="post" style="display:inline;">
         <input type="hidden" name="studentId" th:value="${student.id}">
         <input type="hidden" name="date" th:value="${today}">
@@ -221,8 +226,8 @@ Attendance
                 style="padding:5px 10px; border:none; border-radius:5px; background:red; color:white; cursor:pointer;">
           Absent
         </button>
-      </form>
-    </td>
+      </form> 
+    </td>-->
     <!-- ✅ Status Column -->
  <td class="status-cell"
     th:text="${attendanceMap[student.id] != null ? attendanceMap[student.id] : 'Not Marked'}"
@@ -334,6 +339,22 @@ Attendance
   }
 
   // ✅ On page load update Sr. No. + student count (natural order)
+
+  // ✅ Export to Excel
+function exportToExcel() {
+  const table = document.querySelector(".student-table");
+  let html = table.outerHTML;
+
+  // Excel needs a special MIME type
+  let uri = 'data:application/vnd.ms-excel;charset=utf-8,' + encodeURIComponent(html);
+
+  let fileDownload = document.createElement("a");
+  document.body.appendChild(fileDownload);
+  fileDownload.href = uri;
+  fileDownload.download = 'attendance-list.xls';  // 📂 Excel file
+  fileDownload.click();
+  document.body.removeChild(fileDownload);
+}
 
 </script>
 

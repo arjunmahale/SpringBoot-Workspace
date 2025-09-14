@@ -39,7 +39,7 @@
     }
   })();
 </script>
-  
+
   <style>
     .summary-cards {
       display: flex;
@@ -89,7 +89,7 @@
     <a href="/faculty-dashboard">Faculty Dashboard</a>
     <a href="/student-list">Student Management</a>
 
-    
+
     <a href="/attendance">Attendance</a>
     <a href="/exams">Exams & Results</a>
     <a href="#">Notifications / Notice Board
@@ -143,6 +143,12 @@
             style="padding:8px 15px;background-color:#17a2b8;color:white;border:none;border-radius:5px;">
       🖨️ Print Exam List
     </button>
+
+     <!-- ✅ Added Export to excel Button -->
+        <button onclick="exportToExcel()"
+                style="padding:8px 15px;background-color:#28a745;color:white;border:none;border-radius:5px;">
+          ⬇️ Download as Excel
+        </button>
   </div>
 
   <!-- ✅ Exam Count -->
@@ -294,6 +300,24 @@
       rows.forEach(row => tbody.appendChild(row));
       updateSrNo();
     };
+
+
+ // ✅ Export to Excel
+    function exportToExcel() {
+      const table = document.querySelector(".student-table");
+      let html = table.outerHTML;
+
+      // Excel needs a special MIME type
+      let uri = 'data:application/vnd.ms-excel;charset=utf-8,' + encodeURIComponent(html);
+
+      let fileDownload = document.createElement("a");
+      document.body.appendChild(fileDownload);
+      fileDownload.href = uri;
+      fileDownload.download = 'exam-list.xls';  // 📂 Excel file
+      fileDownload.click();
+      document.body.removeChild(fileDownload);
+    }
+
   </script>
 </main>
 
@@ -309,7 +333,7 @@
       <h4>Quick Links</h4>
       <ul>
         <li><a href="/student-management">Student Management</a></li>
-     
+
         <li><a href="/attendence">Attendance</a></li>
         <li><a href="/reports">Reports</a></li>
       </ul>

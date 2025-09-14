@@ -26,7 +26,7 @@ public class ExamController {
 
     @Autowired
     private StudentService studentService;
-    
+
     @Autowired
     private courseService courseService;
 
@@ -43,14 +43,14 @@ public class ExamController {
     @GetMapping("/exams/marks/entry-list")
     public String listExamsMarksentrylist(Model model,HttpSession session) {
 String user1=(String) session.getAttribute("user");
-		
+
 
 
 		model.addAttribute("user",user1);
 		List<Student> s1 = studentService.getAllStudent();
 		List<Student> s2 = new ArrayList<>();
 
-		
+
 		long cnt = 0;
 		for (Student stu : s1) {
 			if (stu.getCourse() != null && "mcs".equalsIgnoreCase(stu.getCourse().getName())) {
@@ -71,39 +71,49 @@ String user1=(String) session.getAttribute("user");
     public String listExamsMarksentry(Model model,HttpSession session, @RequestParam("student_id") Long studentId,
             @RequestParam("student_name") String studentName) {
     	String user1=(String) session.getAttribute("user");
-    	
+
     	 model.addAttribute("subjects", examService.getAllUniqueSubjects());
     	  model.addAttribute("student_id", studentId);
     	    model.addAttribute("student_name", studentName);
-    	
+
     	model.addAttribute("user",user1);
     	List<Student> s1 = studentService.getAllStudent();
     	List<Student> s2 = new ArrayList<>();
-    	
-    	
+
+
     	long cnt = 0;
     	for (Student stu : s1) {
     		if (stu.getCourse() != null && "mcs".equalsIgnoreCase(stu.getCourse().getName())) {
     			s2.add(stu);
-    			
+
     			cnt++;
     		}
     	}
-    	
+
     	long totalStudents = cnt;
     	model.addAttribute("totalStudents", totalStudents);
-    	
+
     	model.addAttribute("students", s2);
     //	model.addAttribute("exams", examService.getAllExams());
     	return "faculty-links/marks-entry"; // exam listing page
     }
 
     @GetMapping("exams/new")
-    public String showExamForm(Model model) {
-        model.addAttribute("exam", new Exam());
+    public String showExamForm(HttpSession session,Model model) {
+
+
+    	 Exam exam=new Exam();
+    	model.addAttribute("exam", exam);
+    	String course= (String) session.getAttribute("course");
+    	exam.setCourse(course);
+    	model.addAttribute("course",course);
+    	System.out.println("course name : "+course);
         model.addAttribute("courses", courseService.getAllcourses()); // to populate course dropdown
         model.addAttribute("formAction", "/exams/save");
         model.addAttribute("title", "Schedule New Exam");
+
+        //model.addAttribute(course);
+
         return "faculty-links/exam-form"; // exam form page
     }
 
@@ -113,7 +123,7 @@ String user1=(String) session.getAttribute("user");
         boolean exists = examService.existsByCourseAndSubject(exam.getCourse(), exam.getSubject());
 
         if (exists) {
-            redirectAttributes.addFlashAttribute("error", 
+            redirectAttributes.addFlashAttribute("error",
                 "Exam for subject '" + exam.getSubject() + "' in course '" + exam.getCourse() + "' already exists!");
             return "redirect:/exams";
         }
@@ -131,21 +141,21 @@ String user1=(String) session.getAttribute("user");
         redirectAttributes.addFlashAttribute("message", "Exam Deleted successfully!");
         return "redirect:/exams";
     }
-    
-    
-    
-    
+
+
+
+
     //for admin exam
-    
-    
-    
-    
+
+
+
+
     @GetMapping("admin/exams")
     public String listExamsadmin(Model model) {
     	model.addAttribute("exams", examService.getAllExams());
     	return "admin-links/exam-list-admin"; // exam listing page
     }
-    
+
     @GetMapping("admin/exams/new")
     public String showExamFormadmin(Model model) {
     	model.addAttribute("exam", new Exam());
@@ -154,7 +164,7 @@ String user1=(String) session.getAttribute("user");
     	model.addAttribute("title", "Schedule New Exam");
     	return "admin-links/exam-form-admin"; // exam form page
     }
-    
+
     @PostMapping("admin/exams/save")
     public String saveExamadmin(@ModelAttribute Exam exam, RedirectAttributes redirectAttributes) {
         // check if exam already exists for same course + subject
@@ -173,7 +183,7 @@ String user1=(String) session.getAttribute("user");
         return "redirect:/admin/exams";
     }
 
-    
+
     @GetMapping("admin/exams/delete/{id}")
     public String deleteExamadmin(@PathVariable Long id , RedirectAttributes redirectAttributes) {
     	examService.deleteExam(id);

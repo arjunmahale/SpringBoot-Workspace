@@ -79,7 +79,7 @@
     <a href="/faculty-dashboard">Faculty Dashboard</a>
     <a href="/student-list">Student Management</a>
 
-    
+
     <a href="/attendance">Attendance</a>
     <a href="/exams">Exams & Results</a>
     <a href="#">Notifications / Notice Board
@@ -94,7 +94,7 @@
 </h1>
 
 
-      <!-- ✅ Add Student Button 
+      <!-- ✅ Add Student Button
       <div style="display: flex; justify-content: flex-start; margin-bottom: 15px;">
         <a href="/add-student"
            style="padding:8px 15px;background-color:#28a745;color:white;border-radius:6px;text-decoration:none;margin-left:0px;">
@@ -130,6 +130,11 @@
                 style="padding:8px 15px;background-color:#17a2b8;color:white;border:none;border-radius:5px;">
           🖨️ Print Student List
         </button>
+         <!-- ✅ Added Export to excel Button -->
+        <button onclick="exportToExcel()"
+                style="padding:8px 15px;background-color:#28a745;color:white;border:none;border-radius:5px;">
+          ⬇️ Download as Excel
+        </button>
       </div>
 
       <!-- ✅ Student Count -->
@@ -150,7 +155,7 @@
             <th>Mobile No.</th>
             <th>Marks</th>
           <!--  <th>Delete</th>
-            <th>Update</th>  --> 
+            <th>Update</th>  -->
           </tr>
         </thead>
         <tbody id="studentTableBody">
@@ -162,10 +167,10 @@
             <td th:text="${student.roll_no}"></td>
             <td th:text="${student.mobile}"></td>
             <td> <form th:action="@{/exams/marks/entry}" method="get">
-            
+
                 <input type="hidden" name="student_id" th:value="${student.id}" />
                 <input type="hidden" name="student_name" th:value="${student.name}" />
-                
+
                 <button type="submit"
                         style="padding:5px;background-color:#dc3545;border:none;color:white;border-radius: 5px">
                  <i class="fa-solid fa-pen-to-square"></i> Edit
@@ -303,10 +308,27 @@
           rows.forEach(row => tbody.appendChild(row));
           updateSrNo();
         };
+
+     // ✅ Export to Excel
+        function exportToExcel() {
+          const table = document.querySelector(".student-table");
+          let html = table.outerHTML;
+
+          // Excel needs a special MIME type
+          let uri = 'data:application/vnd.ms-excel;charset=utf-8,' + encodeURIComponent(html);
+
+          let fileDownload = document.createElement("a");
+          document.body.appendChild(fileDownload);
+          fileDownload.href = uri;
+          fileDownload.download = 'students-appeared-for-exams.xls';  // 📂 Excel file
+          fileDownload.click();
+          document.body.removeChild(fileDownload);
+        }
+
       </script>
-   
+
     </main>
- 
+
 
 </div>
 
@@ -320,7 +342,7 @@
       <h4>Quick Links</h4>
       <ul>
         <li><a href="/student-management">Student Management</a></li>
-     
+
         <li><a href="/attendence">Attendance</a></li>
         <li><a href="/reports">Reports</a></li>
       </ul>

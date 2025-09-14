@@ -10,7 +10,7 @@
     updateSrNo();
 
     // check if a student was saved and mark it
-   
+
   };
 </script>
 
@@ -64,7 +64,7 @@
     <a href="/faculty-dashboard">Faculty Dashboard</a>
     <a href="/student-list">Student Management</a>
 
-    
+
     <a href="/attendance">Attendance</a>
     <a href="/exams">Exams & Results</a>
     <a href="#">Notifications / Notice Board
@@ -75,7 +75,7 @@
 
 
   <main class="main" id="main-content">
-    
+
 
  <h1 style="display:flex; justify-content:center; align-items:center;">
 Attendance Report
@@ -94,6 +94,7 @@ Attendance Report
           style="padding:8px 15px;background-color:#6c757d;color:white;border:none;border-radius:5px;">
     Refresh
   </button>
+
 </div>
 
 <!-- ✅ Print & Sort Controls -->
@@ -108,6 +109,11 @@ Attendance Report
           style="padding:8px 15px;background-color:#17a2b8;color:white;border:none;border-radius:5px;">
     🖨️ Print Attendance
   </button>
+   <!-- ✅ Added Export to excel Button -->
+        <button onclick="exportToExcel()"
+                style="padding:8px 15px;background-color:#28a745;color:white;border:none;border-radius:5px;">
+          ⬇️ Download as Excel
+        </button>
 </div>
 
 <!-- ✅ Student Count -->
@@ -120,8 +126,8 @@ Attendance Report
     <strong>Date: </strong>
     <span th:text="${today}"></span>
   </div>
-  
- 
+
+
 
   <!-- ✅ Extra button to view all previous attendance
   <form action="/attendance/all" method="get">
@@ -132,10 +138,10 @@ Attendance Report
   </form>
 
  -->
- </div> 
-  
-  
-  
+ </div>
+
+
+
 <!-- ✅ Attendance Table -->
 <!-- ✅ Attendance Table -->
 <table class="student-table" border="1" cellspacing="0" cellpadding="8"
@@ -147,48 +153,48 @@ Attendance Report
     <th>Name</th>
     <th>Roll No.</th>
  <!--   <th>Action</th> ✅ New column -->
-    <th>Status</th> 
+    <th>Status</th>
   </tr>
 </thead>
 <tbody id="studentTableBody">
-  <tr th:each="student, iterStat : ${students}" 
+  <tr th:each="student, iterStat : ${students}"
       th:attr="data-student-id=${student.id}">
     <td th:text="${iterStat.count}"></td>
     <td th:text="${student.id}"></td>
     <td th:text="${student.name}"></td>
     <td th:text="${student.roll_no}"></td>
       <!-- ✅ Present <td>
-    
+
       <form th:action="@{/attendance/save}" method="post" style="display:inline;">
         <input type="hidden" name="studentId" th:value="${student.id}">
         <input type="hidden" name="date" th:value="${today}">
         <input type="hidden" name="name" th:value="${student.name}">
         <input type="hidden" name="course" th:value="${student.course.name}">
         <input type="hidden" name="status" value="Present">
-        <button type="submit" 
+        <button type="submit"
                 style="padding:5px 10px; border:none; border-radius:5px; background:green; color:white; cursor:pointer;">
           Present
         </button>
       </form>-->
 
-      <!-- ✅ Absent 
+      <!-- ✅ Absent
       <form th:action="@{/attendance/save}" method="post" style="display:inline;">
         <input type="hidden" name="studentId" th:value="${student.id}">
         <input type="hidden" name="date" th:value="${today}">
                 <input type="hidden" name="name" th:value="${student.name}">
         <input type="hidden" name="course" th:value="${student.course}">
-        
+
         <input type="hidden" name="status" value="Absent">
-        <button type="submit" 
+        <button type="submit"
                 style="padding:5px 10px; border:none; border-radius:5px; background:red; color:white; cursor:pointer;">
           Absent
         </button>
       </form>
     </td>-->
     <!-- ✅ Status Column -->
-  <td class="status-cell" 
+  <td class="status-cell"
     th:text="${attendanceMap[student.id] != null ? attendanceMap[student.id] : 'Not Marked'}"
-    th:style="${attendanceMap[student.id] == 'Present' ? 'color:green;font-weight:bold;' 
+    th:style="${attendanceMap[student.id] == 'Present' ? 'color:green;font-weight:bold;'
                : (attendanceMap[student.id] == 'Absent' ? 'color:red;font-weight:bold;' : '')}">
 </td>
 
@@ -295,10 +301,26 @@ Attendance Report
   }
 
   // ✅ On page load update Sr. No. + student count (natural order)
- 
+
+  // ✅ Export to Excel
+function exportToExcel() {
+  const table = document.querySelector(".student-table");
+  let html = table.outerHTML;
+
+  // Excel needs a special MIME type
+  let uri = 'data:application/vnd.ms-excel;charset=utf-8,' + encodeURIComponent(html);
+
+  let fileDownload = document.createElement("a");
+  document.body.appendChild(fileDownload);
+  fileDownload.href = uri;
+  fileDownload.download = 'total-attendance-list.xls';  // 📂 Excel file
+  fileDownload.click();
+  document.body.removeChild(fileDownload);
+}
+
 </script>
 
-   
+
   </main>
 </div>
 
@@ -312,7 +334,7 @@ Attendance Report
       <h4>Quick Links</h4>
       <ul>
         <li><a href="/student-management">Student Management</a></li>
-     
+
         <li><a href="/attendence">Attendance</a></li>
         <li><a href="/reports">Reports</a></li>
       </ul>

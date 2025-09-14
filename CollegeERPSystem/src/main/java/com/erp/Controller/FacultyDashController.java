@@ -103,8 +103,8 @@ public class FacultyDashController {
 	     model.addAttribute("students", s2);
 	     model.addAttribute("attendanceMap", attendanceMap);
 	     model.addAttribute("totalStudents", s2.size());
-	     
-	     
+
+
 	     boolean canMark = false;
 
 	     // ✅ Tell Thymeleaf if attendance is open for students
@@ -119,7 +119,7 @@ public class FacultyDashController {
 	        }
 
 	        model.addAttribute("canMark", canMark);
-	        
+
 
 	     return "faculty-links/attendance"; // ✅ return view
 	 }

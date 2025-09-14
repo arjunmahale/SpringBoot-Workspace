@@ -92,11 +92,13 @@ public class LoginController {
 	        session.setAttribute("loggedInUser", dbUser);
 	        session.setAttribute("user", dbUser.getName());
 
+
 	    	//long totalStudents = studentService.countStudents();
 
- String course= dbUser.getFaculty().getCourse().getName();
+	        String course= dbUser.getFaculty().getCourse().getName();
 
 
+           session.setAttribute("course", course);
 
 	    List<Student> s1 =	studentService.getAllStudent();
 	    List<Student> s2 = new ArrayList<>();

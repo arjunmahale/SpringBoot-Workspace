@@ -52,31 +52,18 @@
     </div>
     <a href="/faculty-dashboard">Faculty Dashboard</a>
     <a href="/student-list">Student Management</a>
-
-    
     <a href="/attendance">Attendance</a>
     <a href="/exams">Exams & Results</a>
-    <a href="#">Notifications / Notice Board
-    </a>
+    <a href="#">Notifications / Notice Board</a>
     <a href="#">Timetable</a>
     <a href="#">Reports</a>
   </nav>
 
-
 <main class="main" id="main-content">
       <h1 style="display:flex; justify-content:center; align-items:center;">
- Student List
-</h1>
+        Student List
+      </h1>
 
-
-      <!-- ✅ Add Student Button 
-      <div style="display: flex; justify-content: flex-start; margin-bottom: 15px;">
-        <a href="/add-student"
-           style="padding:8px 15px;background-color:#28a745;color:white;border-radius:6px;text-decoration:none;margin-left:0px;">
-          <i class="fa-solid fa-user-plus"></i> Add Student
-        </a>
-      </div>
-		-->
       <!-- ✅ Search Bar -->
       <div style="margin-bottom: 15px; display:flex; gap:10px;">
         <input type="text" id="searchInput" placeholder="Enter Student ID"
@@ -91,7 +78,7 @@
         </button>
       </div>
 
-      <!-- ✅ Print & Sort Controls -->
+      <!-- ✅ Print & Export Controls -->
       <div style="margin-bottom: 15px; text-align:right; display:flex; justify-content:flex-end; gap:10px;">
         <select id="sortDropdown" onchange="applySort()"
                 style="padding:8px;border:1px solid #ccc;border-radius:5px;">
@@ -104,6 +91,16 @@
         <button onclick="printTable()"
                 style="padding:8px 15px;background-color:#17a2b8;color:white;border:none;border-radius:5px;">
           🖨️ Print Student List
+        </button>
+        <!-- ✅ Added Export to Word Button
+        <button onclick="exportToWord()"
+                style="padding:8px 15px;background-color:#28a745;color:white;border:none;border-radius:5px;">
+          ⬇️ Download as Word
+        </button> -->
+        <!-- ✅ Added Export to excel Button -->
+        <button onclick="exportToExcel()"
+                style="padding:8px 15px;background-color:#28a745;color:white;border:none;border-radius:5px;">
+          ⬇️ Download as Excel
         </button>
       </div>
 
@@ -123,8 +120,8 @@
             <th>Course</th>
             <th>Roll No.</th>
             <th>Mobile No.</th>
-          <!--  <th>Delete</th>
-            <th>Update</th>  --> 
+              <th>Delete</th>
+            <th>Update</th>
           </tr>
         </thead>
         <tbody id="studentTableBody">
@@ -135,7 +132,7 @@
             <td th:text="${student.course != null ? student.course.name : 'N/A'}"></td>
             <td th:text="${student.roll_no}"></td>
             <td th:text="${student.mobile}"></td>
-          <!--   <td>
+             <td>
               <form th:action="@{/delete}" method="post">
                 <input type="hidden" name="id" th:value="${student.id}" />
                 <button type="submit"
@@ -149,24 +146,24 @@
                  style="padding:5px;background-color:#118AB2;color:white;border-radius:5px;text-decoration:none;">
                 <i class="fa-solid fa-pen-to-square"></i> Update
               </a>
-            </td>  -->
+            </td>
           </tr>
         </tbody>
       </table>
 
       <!-- ✅ JS Logic -->
       <script>
-        // Add Sr. No. dynamically
         function updateSrNo() {
           const rows = document.querySelectorAll("#studentTableBody tr");
           let visibleCount = 0;
-          rows.forEach((row, index) => {
+          rows.forEach((row) => {
             if (row.style.display !== "none") {
               visibleCount++;
               row.querySelector("td:first-child").textContent = visibleCount;
             }
           });
-          document.getElementById("studentCount").innerText = "Total Students: " + visibleCount;
+          document.getElementById("studentCount").innerText =
+            "Total Students: " + visibleCount;
         }
 
         // 🔍 Search
@@ -174,7 +171,7 @@
           const input = document.getElementById("searchInput").value.trim();
           const rows = document.querySelectorAll("#studentTableBody tr");
 
-          rows.forEach(row => {
+          rows.forEach((row) => {
             const idCell = row.children[1].textContent.trim();
             if (input === "" || idCell === input) {
               row.style.display = "";
@@ -188,7 +185,7 @@
         function resetTable() {
           document.getElementById("searchInput").value = "";
           const rows = document.querySelectorAll("#studentTableBody tr");
-          rows.forEach(row => row.style.display = "");
+          rows.forEach((row) => (row.style.display = ""));
           updateSrNo();
         }
 
@@ -203,7 +200,7 @@
             name: 2,
             course: 3,
             roll: 4,
-            mobile: 5
+            mobile: 5,
           };
 
           const colIndex = colIndexMap[sortBy];
@@ -223,7 +220,7 @@
           });
 
           tbody.innerHTML = "";
-          rows.forEach(row => tbody.appendChild(row));
+          rows.forEach((row) => tbody.appendChild(row));
           updateSrNo();
         }
 
@@ -252,8 +249,29 @@
           newWin.print();
         }
 
-        // ✅ On page load: sort by ID (descending) + update Sr. No. + student count
-        window.onload = function() {
+        // ✅ Export to Word
+        function exportToWord() {
+          let header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' "+
+                       "xmlns:w='urn:schemas-microsoft-com:office:word' "+
+                       "xmlns='http://www.w3.org/TR/REC-html40'>";
+          let table = document.querySelector(".student-table").outerHTML;
+          let sourceHTML = header +
+            "<head><meta charset='utf-8'></head><body>" +
+            "<h2 style='text-align:center;'>Student List</h2>" +
+            table +
+            "</body></html>";
+
+          let source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
+          let fileDownload = document.createElement("a");
+          document.body.appendChild(fileDownload);
+          fileDownload.href = source;
+          fileDownload.download = 'student-list.doc';
+          fileDownload.click();
+          document.body.removeChild(fileDownload);
+        }
+
+        // ✅ On page load
+        window.onload = function () {
           const tbody = document.getElementById("studentTableBody");
           const rows = Array.from(tbody.querySelectorAll("tr"));
 
@@ -264,9 +282,26 @@
           });
 
           tbody.innerHTML = "";
-          rows.forEach(row => tbody.appendChild(row));
+          rows.forEach((row) => tbody.appendChild(row));
           updateSrNo();
         };
+
+     // ✅ Export to Excel
+        function exportToExcel() {
+          const table = document.querySelector(".student-table");
+          let html = table.outerHTML;
+
+          // Excel needs a special MIME type
+          let uri = 'data:application/vnd.ms-excel;charset=utf-8,' + encodeURIComponent(html);
+
+          let fileDownload = document.createElement("a");
+          document.body.appendChild(fileDownload);
+          fileDownload.href = uri;
+          fileDownload.download = 'student-list.xls';  // 📂 Excel file
+          fileDownload.click();
+          document.body.removeChild(fileDownload);
+        }
+
       </script>
     </main>
 </div>
@@ -281,7 +316,6 @@
       <h4>Quick Links</h4>
       <ul>
         <li><a href="/student-management">Student Management</a></li>
-     
         <li><a href="/attendence">Attendance</a></li>
         <li><a href="/reports">Reports</a></li>
       </ul>

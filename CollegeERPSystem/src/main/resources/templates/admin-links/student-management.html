@@ -69,6 +69,12 @@
                 style="padding:8px 15px;background-color:#17a2b8;color:white;border:none;border-radius:5px;">
           🖨️ Print Student List
         </button>
+        
+           <!-- ✅ Added Export to excel Button -->
+        <button onclick="exportToExcel()"
+                style="padding:8px 15px;background-color:#28a745;color:white;border:none;border-radius:5px;">
+          ⬇️ Download as Excel
+        </button>
       </div>
 
       <!-- ✅ Student Count -->
@@ -231,6 +237,23 @@
           rows.forEach(row => tbody.appendChild(row));
           updateSrNo();
         };
+        
+        // ✅ Export to Excel
+        function exportToExcel() {
+          const table = document.querySelector(".student-table");
+          let html = table.outerHTML;
+
+          // Excel needs a special MIME type
+          let uri = 'data:application/vnd.ms-excel;charset=utf-8,' + encodeURIComponent(html);
+
+          let fileDownload = document.createElement("a");
+          document.body.appendChild(fileDownload);
+          fileDownload.href = uri;
+          fileDownload.download = 'student-list.xls';  // 📂 Excel file
+          fileDownload.click();
+          document.body.removeChild(fileDownload);
+        }
+
       </script>
     </main>
   </div>
