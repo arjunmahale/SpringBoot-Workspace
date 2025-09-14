@@ -1,5 +1,6 @@
 package com.erp.Controller;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,28 +64,36 @@ public class FacultyController {
 
     // Save or update student
     @PostMapping("/save-faculty")
-    public String saveStudents(@ModelAttribute Faculty faculty, RedirectAttributes redirectAttributes) {
+    public String saveFaculty(@ModelAttribute Faculty faculty, RedirectAttributes redirectAttributes) {
+        // Set password as mobile number
         long pass = faculty.getMobile();
         faculty.setPassword(String.valueOf(pass));
+
+        // ✅ Calculate age from DOB
+        if (faculty.getDob() != null) {
+            LocalDate birthDate = faculty.getDob().toLocalDate();
+            int calculatedAge = java.time.Period.between(birthDate, LocalDate.now()).getYears();
+            faculty.setAge(calculatedAge);
+        }
 
         // ✅ Check if course already assigned to another faculty
         Faculty assignedFaculty = facultyServ.getFacultyByCourse(faculty.getCourse());
         if (assignedFaculty != null && (faculty.getId() == 0 || assignedFaculty.getId() != faculty.getId())) {
-            redirectAttributes.addFlashAttribute("error", "Course is already assigned to another faculty! Please use another course or You can simply add new Course");
-            return "redirect:/faculty-management"; // back without saving
+            redirectAttributes.addFlashAttribute("error", "Course is already assigned to another faculty! Please use another course or add a new Course.");
+            return "redirect:/add-faculty"; // back without saving
         }
 
         Faculty existing = null;
-        if (faculty.getId() != 0) { // means update
+        if (faculty.getId() != 0) { // Update case
             existing = facultyServ.getFacultyById(faculty.getId());
         }
 
         Login login;
         if (existing != null && existing.getLogin() != null) {
-            // ✅ Reuse existing login
+            // ✅ Reuse existing login for updates
             login = existing.getLogin();
         } else {
-            // ✅ Create new login (insert case)
+            // ✅ Create new login for insert case
             login = new Login();
             login.setRole("faculty");
         }
@@ -94,11 +103,11 @@ public class FacultyController {
         login.setPassword(faculty.getPassword());
         login.setEmail(faculty.getEmail());
 
-        // Maintain both sides of relation
+        // Maintain both sides of the relation
         login.setFaculty(faculty);
         faculty.setLogin(login);
 
-        // ✅ Save only if no conflict
+        // ✅ Save faculty
         facultyServ.savefFaculty(faculty);
 
         redirectAttributes.addFlashAttribute("message", "Faculty saved successfully!");

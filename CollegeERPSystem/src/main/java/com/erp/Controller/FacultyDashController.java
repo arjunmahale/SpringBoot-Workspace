@@ -195,6 +195,7 @@ String user1=(String) session.getAttribute("user");
 	    Student student = studentService.getStudentById(studentId);
 	    if (student == null) {
 	        redirectAttributes.addFlashAttribute("errorMessage", "Student not found!");
+	        redirectAttributes.addFlashAttribute("error", "Student not found!");
 	        return "redirect:/attendance";
 	    }
 
@@ -208,6 +209,7 @@ String user1=(String) session.getAttribute("user");
 	    attendanceService.saveAttendance(attendance);
 
 	    redirectAttributes.addFlashAttribute("savedStudentId", studentId);
+	    redirectAttributes.addFlashAttribute("message", "attendance saved successfully!");
 	    return "redirect:/student-attendance";
 	}
 

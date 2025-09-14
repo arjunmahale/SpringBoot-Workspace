@@ -1,5 +1,6 @@
 package com.erp.model;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,7 @@ public class Student {
     private long mobile;
     private String gender;
     private int age;
+    private Date dob;
     private String profile_desc;
 
     @ManyToOne
@@ -44,28 +46,54 @@ public class Student {
 
     public Student() {}
 
-    // add login to constructor if you want
-    public Student(long id, String name, String roll_no, String email, long mobile, String gender,
-                   int age, String profile_desc, Course course, String password, Login login) {
-        this.id = id;
-        this.name = name;
-        this.roll_no = roll_no;
-        this.email = email;
-        this.mobile = mobile;
-        this.gender = gender;
-        this.age = age;
-        this.profile_desc = profile_desc;
-        this.course = course;
-        this.password = password;
-        this.login = login;
-    }
+  
+    public Student(long id, String name, String roll_no, String email, long mobile, String gender, int age, Date dob,
+			String profile_desc, Course course, String password, List<Attendance> attendanceRecords, Login login) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.roll_no = roll_no;
+		this.email = email;
+		this.mobile = mobile;
+		this.gender = gender;
+		this.age = age;
+		this.dob = dob;
+		this.profile_desc = profile_desc;
+		this.course = course;
+		this.password = password;
+		this.attendanceRecords = attendanceRecords;
+		this.login = login;
+	}
 
-    // Getters & setters
+
+	// Getters & setters
     // ...
+    
+    
     public Login getLogin() {
         return login;
     }
-    public void setLogin(Login login) {
+    public Date getDob() {
+		return dob;
+	}
+
+
+	public void setDob(Date dob) {
+		this.dob = dob;
+	}
+
+
+	public List<Attendance> getAttendanceRecords() {
+		return attendanceRecords;
+	}
+
+
+	public void setAttendanceRecords(List<Attendance> attendanceRecords) {
+		this.attendanceRecords = attendanceRecords;
+	}
+
+
+	public void setLogin(Login login) {
         this.login = login;
     }
     
@@ -152,11 +180,9 @@ public class Student {
 
 	@Override
 	public String toString() {
-	    return "Student [id=" + id + ", name=" + name + ", roll_no=" + roll_no + 
-	           ", email=" + email + ", mobile=" + mobile + ", gender=" + gender + 
-	           ", age=" + age + ", profile_desc=" + profile_desc + 
-	           ", course=" + (course != null ? course.getName() : "null") +
-	           ", password=" + password + 
-	           ", loginId=" + (login != null ? login.getId() : "null") + "]";
+		return "Student [id=" + id + ", name=" + name + ", roll_no=" + roll_no + ", email=" + email + ", mobile="
+				+ mobile + ", gender=" + gender + ", age=" + age + ", dob=" + dob + ", profile_desc=" + profile_desc
+				+ ", course=" + course + ", password=" + password + ", attendanceRecords=" + attendanceRecords
+				+ ", login=" + login + "]";
 	}
 }

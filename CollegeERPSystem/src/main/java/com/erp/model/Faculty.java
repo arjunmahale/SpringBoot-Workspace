@@ -1,5 +1,7 @@
 package com.erp.model;
 
+import java.sql.Date;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,6 +24,7 @@ public class Faculty {
 	private long mobile;
 	private String gender;
 	private int age;
+	private Date dob;
 	private String profile_desc;
 	private String password;
 	@OneToOne
@@ -39,7 +42,7 @@ public class Faculty {
 
 
 	public Faculty(long id, String name, String email, String department, String subject, long mobile, String gender,
-			int age, String profile_desc, String password, Course course, Login login) {
+			int age, Date dob, String profile_desc, String password, Course course, Login login) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -49,11 +52,26 @@ public class Faculty {
 		this.mobile = mobile;
 		this.gender = gender;
 		this.age = age;
+		this.dob = dob;
 		this.profile_desc = profile_desc;
 		this.password = password;
 		this.course = course;
 		this.login = login;
 	}
+
+
+
+	public Date getDob() {
+		return dob;
+	}
+
+
+
+	public void setDob(Date dob) {
+		this.dob = dob;
+	}
+
+
 
 	public long getMobile() {
 		return mobile;
@@ -159,8 +177,9 @@ public class Faculty {
 	@Override
 	public String toString() {
 		return "Faculty [id=" + id + ", name=" + name + ", email=" + email + ", department=" + department + ", subject="
-				+ subject + ", mobile=" + mobile + ", gender=" + gender + ", age=" + age + ", profile_desc="
-				+ profile_desc + ", password=" + password + ", course=" + course + ", login=" + login + "]";
+				+ subject + ", mobile=" + mobile + ", gender=" + gender + ", age=" + age + ", dob=" + dob
+				+ ", profile_desc=" + profile_desc + ", password=" + password + ", course=" + course + ", login="
+				+ login + "]";
 	}
 
 }

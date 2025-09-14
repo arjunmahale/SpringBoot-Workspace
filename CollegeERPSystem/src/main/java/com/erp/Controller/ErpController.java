@@ -171,11 +171,12 @@ String user1=(String) session.getAttribute("user");
         return "admin-links/student-form"; // ✅ new Thymeleaf template
     }
 
-    
-    //student update and delete will be managed by faculty only 
+
+    //student update and delete will be managed by faculty only
     // Open form to update student
     @GetMapping("/update/{id}")
-    public String editStudentForm(@PathVariable() Long id, Model model) {
+    public String editStudentForm(@PathVariable() Long id, Model model,HttpSession session) {
+    	  String role = (String) session.getAttribute("role");
         Student student = studserv.getStudentById(id); // fetch student by ID
         model.addAttribute("student", student);
         model.addAttribute("title", "Update Student");
@@ -189,6 +190,13 @@ String user1=(String) session.getAttribute("user");
     public String saveStudents(@ModelAttribute Student student, RedirectAttributes redirectAttributes) {
         long pass = student.getMobile();
         student.setPassword(String.valueOf(pass));
+
+        // ✅ calculate age from dob
+        if (student.getDob() != null) {
+            LocalDate birthDate = student.getDob().toLocalDate();
+            int calculatedAge = java.time.Period.between(birthDate, LocalDate.now()).getYears();
+            student.setAge(calculatedAge);
+        }
 
         // 🔎 check if student already exists
         Student existing = null;
@@ -221,7 +229,6 @@ String user1=(String) session.getAttribute("user");
         return "redirect:/student-management";
     }
 
-
     // Delete student
     @PostMapping("/delete")
     public String deleteStudent(@ModelAttribute Student student, RedirectAttributes redirectAttributes) {
@@ -245,5 +252,89 @@ String user1=(String) session.getAttribute("user");
 //        }
 //        return "/admin-links/student-management"; // your Thymeleaf template name
 //    }
+
+
+    // Open form to add student
+    @GetMapping("/faculty/add-student")
+    public String showStudentFormfaculty(Model model) {
+        model.addAttribute("student", new Student()); // empty student for new entry
+        model.addAttribute("courses", courseServ.getAllcourses());
+        model.addAttribute("title","Add New Student");
+        model.addAttribute("formAction","/save-student");
+        return "faculty-links/student-form"; // ✅ new Thymeleaf template
+    }
+
+
+    //student update and delete will be managed by faculty only
+    // Open form to update student
+    @GetMapping("/faculty/update/{id}")
+    public String editStudentFormfaculty(@PathVariable() Long id, Model model,HttpSession session) {
+    	  String role = (String) session.getAttribute("role");
+        Student student = studserv.getStudentById(id); // fetch student by ID
+        model.addAttribute("student", student);
+        model.addAttribute("title", "Update Student");
+        model.addAttribute("courses", courseServ.getAllcourses());
+        model.addAttribute("formAction","/faculty/save-student");
+        return "faculty-links/student-form"; // same form but prefilled
+    }
+
+    // Save or update student
+    @PostMapping("/faculty/save-student")
+    public String saveStudentsfaculty(@ModelAttribute Student student, RedirectAttributes redirectAttributes) {
+        // Set password as mobile number
+        long pass = student.getMobile();
+        student.setPassword(String.valueOf(pass));
+
+        // ✅ Calculate age from DOB
+        if (student.getDob() != null) {
+            LocalDate birthDate = student.getDob().toLocalDate();
+            int calculatedAge = java.time.Period.between(birthDate, LocalDate.now()).getYears();
+            student.setAge(calculatedAge);
+        }
+
+        // 🔎 Check if student already exists
+        Student existing = null;
+        if (student.getId() != 0) { // Update case
+            existing = studserv.getStudentById(student.getId());
+        }
+
+        Login login;
+        if (existing != null && existing.getLogin() != null) {
+            // ✅ Reuse existing login for updates
+            login = existing.getLogin();
+        } else {
+            // ✅ Create new login for insert case
+            login = new Login();
+            login.setRole("student");
+        }
+
+        // Update login fields from student
+        login.setName(student.getName());
+        login.setPassword(student.getPassword());
+        login.setEmail(student.getEmail());
+
+        // Maintain both sides of the relation
+        login.setStudent(student);
+        student.setLogin(login);
+
+        // Save student (login cascaded)
+        studserv.saveStudent(student);
+
+        redirectAttributes.addFlashAttribute("message", "Student saved successfully!");
+        return "redirect:/student-list";
+    }
+
+
+    // Delete student
+    @PostMapping("/faculty/delete")
+    public String deleteStudentfaculty(@ModelAttribute Student student, RedirectAttributes redirectAttributes) {
+
+        studserv.deleteStudent(student);
+
+
+
+        redirectAttributes.addFlashAttribute("message", "Student deleted successfully!");
+        return "redirect:/student-list";
+    }
 
 }

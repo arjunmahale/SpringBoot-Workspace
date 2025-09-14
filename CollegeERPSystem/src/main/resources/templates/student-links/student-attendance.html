@@ -4,6 +4,39 @@
   <meta charset="UTF-8">
   <title>Student Dashboard</title>
   <link rel="stylesheet" href="dashboard.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- hidden containers that contain raw HTML message (th:utext so <b> remains) -->
+<div id="flashSuccess" th:if="${message}" th:utext="${message}" style="display:none;"></div>
+<div id="flashError" th:if="${error}" th:utext="${error}" style="display:none;"></div>
+
+<!-- show SweetAlert popups by reading innerHTML from hidden divs -->
+<script>
+  // show error if any
+  (function() {
+    var errDiv = document.getElementById('flashError');
+    if (errDiv) {
+      var html = errDiv.innerHTML || '';
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        html: html,   // accepts HTML
+        confirmButtonText: 'OK'
+      });
+    }
+
+    var successDiv = document.getElementById('flashSuccess');
+    if (successDiv) {
+      var html2 = successDiv.innerHTML || '';
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        html: html2,
+        confirmButtonText: 'OK'
+      });
+    }
+  })();
+</script>
+  
   <style>
     .summary-cards {
       display: flex;
@@ -103,7 +136,7 @@
     padding:6px 12px;
     background: linear-gradient(90deg, rgba(255,255,255,0.9), rgba(255,255,255,0.8));
     border-radius:10px;
-    
+
   }
 
   /* pulsing dot */
@@ -139,7 +172,7 @@
     color:#111;
     display:inline-block;
     transform-origin:center;
-   
+
   }
 
   /* keyframes */
@@ -192,11 +225,11 @@
     <a href="#">Timetable</a>
     <a href="#">Reports</a>
   </nav>
-  
+
   <main class="main" id="main-content">
 <div style="display:flex; justify-content:center; align-items:flex-start; padding-top:40px; background: transparent; min-height:100vh;">
   <div style="background:#fff; padding:25px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.1); text-align:center; width:50%;">
-    
+
  <!-- Put this where you want the live header -->
 <div class="live-badge-wrapper" role="status" aria-live="polite">
   <h1 class="live-heading">
@@ -214,18 +247,140 @@
     </div>
 
     <div th:if="${canMark}">
-     <form th:action="@{/attendance/save}" method="post" style="display:inline;">
-        <input type="hidden" name="studentId" th:value="${student.id}">
-        <input type="hidden" name="date" th:value="${today}">
-        <input type="hidden" name="name" th:value="${student.name}">
-        <input type="hidden" name="course" th:value="${student.course.name}">
-        <input type="hidden" name="status" value="Present">
-        <button type="submit" 
-                style="padding:5px 10px; border:none; border-radius:5px; background:green; color:white; cursor:pointer;">
-          Mark as Present
-        </button>
-      </form>
-    </div>
+ <!-- Mark Present -->
+<form th:action="@{/attendance/save}" method="post" style="display:inline;">
+  <input type="hidden" name="studentId" th:value="${student.id}">
+  <input type="hidden" name="date" th:value="${today}">
+  <input type="hidden" name="name" th:value="${student.name}">
+  <input type="hidden" name="course" th:value="${student.course.name}">
+  <input type="hidden" name="status" value="Present">
+
+  <button type="submit"
+          style="
+            padding:10px 20px;
+            border:none;
+            border-radius:6px;
+            background:linear-gradient(45deg,#4caf50,#2e7d32);
+            color:white;
+            font-size:14px;
+            font-weight:600;
+            cursor:pointer;
+            transition:all 0.3s ease;
+            box-shadow:0 3px 6px rgba(0,0,0,0.15);
+            margin-right:12px;
+          "
+          onmouseover="this.style.opacity=0.9"
+          onmouseout="this.style.opacity=1">
+    Mark as Present
+  </button>
+</form>
+
+
+<!-- Absent With Reason (toggle input & hide button) -->
+<button type="button"
+        id="absentBtn"
+        onclick="showReasonBox();"
+        style="
+          padding:10px 20px;
+          border:none;
+          border-radius:6px;
+          background:linear-gradient(45deg,#ff9800,#ff5722);
+          color:white;
+          font-size:14px;
+          font-weight:600;
+          cursor:pointer;
+          margin-top:12px;
+          transition:all 0.3s ease;
+          box-shadow:0 3px 6px rgba(0,0,0,0.15);
+        "
+        onmouseover="this.style.opacity=0.9"
+        onmouseout="this.style.opacity=1">
+  Absent With Reason
+</button>
+
+<!-- Hidden form for reason -->
+<form id="reason-box" th:action="@{/attendance/save}" method="post"
+      style="display:none; margin-top:20px; padding:18px; border:1px solid #ddd; border-radius:8px; background:#fafafa; box-shadow:0 3px 8px rgba(0,0,0,0.1);">
+
+  <input type="hidden" name="studentId" th:value="${student.id}">
+  <input type="hidden" name="date" th:value="${today}">
+  <input type="hidden" name="name" th:value="${student.name}">
+  <input type="hidden" name="course" th:value="${student.course.name}">
+
+  <input type="hidden" id="statusField" name="status" value="Absent">
+
+  <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+    <label for="reason" style="font-size:15px; font-weight:600; color:#333;">Reason:</label>
+    <input type="text" id="reason" placeholder="Enter reason here..."
+           style="
+             flex:1;
+             min-width:220px;
+             padding:10px 14px;
+             border:1px solid #ccc;
+             border-radius:6px;
+             font-size:14px;
+             outline:none;
+             transition:border-color 0.3s;
+           "
+           onfocus="this.style.borderColor='#007bff'"
+           onblur="this.style.borderColor='#ccc'"
+           oninput="document.getElementById('statusField').value='Absent - Reason: ' + this.value;">
+  </div>
+
+  <div style="margin-top:18px; display:flex; gap:12px;">
+    <button type="submit"
+            style="
+              padding:10px 20px;
+              border:none;
+              border-radius:6px;
+              background:linear-gradient(45deg,#f44336,#e53935);
+              color:white;
+              font-size:14px;
+              font-weight:600;
+              cursor:pointer;
+              transition:all 0.3s ease;
+              box-shadow:0 3px 6px rgba(0,0,0,0.15);
+            "
+            onmouseover="this.style.opacity=0.9"
+            onmouseout="this.style.opacity=1">
+      Save as Absent
+    </button>
+
+    <button type="button"
+            onclick="cancelReasonBox();"
+            style="
+              padding:10px 20px;
+              border:1px solid #bbb;
+              border-radius:6px;
+              background:#fff;
+              color:#333;
+              font-size:14px;
+              font-weight:600;
+              cursor:pointer;
+              transition:all 0.3s ease;
+            "
+            onmouseover="this.style.background='#f0f0f0'"
+            onmouseout="this.style.background='#fff'">
+      Cancel
+    </button>
+  </div>
+</form>
+
+<script>
+  function showReasonBox() {
+    document.getElementById("reason-box").style.display = "block";
+    document.getElementById("absentBtn").style.display = "none";
+  }
+
+  function cancelReasonBox() {
+    document.getElementById("reason-box").style.display = "none";
+    document.getElementById("absentBtn").style.display = "inline-block";
+  }
+</script>
+
+
+</div>
+
 
     <div th:unless="${canMark}" style="color:red; margin-top:15px; font-size:14px;">
       Attendance is not open or time limit expired.

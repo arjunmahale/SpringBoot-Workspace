@@ -68,7 +68,7 @@
       <h3 class="profile-name" th:text="${user}"></h3>
     </div>
     <a href="/faculty-dashboard">Faculty Dashboard</a>
-    <a href="/student-list">Student Management</a>
+    <a href="/student-list">Students Enrolled</a>
 
 
     <a href="/attendance">Attendance</a>
@@ -189,7 +189,7 @@ Attendance
     <th>ID</th>
     <th>Name</th>
     <th>Roll No.</th>
- 
+
     <th>Status</th> <!-- ✅ New column -->
   </tr>
 </thead>
@@ -201,7 +201,7 @@ Attendance
     <td th:text="${student.name}"></td>
     <td th:text="${student.roll_no}"></td>
   <!--    <td>
-     ✅ Present 
+     ✅ Present
       <form th:action="@{/attendance/save}" method="post" style="display:inline;">
         <input type="hidden" name="studentId" th:value="${student.id}">
         <input type="hidden" name="date" th:value="${today}">
@@ -226,7 +226,7 @@ Attendance
                 style="padding:5px 10px; border:none; border-radius:5px; background:red; color:white; cursor:pointer;">
           Absent
         </button>
-      </form> 
+      </form>
     </td>-->
     <!-- ✅ Status Column -->
  <td class="status-cell"

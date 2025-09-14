@@ -51,7 +51,7 @@
       <h3 class="profile-name" th:text="${user}"></h3>
     </div>
     <a href="/faculty-dashboard">Faculty Dashboard</a>
-    <a href="/student-list">Student Management</a>
+    <a href="/student-list">Student Enrolled</a>
     <a href="/attendance">Attendance</a>
     <a href="/exams">Exams & Results</a>
     <a href="#">Notifications / Notice Board</a>
@@ -133,7 +133,7 @@
             <td th:text="${student.roll_no}"></td>
             <td th:text="${student.mobile}"></td>
              <td>
-              <form th:action="@{/delete}" method="post">
+              <form th:action="@{/faculty/delete}" method="post">
                 <input type="hidden" name="id" th:value="${student.id}" />
                 <button type="submit"
                         style="padding:5px;background-color:#dc3545;border:none;color:white;border-radius: 5px">
@@ -142,7 +142,7 @@
               </form>
             </td>
             <td>
-              <a th:href="@{'/update/' + ${student.id}}"
+              <a th:href="@{'/faculty/update/' + ${student.id}}"
                  style="padding:5px;background-color:#118AB2;color:white;border-radius:5px;text-decoration:none;">
                 <i class="fa-solid fa-pen-to-square"></i> Update
               </a>

@@ -63,7 +63,7 @@
   </nav>
 
   <main class="main" id="main-content">
-    
+
 
  <h1 style="display:flex; justify-content:center; align-items:center;">
 Attendance
@@ -101,8 +101,8 @@ Attendance
                 style="padding:8px 15px;background-color:#28a745;color:white;border:none;border-radius:5px;">
           ⬇️ Download as Excel
         </button>
-        
-        
+
+
 </div>
 
 <!-- ✅ Student Count -->
@@ -115,8 +115,8 @@ Attendance
     <strong>Date: </strong>
     <span th:text="${today}"></span>
   </div>
-  
- 
+
+
 
   <!-- ✅ Extra button to view all previous attendance -->
   <form action="/total-attendance-list" method="get">
@@ -127,10 +127,10 @@ Attendance
   </form>
 </div>
 
-  
-  
-  
-  
+
+
+
+
 <!-- ✅ Attendance Table -->
 <!-- ✅ Attendance Table -->
 <table class="student-table" border="1" cellspacing="0" cellpadding="8"
@@ -141,49 +141,49 @@ Attendance
     <th>ID</th>
     <th>Name</th>
     <th>Roll No.</th>
-    <th>Action</th>
+
     <th>Status</th> <!-- ✅ New column -->
   </tr>
 </thead>
 <tbody id="studentTableBody">
-  <tr th:each="student, iterStat : ${students}" 
+  <tr th:each="student, iterStat : ${students}"
       th:attr="data-student-id=${student.id}">
     <td th:text="${iterStat.count}"></td>
     <td th:text="${student.id}"></td>
     <td th:text="${student.name}"></td>
     <td th:text="${student.roll_no}"></td>
-    <td>
-      <!-- ✅ Present -->
+  <!--  <td>
+       ✅ Present
       <form th:action="@{/attendance/save}" method="post" style="display:inline;">
         <input type="hidden" name="studentId" th:value="${student.id}">
         <input type="hidden" name="date" th:value="${today}">
         <input type="hidden" name="name" th:value="${student.name}">
         <input type="hidden" name="course" th:value="${student.course.name}">
         <input type="hidden" name="status" value="Present">
-        <button type="submit" 
+        <button type="submit"
                 style="padding:5px 10px; border:none; border-radius:5px; background:green; color:white; cursor:pointer;">
           Present
         </button>
       </form>
-
-      <!-- ✅ Absent -->
+ -->
+      <!-- ✅ Absent
       <form th:action="@{/attendance/save}" method="post" style="display:inline;">
         <input type="hidden" name="studentId" th:value="${student.id}">
         <input type="hidden" name="date" th:value="${today}">
                 <input type="hidden" name="name" th:value="${student.name}">
         <input type="hidden" name="course" th:value="${student.course}">
-        
+
         <input type="hidden" name="status" value="Absent">
-        <button type="submit" 
+        <button type="submit"
                 style="padding:5px 10px; border:none; border-radius:5px; background:red; color:white; cursor:pointer;">
           Absent
         </button>
       </form>
-    </td>
+    </td> -->
     <!-- ✅ Status Column -->
-  <td class="status-cell" 
+  <td class="status-cell"
     th:text="${attendanceMap[student.id] != null ? attendanceMap[student.id] : 'Not Marked'}"
-    th:style="${attendanceMap[student.id] == 'Present' ? 'color:green;font-weight:bold;' 
+    th:style="${attendanceMap[student.id] == 'Present' ? 'color:green;font-weight:bold;'
                : (attendanceMap[student.id] == 'Absent' ? 'color:red;font-weight:bold;' : '')}">
 </td>
 
@@ -290,7 +290,7 @@ Attendance
   }
 
   // ✅ On page load update Sr. No. + student count (natural order)
- 
+
     // ✅ Export to Excel
 function exportToExcel() {
   const table = document.querySelector(".student-table");
@@ -307,10 +307,12 @@ function exportToExcel() {
   document.body.removeChild(fileDownload);
 }
 
-  
+window.onload = function() {
+    updateSrNo();
+  };
 </script>
 
-   
+
   </main>
 </div>
 

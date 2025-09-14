@@ -3,8 +3,8 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Admin Dashboard</title>
-  <link rel="stylesheet" href="../dashboard.css">
+  <title>faculty Dashboard</title>
+  <link rel="stylesheet" href="../../dashboard.css">
     <link rel="stylesheet" th:href="@{/student-form.css}">
      <style>
     .form-grid {
@@ -51,24 +51,25 @@
   </style>
 </head>
 <body>
-  <header><u>Admin Dashboard</u></header>
+  <header><u>Faculty Dashboard</u></header>
   <div class="container">
       <nav class="sidebar">
     <div class="profile">
-      <img src="../profile.jpg" alt="Admin Profile" class="profile-pic">
-      <h3 class="profile-name">Admin User</h3>
+      <img src="../../profile.jpg" alt="Admin Profile" class="profile-pic">
+      <h3 class="profile-name" th:text="${user}"></h3>
     </div>
-    <a href="/admin-dashboard">Admin Dashboard</a>
-    <a href="/student-management">Student Management</a>
-    <a href="/course-management">Course Management</a>
-    <a href="/faculty-management">Faculty Management</a>
-    <a href="/attendance-list">Attendance</a>
-    <a href="/admin/exams">Exams & Results</a>
+    <a href="/faculty-dashboard">Faculty Dashboard</a>
+    <a href="/student-list">Student Enrolled</a>
+
+
+    <a href="/attendance">Attendance</a>
+    <a href="/exams">Exams & Results</a>
     <a href="#">Notifications / Notice Board
-</a>
+    </a>
     <a href="#">Timetable</a>
     <a href="#">Reports</a>
   </nav>
+
     <main class="main" id="main-content">
       <!-- ✅ Add Student Button -->
        <form th:action="@{${formAction}}" method="post"

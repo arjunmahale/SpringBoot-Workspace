@@ -67,6 +67,7 @@ public class LoginController {
 	    	long totalStudents = studentService.countStudents();
 	    	long totalCourses = courseService.countCourses();
 	    	long totalFaculty = facultyService.countFaculty();
+	    	  session.setAttribute("role", dbUser.getRole());
 
 	    	System.out.println("Students: " + totalStudents);
 	    	System.out.println("Courses: " + totalCourses);
@@ -91,7 +92,11 @@ public class LoginController {
 	    	  // store dbUser in session
 	        session.setAttribute("loggedInUser", dbUser);
 	        session.setAttribute("user", dbUser.getName());
-
+	        session.setAttribute("role", dbUser.getRole());
+	        String role= (String) session.getAttribute("role");
+	        System.out.println(role);
+	        System.out.println(role);
+	        System.out.println(role);
 
 	    	//long totalStudents = studentService.countStudents();
 
