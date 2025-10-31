@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="dashboard.css">
   <style>
     .summary-cards {
@@ -45,26 +46,55 @@
 <body>
 <header><u>Admin Dashboard</u></header>
 <div class="container">
-   <nav class="sidebar">
-    <div class="profile">
-      <img src="profile.jpg" alt="Admin Profile" class="profile-pic">
-      <h3 class="profile-name">Admin User</h3>
-    </div>
-    <a href="/admin-dashboard">Admin Dashboard</a>
-    <a href="/student-management">Student Management</a>
-    <a href="/course-management">Course Management</a>
-    <a href="/faculty-management">Faculty Management</a>
-    <a href="/attendance-list">Attendance</a>
-    <a href="/admin/exams">Exams & Results</a>
-    <a href="#">Notifications / Notice Board
-</a>
-    <a href="#">Timetable</a>
-    <a href="#">Reports</a>
-  </nav>
+ <nav class="sidebar" >
+  <div class="profile" style="text-align: center; margin-bottom: 20px;">
+    <img src="profile.jpg" alt="Admin Profile" class="profile-pic" style="width: 80px; height: 80px; border-radius: 50%; border: 2px solid #fff; margin-bottom: 10px;">
+    <h3 class="profile-name" style="font-size: 16px; margin: 0;">Admin User</h3>
+  </div>
+
+  <a href="/admin-dashboard" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-home" style="margin-right: 10px;"></i> Admin Dashboard
+  </a>
+
+  <a href="/student-management" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-user-graduate" style="margin-right: 10px;"></i> Student Management
+  </a>
+
+  <a href="/course-management" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-book" style="margin-right: 10px;"></i> Course Management
+  </a>
+
+  <a href="/faculty-management" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-chalkboard-teacher" style="margin-right: 10px;"></i> Faculty Management
+  </a>
+
+  <a href="/attendance-list" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-check-square" style="margin-right: 10px;"></i> Attendance
+  </a>
+
+  <a href="/admin/exams" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-file-alt" style="margin-right: 10px;"></i> Exams & Results
+  </a>
+
+  <a href="#" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-bell" style="margin-right: 10px;"></i> Notifications / Notice Board
+  </a>
+
+  <a href="#" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-calendar-alt" style="margin-right: 10px;"></i> Timetable
+  </a>
+
+  <a href="#" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-file-invoice" style="margin-right: 10px;"></i> Reports
+  </a>
+</nav>
 
   <main class="main" id="main-content">
 
-
+<div>
+    <strong>Date: </strong>
+    <span th:text="${today}"></span>
+  </div>
  <h1 style="display:flex; justify-content:center; align-items:center;">
 Attendance
 </h1>
@@ -111,18 +141,41 @@ Attendance
 </div>
 <!-- 📅 Date Selector -->
 <div style="margin:15px 0; display:flex; justify-content:space-between; align-items:center;">
-  <div>
-    <strong>Date: </strong>
-    <span th:text="${today}"></span>
-  </div>
+
+<div>
+  <span th:if="${selectedDate != null}">
+    <strong>Attendance By Date : </strong>
+    <span th:text="${selectedDate}"></span>
+  </span>
+
+  <span th:if="${selectedCourse != null}">
+    <strong>Course : </strong>
+    <span th:text="${selectedCourse}"></span>
+  </span>
+</div>
+
+
+
 
 
 
   <!-- ✅ Extra button to view all previous attendance -->
-  <form action="/total-attendance-list" method="get">
+  <form action="/attendance-list-by-date-course" method="get">
+     <label for="course" style="font-size:14px; font-weight:500;">Course:</label>
+    <select name="course" id="course" style="padding:6px 10px; font-size:14px; border:1px solid #ccc; border-radius:5px;">
+        <option value="">Select Course</option>
+        <th:block th:each="c : ${courses}">
+            <option th:value="${c.name}" th:text="${c.name}"></option>
+        </th:block>
+    </select>
+
+    <label for="date" style="font-size:14px; font-weight:500;">Date:</label>
+    <input type="date" name="date" id="date" required
+           style="padding:6px 10px; font-size:14px; border:1px solid #ccc; border-radius:5px;">
+
     <button type="submit"
-            style="padding:8px 12px; background:#6c757d; color:white; border:none; border-radius:5px;">
-      📅 View All Previous Attendance
+            style="padding:6px 15px; font-size:14px; border:none; border-radius:5px; background:#007BFF; color:white; cursor:pointer;">
+        Show Attendance
     </button>
   </form>
 </div>
@@ -140,6 +193,7 @@ Attendance
     <th>Sr. No.</th>
     <th>ID</th>
     <th>Name</th>
+    <th>Course</th>
     <th>Roll No.</th>
 
     <th>Status</th> <!-- ✅ New column -->
@@ -151,6 +205,7 @@ Attendance
     <td th:text="${iterStat.count}"></td>
     <td th:text="${student.id}"></td>
     <td th:text="${student.name}"></td>
+    <td th:text="${student.course.name}"></td>
     <td th:text="${student.roll_no}"></td>
   <!--  <td>
        ✅ Present
@@ -191,6 +246,7 @@ Attendance
 </tbody>
 
 </table>
+
 
 
 <!-- ✅ JS Logic -->

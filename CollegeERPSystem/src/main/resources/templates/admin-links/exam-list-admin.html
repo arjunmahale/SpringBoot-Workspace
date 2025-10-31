@@ -2,10 +2,11 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Admin Dashboard</title>
+  <title>Admin exam list</title>
   <link rel="stylesheet" href="../dashboard.css">
   <!-- include SweetAlert2 (put in head or before using it) -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <!-- hidden containers that contain raw HTML message (th:utext so <b> remains) -->
 <div id="flashSuccess" th:if="${message}" th:utext="${message}" style="display:none;"></div>
@@ -38,7 +39,7 @@
     }
   })();
 </script>
-  
+
   <style>
     .summary-cards {
       display: flex;
@@ -81,37 +82,67 @@
 <body>
 <header><u>Admin Dashboard</u></header>
 <div class="container">
-    <nav class="sidebar">
-    <div class="profile">
-      <img src="../profile.jpg" alt="Admin Profile" class="profile-pic">
-      <h3 class="profile-name">Admin User</h3>
-    </div>
-    <a href="/admin-dashboard">Admin Dashboard</a>
-    <a href="/student-management">Student Management</a>
-    <a href="/course-management">Course Management</a>
-    <a href="/faculty-management">Faculty Management</a>
-    <a href="/attendance-list">Attendance</a>
-    <a href="/admin/exams">Exams & Results</a>
-    <a href="#">Notifications / Notice Board
-</a>
-    <a href="#">Timetable</a>
-    <a href="#">Reports</a>
-  </nav>
+  <nav class="sidebar" >
+  <div class="profile" style="text-align: center; margin-bottom: 20px;">
+    <img src="../profile.jpg" alt="Admin Profile" class="profile-pic" style="width: 80px; height: 80px; border-radius: 50%; border: 2px solid #fff; margin-bottom: 10px;">
+    <h3 class="profile-name" style="font-size: 16px; margin: 0;">Admin User</h3>
+  </div>
+
+  <a href="/admin-dashboard" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-home" style="margin-right: 10px;"></i> Admin Dashboard
+  </a>
+
+  <a href="/student-management" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-user-graduate" style="margin-right: 10px;"></i> Student Management
+  </a>
+
+  <a href="/course-management" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-book" style="margin-right: 10px;"></i> Course Management
+  </a>
+
+  <a href="/faculty-management" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-chalkboard-teacher" style="margin-right: 10px;"></i> Faculty Management
+  </a>
+
+  <a href="/attendance-list" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-check-square" style="margin-right: 10px;"></i> Attendance
+  </a>
+
+  <a href="/admin/exams" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-file-alt" style="margin-right: 10px;"></i> Exams & Results
+  </a>
+
+  <a href="#" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-bell" style="margin-right: 10px;"></i> Notifications / Notice Board
+  </a>
+
+  <a href="#" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-calendar-alt" style="margin-right: 10px;"></i> Timetable
+  </a>
+
+  <a href="#" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-file-invoice" style="margin-right: 10px;"></i> Reports
+  </a>
+</nav>
 
 <main class="main" id="main-content">
+ <div>
+    <strong>Date: </strong>
+    <span th:text="${today}"></span>
+  </div>
   <h1 style="display:flex; justify-content:center; align-items:center;">
     Exam List
   </h1>
 
-  <!-- ✅ Add Exam Button -->
+  <!-- ✅ Add Exam Button
   <div style="display: flex; justify-content: flex-start; margin-bottom: 15px;">
     <a href="/admin/exams/new"
        style="padding:8px 15px;background-color:#28a745;color:white;border-radius:6px;text-decoration:none;margin-left:20px;">
       <i class="fa-solid fa-plus"></i> Schedule Exam
     </a>
-    
+
   </div>
- 
+ -->
 
   <!-- ✅ Search Bar -->
   <div style="margin-bottom: 15px; display:flex; gap:10px;">
@@ -140,7 +171,7 @@
             style="padding:8px 15px;background-color:#17a2b8;color:white;border:none;border-radius:5px;">
       🖨️ Print Exam List
     </button>
-    
+
        <!-- ✅ Added Export to excel Button -->
         <button onclick="exportToExcel()"
                 style="padding:8px 15px;background-color:#28a745;color:white;border:none;border-radius:5px;">
@@ -297,10 +328,10 @@
       rows.forEach(row => tbody.appendChild(row));
       updateSrNo();
     };
-    
+
     // ✅ Export to Excel
     function exportToExcel() {
-      const table = document.querySelector(".student-table");
+      const table = document.querySelector(".exam-table");
       let html = table.outerHTML;
 
       // Excel needs a special MIME type
@@ -329,7 +360,7 @@
       <h4>Quick Links</h4>
       <ul>
         <li><a href="/student-management">Student Management</a></li>
-     
+
         <li><a href="/attendence">Attendance</a></li>
         <li><a href="/reports">Reports</a></li>
       </ul>

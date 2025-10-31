@@ -4,13 +4,14 @@
   <meta charset="UTF-8">
   <title>Admin Dashboard</title>
   <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <script th:inline="javascript">
   window.onload = function() {
     // update table numbering & count
     updateSrNo();
 
     // check if a student was saved and mark it
-   
+
   };
 </script>
 
@@ -56,24 +57,50 @@
 <body>
 <header><u>Admin Dashboard</u></header>
 <div class="container">
-   <nav class="sidebar">
-    <div class="profile">
-      <img src="profile.jpg" alt="Admin Profile" class="profile-pic">
-      <h3 class="profile-name">Admin User</h3>
-    </div>
-    <a href="/admin-dashboard">Admin Dashboard</a>
-    <a href="/student-management">Student Management</a>
-    <a href="/course-management">Course Management</a>
-    <a href="/faculty-management">Faculty Management</a>
-    <a href="/attendance-list">Attendance</a>
-    <a href="/admin/exams">Exams & Results</a>
-    <a href="#">Notifications / Notice Board
-</a>
-    <a href="#">Timetable</a>
-    <a href="#">Reports</a>
-  </nav>
+   <nav class="sidebar" >
+  <div class="profile" style="text-align: center; margin-bottom: 20px;">
+    <img src="profile.jpg" alt="Admin Profile" class="profile-pic" style="width: 80px; height: 80px; border-radius: 50%; border: 2px solid #fff; margin-bottom: 10px;">
+    <h3 class="profile-name" style="font-size: 16px; margin: 0;">Admin User</h3>
+  </div>
+
+  <a href="/admin-dashboard" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-home" style="margin-right: 10px;"></i> Admin Dashboard
+  </a>
+
+  <a href="/student-management" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-user-graduate" style="margin-right: 10px;"></i> Student Management
+  </a>
+
+  <a href="/course-management" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-book" style="margin-right: 10px;"></i> Course Management
+  </a>
+
+  <a href="/faculty-management" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-chalkboard-teacher" style="margin-right: 10px;"></i> Faculty Management
+  </a>
+
+  <a href="/attendance-list" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-check-square" style="margin-right: 10px;"></i> Attendance
+  </a>
+
+  <a href="/admin/exams" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-file-alt" style="margin-right: 10px;"></i> Exams & Results
+  </a>
+
+  <a href="#" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-bell" style="margin-right: 10px;"></i> Notifications / Notice Board
+  </a>
+
+  <a href="#" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-calendar-alt" style="margin-right: 10px;"></i> Timetable
+  </a>
+
+  <a href="#" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-file-invoice" style="margin-right: 10px;"></i> Reports
+  </a>
+</nav>
   <main class="main" id="main-content">
-    
+
 
  <h1 style="display:flex; justify-content:center; align-items:center;">
 Attendance Report
@@ -106,7 +133,7 @@ Attendance Report
           style="padding:8px 15px;background-color:#17a2b8;color:white;border:none;border-radius:5px;">
     🖨️ Print Attendance
   </button>
-  
+
      <!-- ✅ Added Export to excel Button -->
         <button onclick="exportToExcel()"
                 style="padding:8px 15px;background-color:#28a745;color:white;border:none;border-radius:5px;">
@@ -124,8 +151,8 @@ Attendance Report
     <strong>Date: </strong>
     <span th:text="${today}"></span>
   </div>
-  
- 
+
+
 
   <!-- ✅ Extra button to view all previous attendance
   <form action="/attendance/all" method="get">
@@ -136,10 +163,10 @@ Attendance Report
   </form>
 
  -->
- </div> 
-  
-  
-  
+ </div>
+
+
+
 <!-- ✅ Attendance Table -->
 <!-- ✅ Attendance Table -->
 <table class="student-table" border="1" cellspacing="0" cellpadding="8"
@@ -151,48 +178,48 @@ Attendance Report
     <th>Name</th>
     <th>Roll No.</th>
  <!--   <th>Action</th> ✅ New column -->
-    <th>Status</th> 
+    <th>Status</th>
   </tr>
 </thead>
 <tbody id="studentTableBody">
-  <tr th:each="student, iterStat : ${students}" 
+  <tr th:each="student, iterStat : ${students}"
       th:attr="data-student-id=${student.id}">
     <td th:text="${iterStat.count}"></td>
     <td th:text="${student.id}"></td>
     <td th:text="${student.name}"></td>
     <td th:text="${student.roll_no}"></td>
       <!-- ✅ Present <td>
-    
+
       <form th:action="@{/attendance/save}" method="post" style="display:inline;">
         <input type="hidden" name="studentId" th:value="${student.id}">
         <input type="hidden" name="date" th:value="${today}">
         <input type="hidden" name="name" th:value="${student.name}">
         <input type="hidden" name="course" th:value="${student.course.name}">
         <input type="hidden" name="status" value="Present">
-        <button type="submit" 
+        <button type="submit"
                 style="padding:5px 10px; border:none; border-radius:5px; background:green; color:white; cursor:pointer;">
           Present
         </button>
       </form>-->
 
-      <!-- ✅ Absent 
+      <!-- ✅ Absent
       <form th:action="@{/attendance/save}" method="post" style="display:inline;">
         <input type="hidden" name="studentId" th:value="${student.id}">
         <input type="hidden" name="date" th:value="${today}">
                 <input type="hidden" name="name" th:value="${student.name}">
         <input type="hidden" name="course" th:value="${student.course}">
-        
+
         <input type="hidden" name="status" value="Absent">
-        <button type="submit" 
+        <button type="submit"
                 style="padding:5px 10px; border:none; border-radius:5px; background:red; color:white; cursor:pointer;">
           Absent
         </button>
       </form>
     </td>-->
     <!-- ✅ Status Column -->
-  <td class="status-cell" 
+  <td class="status-cell"
     th:text="${attendanceMap[student.id] != null ? attendanceMap[student.id] : 'Not Marked'}"
-    th:style="${attendanceMap[student.id] == 'Present' ? 'color:green;font-weight:bold;' 
+    th:style="${attendanceMap[student.id] == 'Present' ? 'color:green;font-weight:bold;'
                : (attendanceMap[student.id] == 'Absent' ? 'color:red;font-weight:bold;' : '')}">
 </td>
 
@@ -299,7 +326,7 @@ Attendance Report
   }
 
   // ✅ On page load update Sr. No. + student count (natural order)
- 
+
     // ✅ Export to Excel
 function exportToExcel() {
   const table = document.querySelector(".student-table");
@@ -318,7 +345,7 @@ function exportToExcel() {
 
 </script>
 
-   
+
   </main>
 </div>
 
@@ -332,7 +359,7 @@ function exportToExcel() {
       <h4>Quick Links</h4>
       <ul>
         <li><a href="/student-management">Student Management</a></li>
-     
+
         <li><a href="/attendence">Attendance</a></li>
         <li><a href="/reports">Reports</a></li>
       </ul>

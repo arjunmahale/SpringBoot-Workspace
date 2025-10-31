@@ -1,9 +1,10 @@
 package com.erp.Controller;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.erp.model.Attendance;
+import com.erp.model.Course;
 import com.erp.model.Student;
 import com.erp.services.AttendanceService;
 import com.erp.services.StudentService;
+import com.erp.services.courseService;
 import com.erp.state.AttendanceState;
 
 import jakarta.servlet.http.HttpSession;
@@ -24,197 +27,244 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class FacultyDashController {
 
-	@Autowired
-	private StudentService studentService;
+    @Autowired
+    private StudentService studentService;
 
-	@Autowired
-	private AttendanceService attendanceService;
+    @Autowired
+    private courseService courseService;
+    @Autowired
+    private AttendanceService attendanceService;
 
-	@GetMapping("/faculty-dashboard")
-	public String showadminDashboard( HttpSession session,Model model) {
+    @GetMapping("/faculty-dashboard")
+    public String showFacultyDashboard(HttpSession session, Model model) {
+        String user1 = (String) session.getAttribute("user");
+        String admin_course = (String) session.getAttribute("admin_course");
 
-		String user1=(String) session.getAttribute("user");
+        model.addAttribute("user", user1);
 
-		model.addAttribute("user",user1);
-		List<Student> s1 = studentService.getAllStudent();
-		List<Student> s2 = new ArrayList<>();
+        List<Student> s1 = studentService.getAllStudent();
+        List<Student> s2 = new ArrayList<>();
 
+        long cnt = 0;
+        for (Student stu : s1) {
+            if (stu.getCourse() != null && admin_course.equalsIgnoreCase(stu.getCourse().getName())) {
+                s2.add(stu);
+                cnt++;
+            }
+        }
+        // ✅ Count of all students who marked attendance (excluding Not Marked)
+        long attendanceMarkedCount = attendanceService.countAttendanceMarkedToday();
+        model.addAttribute("attendancemarkedcount", attendanceMarkedCount);
 
-		long cnt = 0;
-		for (Student stu : s1) {
-			if (stu.getCourse() != null && "mcs".equalsIgnoreCase(stu.getCourse().getName())) {
-				s2.add(stu);
+        model.addAttribute("totalStudents", cnt);
+        model.addAttribute("students", s2);
+        model.addAttribute("today", LocalDate.now().toString());
 
-				cnt++;
-			}
-		}
+        return "faculty-links/faculty-dashboard";
+    }
 
-		long totalStudents = cnt;
-		model.addAttribute("totalStudents", totalStudents);
+    @GetMapping("/student-list")
+    public String showStudentsToFaculty(HttpSession session, Model model) {
+        String user1 = (String) session.getAttribute("user");
+        String admin_course = (String) session.getAttribute("admin_course");
+        model.addAttribute("admin_course",admin_course);
+        model.addAttribute("user", user1);
 
-		model.addAttribute("students", s2);
-		 LocalDate today = LocalDate.now();
-		    model.addAttribute("today", today.toString());
+        List<Student> students = studentService.getAllStudent();
+        List<Student> s2 = new ArrayList<>();
 
-		return "faculty-links/faculty-dashboard"; // template name, no redirect
-	}
+        for (Student stu : students) {
+            if (stu.getCourse() != null && admin_course.equalsIgnoreCase(stu.getCourse().getName())) {
+                s2.add(stu);
+            }
+        }
 
-	 @GetMapping("/student-list")
-	    public String showStudentstoFaculty(HttpSession session,Model model) {
-		 String user1=(String) session.getAttribute("user");
+        // ✅ Today’s date
+        LocalDate today = LocalDate.now();
+        model.addAttribute("today", today.toString());
 
-			model.addAttribute("user",user1);
-	        List<Student> students = studentService.getAllStudent();
-	        model.addAttribute("students", students);
+        model.addAttribute("students", s2);
+        return "faculty-links/student-list";
+    }
 
-	        return "faculty-links/student-list"; // ✅ table page only
-	    }
+ // ✅ Show today's attendance (default view)
+    @GetMapping("/attendance")
+    public String showAttendance(HttpSession session, Model model) {
+        // ✅ Check if logged in
+        if (session.getAttribute("loggedInUser") == null) {
+            return "redirect:/";
+        }
 
-	 @GetMapping("/attendance")
-	 public String showAttendance(HttpSession session, Model model) {
-	     LocalDate today = LocalDate.now();
-	     model.addAttribute("today", today.toString());
+        String admin_course = (String) session.getAttribute("admin_course");
+        String user1 = (String) session.getAttribute("user");
 
-	     String user1 = (String) session.getAttribute("user");
-	     model.addAttribute("user", user1);
+        model.addAttribute("user", user1);
+        model.addAttribute("course", admin_course);
 
-	     // ✅ Get all students
-	     List<Student> s1 = studentService.getAllStudent();
-	     List<Student> s2 = new ArrayList<>();
+        // ✅ Today’s date
+        LocalDate today = LocalDate.now();
+        model.addAttribute("today", today.toString());
 
-	     // ✅ Filter students of course "MCS"
-	     for (Student stu : s1) {
-	         if (stu.getCourse() != null && "mcs".equalsIgnoreCase(stu.getCourse().getName())) {
-	             s2.add(stu);
-	         }
-	     }
+        // ✅ Get students of this faculty's course
+        List<Student> courseStudents = studentService.getAllStudent().stream()
+                .filter(stu -> stu.getCourse() != null &&
+                               admin_course.equalsIgnoreCase(stu.getCourse().getName()))
+                .toList();
 
-	     // ✅ Attendance map (only for students in MCS)
-	     Map<Long, String> attendanceMap = new HashMap<>();
-	     List<Attendance> todayAttendance = attendanceService.getByDate(today);
+        // ✅ Attendance map for today
+        Map<Long, String> attendanceMap = new HashMap<>();
+        List<Attendance> todayAttendance = attendanceService.getByDate(today);
 
-	     for (Attendance att : todayAttendance) {
-	         if (att.getStudent().getCourse() != null &&
-	             "mcs".equalsIgnoreCase(att.getStudent().getCourse().getName())) {
-	             attendanceMap.put(att.getStudent().getId(), att.getStatus());
-	         }
-	     }
+        for (Attendance att : todayAttendance) {
+            if (att.getStudent().getCourse() != null &&
+                admin_course.equalsIgnoreCase(att.getStudent().getCourse().getName())) {
+                attendanceMap.put(att.getStudent().getId(), att.getStatus());
+            }
+        }
 
-	     model.addAttribute("students", s2);
-	     model.addAttribute("attendanceMap", attendanceMap);
-	     model.addAttribute("totalStudents", s2.size());
+        model.addAttribute("students", courseStudents);
+        model.addAttribute("attendanceMap", attendanceMap);
+        model.addAttribute("totalStudents", courseStudents.size());
 
+        boolean canMark = AttendanceState.isAttendanceOpen(admin_course);
+        model.addAttribute("canMark", canMark);
 
-	     boolean canMark = false;
-
-	     // ✅ Tell Thymeleaf if attendance is open for students
-	    // model.addAttribute("attendanceOpen", attendanceService.isAttendanceOpen());
-	     if (AttendanceState.attendanceOpen && AttendanceState.attendanceStartTime != null) {
-	            LocalDateTime now = LocalDateTime.now();
-	            if (now.isBefore(AttendanceState.attendanceStartTime.plusMinutes(30))) {
-	                canMark = true; // ✅ still within 30 minutes
-	            } else {
-	                AttendanceState.attendanceOpen = false; // auto-close after 30 min
-	            }
-	        }
-
-	        model.addAttribute("canMark", canMark);
-
-
-	     return "faculty-links/attendance"; // ✅ return view
-	 }
-
-	 // ---------------- Faculty triggers attendance ----------------
-
-	 @GetMapping("/allow-attendance")
-	 public String allowAttendance(HttpSession session) {
-	     AttendanceState.attendanceOpen = true;
-	     AttendanceState.attendanceStartTime = LocalDateTime.now();
-	     session.setAttribute("message", "Attendance is now open for students.");
-	     return "redirect:/attendance";
-	 }
+        return "faculty-links/attendance";
+    }
 
 
-//	 @GetMapping("/attendance/start")
-//	 public String startAttendance(HttpSession session) {
-//	     attendanceService.startAttendanceWindow();
-//	     return "redirect:/attendance"; // refresh faculty page
-//	 }
+ // ✅ Show attendance by date (restricted to faculty’s course)
+    @GetMapping("/attendance-by-date")
+    public String getAttendanceByDate(
+            @RequestParam("date")LocalDate date,
+            HttpSession session,
+            Model model) {
 
-	 @GetMapping("/attendance/stop")
-	 public String stopAttendance(HttpSession session) {
-		 AttendanceState.attendanceOpen = false;
-	     attendanceService.stopAttendanceWindow();
-	     return "redirect:/attendance"; // refresh faculty page
-	 }
+        if (session.getAttribute("loggedInUser") == null) {
+            return "redirect:/";
+        }
 
+        String admin_course = (String) session.getAttribute("admin_course");
+        String user1 = (String) session.getAttribute("user");
 
-	@GetMapping("/total-attendance")
-	public String showAllAttendance(HttpSession session,Model model) {
-	    LocalDate today = LocalDate.now();
-	    model.addAttribute("today", today.toString());
-String user1=(String) session.getAttribute("user");
+        // ✅ Today’s date
+        LocalDate today = LocalDate.now();
+        model.addAttribute("today", today.toString());
 
-		model.addAttribute("user",user1);
-	    // ✅ Get all students
-	    List<Student> s1 = studentService.getAllStudent();
-	    List<Student> s2 = new ArrayList<>();
+        model.addAttribute("user", user1);
+        model.addAttribute("course", admin_course);
+        model.addAttribute("selectedDate", date.toString());
 
-	    // ✅ Filter students of course "MCS"
-	    for (Student stu : s1) {
-	        if (stu.getCourse() != null && "mcs".equalsIgnoreCase(stu.getCourse().getName())) {
-	            s2.add(stu);
-	        }
-	    }
+        // ✅ Students of faculty’s course
+        List<Student> studentsByCourse = studentService.getAllStudent().stream()
+                .filter(stu -> stu.getCourse() != null &&
+                               admin_course.equalsIgnoreCase(stu.getCourse().getName()))
+                .toList();
 
-	    // ✅ Attendance map (only for students in MCS)
-	    Map<Long, String> attendanceMap = new HashMap<>();
-	    List<Attendance> todayAttendance = attendanceService.getByDate(today);
+        // ✅ Attendance for selected date & faculty’s course
+        Map<Long, String> attendanceMap = new HashMap<>();
+        List<Attendance> attendanceList = attendanceService.getByCourseAndDate(admin_course, date);
 
-	    for (Attendance att : todayAttendance) {
-	        if (att.getStudent().getCourse() != null &&
-	            "mcs".equalsIgnoreCase(att.getStudent().getCourse().getName())) {
-	            attendanceMap.put(att.getStudent().getId(), att.getStatus());
-	        }
-	    }
+        for (Attendance att : attendanceList) {
+            if (att.getStudent().getCourse() != null &&
+                admin_course.equalsIgnoreCase(att.getStudent().getCourse().getName())) {
+                attendanceMap.put(att.getStudent().getId(), att.getStatus());
+            }
+        }
 
-	    model.addAttribute("students", s1);
-	    model.addAttribute("attendanceMap", attendanceMap);
-	    model.addAttribute("totalStudents", s1.size());
+        model.addAttribute("students", studentsByCourse);
+        model.addAttribute("attendanceMap", attendanceMap);
+        model.addAttribute("totalStudents", studentsByCourse.size());
 
-	    return "faculty-links/total-attendance"; // ✅ return view
-	}
-
-	@PostMapping("/attendance/save")
-	public String saveAttendance(@RequestParam Long studentId,
-	                             @RequestParam String status,
-	                             @RequestParam String name,
-	                             @RequestParam String date,
-	                             RedirectAttributes redirectAttributes) {
-
-	    Student student = studentService.getStudentById(studentId);
-	    if (student == null) {
-	        redirectAttributes.addFlashAttribute("errorMessage", "Student not found!");
-	        redirectAttributes.addFlashAttribute("error", "Student not found!");
-	        return "redirect:/attendance";
-	    }
-
-	    Attendance attendance = new Attendance();
-	    attendance.setDate(LocalDate.parse(date));
-	    attendance.setStatus(status);
-	    attendance.setName(student.getName());
-	    attendance.setCourse(student.getCourse() != null ? student.getCourse().getName() : "N/A");
-	    attendance.setStudent(student);
-
-	    attendanceService.saveAttendance(attendance);
-
-	    redirectAttributes.addFlashAttribute("savedStudentId", studentId);
-	    redirectAttributes.addFlashAttribute("message", "attendance saved successfully!");
-	    return "redirect:/student-attendance";
-	}
+        return "faculty-links/attendance";
+    }
 
 
 
+    @GetMapping("/allow-attendance")
+    public String allowAttendance(HttpSession session) {
+        String courseName = (String) session.getAttribute("admin_course");
 
+        if (courseName != null) {
+            AttendanceState.openAttendance(courseName);
+            session.setAttribute("message", "Attendance is now open for students of course: " + courseName);
+        } else {
+            session.setAttribute("message", "No course assigned to faculty.");
+        }
 
+        return "redirect:/attendance";
+    }
+
+    @GetMapping("/attendance/stop")
+    public String stopAttendance(HttpSession session) {
+        String courseName = (String) session.getAttribute("admin_course");
+
+        if (courseName != null) {
+            AttendanceState.closeAttendance(courseName);
+            session.setAttribute("message", "Attendance has been closed for course: " + courseName);
+        }
+
+        return "redirect:/attendance";
+    }
+
+    @GetMapping("/total-attendance")
+    public String showAllAttendance(HttpSession session, Model model) {
+        String user1 = (String) session.getAttribute("user");
+        String admin_course = (String) session.getAttribute("admin_course");
+
+        model.addAttribute("today", LocalDate.now().toString());
+        model.addAttribute("user", user1);
+
+        List<Student> s1 = studentService.getAllStudent();
+        List<Student> s2 = new ArrayList<>();
+
+        for (Student stu : s1) {
+            if (stu.getCourse() != null && admin_course.equalsIgnoreCase(stu.getCourse().getName())) {
+                s2.add(stu);
+            }
+        }
+
+        Map<Long, String> attendanceMap = new HashMap<>();
+        List<Attendance> todayAttendance = attendanceService.getByDate(LocalDate.now());
+
+        for (Attendance att : todayAttendance) {
+            if (att.getStudent().getCourse() != null &&
+                admin_course.equalsIgnoreCase(att.getStudent().getCourse().getName())) {
+                attendanceMap.put(att.getStudent().getId(), att.getStatus());
+            }
+        }
+
+        model.addAttribute("students", s2);
+        model.addAttribute("attendanceMap", attendanceMap);
+        model.addAttribute("totalStudents", s2.size());
+
+        return "faculty-links/total-attendance";
+    }
+
+    @PostMapping("/attendance/save")
+    public String saveAttendance(@RequestParam Long studentId,
+                                 @RequestParam String status,
+                                 @RequestParam String name,
+                                 @RequestParam String date,
+                                 RedirectAttributes redirectAttributes) {
+
+        Student student = studentService.getStudentById(studentId);
+        if (student == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Student not found!");
+            return "redirect:/student-attendance";
+        }
+
+        Attendance attendance = new Attendance();
+        attendance.setDate(LocalDate.parse(date));
+        attendance.setStatus(status);
+        attendance.setName(student.getName());
+        attendance.setCourse(student.getCourse() != null ? student.getCourse().getName() : "N/A");
+        attendance.setStudent(student);
+
+        attendanceService.saveAttendance(attendance);
+
+        redirectAttributes.addFlashAttribute("savedStudentId", studentId);
+        redirectAttributes.addFlashAttribute("message", "Attendance saved successfully!");
+        return "redirect:/student-attendance";
+    }
 }

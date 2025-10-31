@@ -19,7 +19,11 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
     List<Attendance> findByDate(LocalDate date);
 	Attendance findByStudentIdAndDate(long id, LocalDate date);
 
-	
 
-	
+	// AttendanceRepository.java
+	@Query("SELECT a FROM Attendance a WHERE a.student.course.name = :courseName AND a.date = :date")
+	List<Attendance> findByCourseAndDate(@Param("courseName") String courseName, @Param("date") LocalDate date);
+	long countByDateAndStatusNot(LocalDate date, String status);
+
+
 }

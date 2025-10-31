@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Faculty Dashboard</title>
   <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     .summary-cards {
       display: flex;
@@ -45,28 +46,47 @@
 <body>
 <header><u>Faculty Dashboard</u></header>
 <div class="container">
-  <nav class="sidebar">
-    <div class="profile">
-      <img src="profile.jpg" alt="Admin Profile" class="profile-pic">
-      <h3 class="profile-name" th:text="${user}"></h3>
-    </div>
-    <a href="/faculty-dashboard">Faculty Dashboard</a>
-    <a href="/student-list">Student Enrolled</a>
+  <nav class="sidebar" >
+  <div class="profile" style="text-align: center; margin-bottom: 20px;">
+    <img src="profile.jpg" alt="Admin Profile" class="profile-pic" style="width: 80px; height: 80px; border-radius: 50%; border: 2px solid #fff; margin-bottom: 10px;">
+    <h3 class="profile-name" th:text="${user}" style="font-size: 16px; margin: 0;"></h3>
+  </div>
 
+  <a href="/faculty-dashboard" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-home" style="margin-right: 10px;"></i> Faculty Dashboard
+  </a>
 
-    <a href="/attendance">Attendance</a>
-    <a href="/exams">Exams & Results</a>
-    <a href="#">Notifications / Notice Board
-    </a>
-    <a href="#">Timetable</a>
-    <a href="#">Reports</a>
-  </nav>
+  <a href="/student-list" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-user-graduate" style="margin-right: 10px;"></i> Student Enrolled
+  </a>
+
+  <a href="/attendance" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-check-square" style="margin-right: 10px;"></i> Attendance
+  </a>
+
+  <a href="/exams" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-file-alt" style="margin-right: 10px;"></i> Exams & Results
+  </a>
+
+  <a href="#" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-bell" style="margin-right: 10px;"></i> Notifications / Notice Board
+  </a>
+
+  <a href="#" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-calendar-alt" style="margin-right: 10px;"></i> Timetable
+  </a>
+
+  <a href="#" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-file-invoice" style="margin-right: 10px;"></i> Reports
+  </a>
+</nav>
+
 
   <main class="main" id="main-content">
 
 
   <!-- 📅 Date Selector -->
-<div style="margin:15px 0; ; justify-content:space-between; align-items:center;">
+<div style="margin:5px 0; ; justify-content:space-between; align-items:center;">
   <div>
     <strong>Date: </strong>
     <span th:text="${today}"></span>
@@ -81,6 +101,10 @@
   <div class="card" style="flex:1; background:#f8f9fa; padding:20px; text-align:center; border-radius:10px; box-shadow:0px 2px 6px rgba(0,0,0,0.1);">
     <h4>Total Students</h4>
     <h2 th:text="${totalStudents}">0</h2>
+  </div>
+  <div class="card" style="flex:1; background:#f8f9fa; padding:20px; text-align:center; border-radius:10px; box-shadow:0px 2px 6px rgba(0,0,0,0.1);">
+    <h4>Attendance Marked Count</h4>
+    <h2 th:text="${attendancemarkedcount}">0</h2>
   </div>
 
 </div>

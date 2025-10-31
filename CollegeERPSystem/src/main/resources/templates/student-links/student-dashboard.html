@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <title>Student Dashboard</title>
   <link rel="stylesheet" href="dashboard.css">
   <style>
@@ -95,25 +96,46 @@
 
 <header><u>Student Dashboard</u></header>
 <div class="container">
-  <nav class="sidebar">
-    <div class="profile">
-      <img src="profile.jpg" alt="Admin Profile" class="profile-pic">
-      <h3 class="profile-name" th:text="${user}"></h3>
-    </div>
-    <a href="/student-dashboard">Student Dashboard</a>
+ <nav class="sidebar" >
+  <div class="profile" style="text-align: center; margin-bottom: 20px;">
+    <img src="profile.jpg" alt="Admin Profile" class="profile-pic" style="width: 80px; height: 80px; border-radius: 50%; border: 2px solid #fff; margin-bottom: 10px;">
+    <h3 class="profile-name" th:text="${user}" style="font-size: 16px; margin: 0;"></h3>
+  </div>
 
+  <a href="/student-dashboard" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-home" style="margin-right: 10px;"></i> Student Dashboard
+  </a>
 
+  <a href="/student-attendance" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-check-square" style="margin-right: 10px;"></i> Attendance
+  </a>
 
-    <a href="/student-attendance">Attendance</a>
-    <a href="#">marks</a>
-    <a href="#">Exams & Results</a>
-    <a href="#">Notifications / Notice Board
-    </a>
-    <a href="#">Timetable</a>
-    <a href="#">Reports</a>
-  </nav>
+  <a href="#" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-clipboard-list" style="margin-right: 10px;"></i> Marks
+  </a>
+
+  <a href="#" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-file-alt" style="margin-right: 10px;"></i> Exams & Results
+  </a>
+
+  <a href="#" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-bell" style="margin-right: 10px;"></i> Notifications / Notice Board
+  </a>
+
+  <a href="#" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-calendar-alt" style="margin-right: 10px;"></i> Timetable
+  </a>
+
+  <a href="#" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
+    <i class="fas fa-file-invoice" style="margin-right: 10px;"></i> Reports
+  </a>
+</nav>
+
 
    <main class="main" id="main-content">
+    <div style="margin-top: 5px">    <strong>Date: </strong>
+    <span th:text="${today}"></span>
+  </div>
     <div class="profile-container">
       <!-- Student Profile Header -->
       <div class="profile-header">

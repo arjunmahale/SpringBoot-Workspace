@@ -23,6 +23,12 @@ public class AttendanceService {
         return attendanceRepository.findByDate(date);
     }
 
+ // AttendanceService.java
+    public List<Attendance> getByCourseAndDate(String courseName, LocalDate date) {
+        return attendanceRepository.findByCourseAndDate(courseName, date);
+    }
+
+
     public void saveAttendance(Attendance attendance) {
         // ✅ Check if attendance already exists for this student and date
         Attendance existingAttendance = attendanceRepository
@@ -69,5 +75,9 @@ public class AttendanceService {
             return false;
         }
         return true;
+    }
+
+    public long countAttendanceMarkedToday() {
+        return attendanceRepository.countByDateAndStatusNot(LocalDate.now(), "Not Marked");
     }
 }

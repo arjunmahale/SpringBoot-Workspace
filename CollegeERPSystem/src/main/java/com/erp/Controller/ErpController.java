@@ -25,6 +25,7 @@ import com.erp.services.FacultyService;
 import com.erp.services.LoginService;
 import com.erp.services.StudentService;
 import com.erp.services.courseService;
+import com.erp.utilities.EmailService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -40,6 +41,8 @@ public class ErpController {
     @Autowired
     private LoginService loginServ;
 
+    @Autowired
+    private EmailService emailService;
 
     @Autowired
     private FacultyService facultyService1;
@@ -59,6 +62,11 @@ public class ErpController {
     @GetMapping("/student-management")
     public String showStudents(Model model) {
 
+
+        // ✅ Today’s date
+        LocalDate today = LocalDate.now();
+        model.addAttribute("today", today.toString());
+
         List<Student> students = studserv.getAllStudent();
         model.addAttribute("students", students);
 
@@ -77,6 +85,10 @@ public class ErpController {
     	model.addAttribute("totalFaculty", totalFaculty);
 
 
+        // ✅ Today’s date
+        LocalDate today = LocalDate.now();
+        model.addAttribute("today", today.toString());
+
     	   model.addAttribute("students", studserv.getRecentStudents()); // maybe last 5
     	    model.addAttribute("courses", courseServ.getAllcourses());
     	    model.addAttribute("faculties", facultyService1.getAllfaculties());
@@ -87,44 +99,99 @@ public class ErpController {
     }
 
     @GetMapping("/attendance-list")
-	public String showAttendance(HttpSession session,Model model) {
-    	  // Check if user is logged in
+    public String showAttendance(HttpSession session, Model model) {
+        // ✅ Check if user is logged in
         if (session.getAttribute("loggedInUser") == null) {
             return "redirect:/"; // redirect to login page if not logged in
         }
-	    LocalDate today = LocalDate.now();
-	    model.addAttribute("today", today.toString());
-String user1=(String) session.getAttribute("user");
 
-		model.addAttribute("user",user1);
-	    // ✅ Get all students
-	    List<Student> s1 = studserv.getAllStudent();
-	    List<Student> s2 = new ArrayList<>();
+        String user1 = (String) session.getAttribute("user");
+        model.addAttribute("user", user1);
 
-	    // ✅ Filter students of course "MCS"
-	    for (Student stu : s1) {
-	        if (stu.getCourse() != null && "mcs".equalsIgnoreCase(stu.getCourse().getName())) {
-	            s2.add(stu);
-	        }
-	    }
+        // ✅ Provide today's date
+        LocalDate today = LocalDate.now();
+        model.addAttribute("today", today.toString());
 
-	    // ✅ Attendance map (only for students in MCS)
-	    Map<Long, String> attendanceMap = new HashMap<>();
-	    List<Attendance> todayAttendance = attendanceService.getByDate(today);
+        // ✅ Get all courses (assuming you have CourseService)
+        List<Course> courses = courseServ.getAllcourses();
+        model.addAttribute("courses", courses);
 
-	    for (Attendance att : todayAttendance) {
-	        if (att.getStudent().getCourse() != null &&
-	            "mcs".equalsIgnoreCase(att.getStudent().getCourse().getName())) {
-	            attendanceMap.put(att.getStudent().getId(), att.getStatus());
-	        }
-	    }
+        // ✅ Default students list (can be empty or filtered by a default course like "MCS")
+        List<Student> allStudents = studserv.getAllStudent();
+        List<Student> filteredStudents = new ArrayList<>();
+        for (Student stu : allStudents) {
+            if (stu.getCourse() != null && "mcs".equalsIgnoreCase(stu.getCourse().getName())) {
+                filteredStudents.add(stu);
+            }
+        }
 
-	    model.addAttribute("students", s2);
-	    model.addAttribute("attendanceMap", attendanceMap);
-	    model.addAttribute("totalStudents", s2.size());
+        // ✅ Attendance map for today (only MCS initially)
+        Map<Long, String> attendanceMap = new HashMap<>();
+        List<Attendance> todayAttendance = attendanceService.getByDate(today);
 
-	    return "admin-links/attendance-list"; // ✅ return view
-	}
+        for (Attendance att : todayAttendance) {
+            if (att.getStudent().getCourse() != null &&
+                "mcs".equalsIgnoreCase(att.getStudent().getCourse().getName())) {
+                attendanceMap.put(att.getStudent().getId(), att.getStatus());
+            }
+        }
+
+        model.addAttribute("students", filteredStudents);
+        model.addAttribute("attendanceMap", attendanceMap);
+        model.addAttribute("totalStudents", filteredStudents.size());
+
+        return "admin-links/attendance-list"; // ✅ return view
+    }
+
+    //attendance by date and course
+
+    @GetMapping("/attendance-list-by-date-course")
+    public String getAttendanceByCourseAndDate(
+            @RequestParam("course") String courseName,
+            @RequestParam("date") LocalDate date,
+            HttpSession session,
+            Model model) {
+
+        // ✅ Check login
+        if (session.getAttribute("loggedInUser") == null) {
+            return "redirect:/"; // redirect to login page if not logged in
+        }
+     // ✅ Get all courses (assuming you have CourseService)
+        List<Course> courses = courseServ.getAllcourses();
+        model.addAttribute("courses", courses);
+        model.addAttribute("selectedDate", date.toString());
+        model.addAttribute("selectedCourse", courseName);
+        model.addAttribute("user", session.getAttribute("user"));
+
+        // ✅ Filter students by selected course
+        List<Student> studentsByCourse = studserv.getAllStudent().stream()
+                .filter(stu -> stu.getCourse() != null &&
+                               courseName.equalsIgnoreCase(stu.getCourse().getName()))
+                .toList();
+
+        // ✅ Attendance for selected course & date
+        Map<Long, String> attendanceMap = new HashMap<>();
+        List<Attendance> attendanceList = attendanceService.getByCourseAndDate(courseName, date);
+
+        for (Attendance att : attendanceList) {
+            if (att.getStudent().getCourse() != null &&
+                courseName.equalsIgnoreCase(att.getStudent().getCourse().getName())) {
+                attendanceMap.put(att.getStudent().getId(), att.getStatus());
+            }
+        }
+        // ✅ Provide today's date
+        LocalDate today = LocalDate.now();
+        model.addAttribute("today", today.toString());
+        // ✅ Add to model
+        model.addAttribute("students", studentsByCourse);
+        model.addAttribute("attendanceMap", attendanceMap);
+        model.addAttribute("totalStudents", studentsByCourse.size());
+
+        return "admin-links/attendance-list"; // view page
+    }
+
+
+
     @GetMapping("/total-attendance-list")
     public String showAttendanceAllTime(HttpSession session,Model model) {
     	LocalDate today = LocalDate.now();
@@ -163,12 +230,14 @@ String user1=(String) session.getAttribute("user");
 
     // Open form to add student
     @GetMapping("/add-student")
-    public String showStudentForm(Model model) {
+    public String showStudentForm(Model model,HttpSession session) {
         model.addAttribute("student", new Student()); // empty student for new entry
         model.addAttribute("courses", courseServ.getAllcourses());
+
+         model.addAttribute("admin_course", session.getAttribute("admin_course"));
         model.addAttribute("title","Add New Student");
         model.addAttribute("formAction","/save-student");
-        return "admin-links/student-form"; // ✅ new Thymeleaf template
+        return "faculty-links/student-form"; // ✅ new Thymeleaf template
     }
 
 
@@ -256,11 +325,13 @@ String user1=(String) session.getAttribute("user");
 
     // Open form to add student
     @GetMapping("/faculty/add-student")
-    public String showStudentFormfaculty(Model model) {
+    public String showStudentFormfaculty(Model model ,HttpSession session) {
         model.addAttribute("student", new Student()); // empty student for new entry
         model.addAttribute("courses", courseServ.getAllcourses());
+        String admin_course= (String) session.getAttribute("admin_course");
+        model.addAttribute("admin_course",admin_course);
         model.addAttribute("title","Add New Student");
-        model.addAttribute("formAction","/save-student");
+        model.addAttribute("formAction","/faculty/save-student");
         return "faculty-links/student-form"; // ✅ new Thymeleaf template
     }
 
@@ -274,50 +345,52 @@ String user1=(String) session.getAttribute("user");
         model.addAttribute("student", student);
         model.addAttribute("title", "Update Student");
         model.addAttribute("courses", courseServ.getAllcourses());
+        String admin_course= (String) session.getAttribute("admin_course");
+        model.addAttribute("admin_course",admin_course);
         model.addAttribute("formAction","/faculty/save-student");
         return "faculty-links/student-form"; // same form but prefilled
     }
 
     // Save or update student
     @PostMapping("/faculty/save-student")
-    public String saveStudentsfaculty(@ModelAttribute Student student, RedirectAttributes redirectAttributes) {
+    public String saveStudentsfaculty(
+            @ModelAttribute Student student,
+            @RequestParam("courseName") String courseName,
+            RedirectAttributes redirectAttributes) {
+
         // Set password as mobile number
         long pass = student.getMobile();
         student.setPassword(String.valueOf(pass));
 
-        // ✅ Calculate age from DOB
+        // ✅ Calculate age
         if (student.getDob() != null) {
             LocalDate birthDate = student.getDob().toLocalDate();
             int calculatedAge = java.time.Period.between(birthDate, LocalDate.now()).getYears();
             student.setAge(calculatedAge);
         }
 
-        // 🔎 Check if student already exists
-        Student existing = null;
-        if (student.getId() != 0) { // Update case
-            existing = studserv.getStudentById(student.getId());
-        }
+        // ✅ Attach managed Course from DB
+        Course course = courseServ.findByName(courseName);  // You must add findByName in repo/service
+        student.setCourse(course);
+
+        // ✅ Handle Login relation
+        Student existing = (student.getId() != 0) ? studserv.getStudentById(student.getId()) : null;
 
         Login login;
         if (existing != null && existing.getLogin() != null) {
-            // ✅ Reuse existing login for updates
             login = existing.getLogin();
         } else {
-            // ✅ Create new login for insert case
             login = new Login();
             login.setRole("student");
         }
 
-        // Update login fields from student
         login.setName(student.getName());
         login.setPassword(student.getPassword());
         login.setEmail(student.getEmail());
 
-        // Maintain both sides of the relation
         login.setStudent(student);
         student.setLogin(login);
 
-        // Save student (login cascaded)
         studserv.saveStudent(student);
 
         redirectAttributes.addFlashAttribute("message", "Student saved successfully!");
@@ -335,6 +408,95 @@ String user1=(String) session.getAttribute("user");
 
         redirectAttributes.addFlashAttribute("message", "Student deleted successfully!");
         return "redirect:/student-list";
+    }
+
+
+    //*************************************************************
+    //*************************************************************
+    //student registration
+
+    // Open form to add student
+    @GetMapping("/reg-add-student")
+    public String regshowStudentForm(Model model,HttpSession session) {
+        model.addAttribute("student", new Student()); // empty student for new entry
+        model.addAttribute("courses", courseServ.getAllcourses());
+
+         model.addAttribute("admin_course", session.getAttribute("admin_course"));
+        model.addAttribute("title","Add New Student");
+        model.addAttribute("formAction","/reg-save-student");
+        return "faculty-links/student-form"; // ✅ new Thymeleaf template
+    }
+
+
+    //student update and delete will be managed by faculty only
+    // Open form to update student
+    @GetMapping("/reg-update/{id}")
+    public String regeditStudentForm(@PathVariable() Long id, Model model,HttpSession session) {
+    	  String role = (String) session.getAttribute("role");
+        Student student = studserv.getStudentById(id); // fetch student by ID
+        model.addAttribute("student", student);
+        model.addAttribute("title", "Update Student");
+        model.addAttribute("courses", courseServ.getAllcourses());
+        model.addAttribute("formAction","/reg-save-student");
+        return "admin-links/student-form"; // same form but prefilled
+    }
+
+    // Save or update student
+    @PostMapping("/reg-save-student")
+    public String regsaveStudents(@ModelAttribute Student student, RedirectAttributes redirectAttributes) {
+        long pass = student.getMobile();
+        student.setPassword(String.valueOf(pass));
+
+        // ✅ calculate age from dob
+        if (student.getDob() != null) {
+            LocalDate birthDate = student.getDob().toLocalDate();
+            int calculatedAge = java.time.Period.between(birthDate, LocalDate.now()).getYears();
+            student.setAge(calculatedAge);
+        }
+
+        // 🔎 check if student already exists
+        Student existing = null;
+        if (student.getId() != 0) { // means update
+            existing = studserv.getStudentById(student.getId());
+        }
+
+        Login login;
+        if (existing != null && existing.getLogin() != null) {
+            // ✅ Reuse existing login
+            login = existing.getLogin();
+        } else {
+            // ✅ Create new login (insert case)
+            login = new Login();
+            login.setRole("student");
+        }
+
+        // Update login fields from student
+        login.setName(student.getName());
+        login.setPassword(student.getPassword());
+        login.setEmail(student.getEmail());
+
+        // Maintain both sides of relation
+        login.setStudent(student);
+        student.setLogin(login);
+
+        studserv.saveStudent(student); // cascade saves login too
+
+        emailService.sendRegistrationMail(student.getEmail(), student.getName());
+
+        redirectAttributes.addFlashAttribute("message", "Student saved successfully!You can login now 😊");
+        return "redirect:/index";
+    }
+
+    // Delete student
+    @PostMapping("/reg-delete")
+    public String regdeleteStudent(@ModelAttribute Student student, RedirectAttributes redirectAttributes) {
+
+        studserv.deleteStudent(student);
+
+
+
+        redirectAttributes.addFlashAttribute("message", "Student deleted successfully!");
+        return "redirect:/student-management";
     }
 
 }

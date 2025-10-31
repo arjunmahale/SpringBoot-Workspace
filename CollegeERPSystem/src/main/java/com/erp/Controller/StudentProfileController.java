@@ -1,7 +1,6 @@
 package com.erp.Controller;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,7 +14,7 @@ import com.erp.model.Attendance;
 import com.erp.model.Student;
 import com.erp.services.StudentService;
 import com.erp.state.AttendanceState;
-import com.erp.services.AttendanceService; // ✅ new service for attendance window
+import com.erp.services.AttendanceService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -26,16 +25,23 @@ public class StudentProfileController {
     private StudentService studentService;
 
     @Autowired
-    private AttendanceService attendanceService; // ✅ injected service
+    private AttendanceService attendanceService;
 
     @GetMapping("student-dashboard")
     public String showStudent(Model model, HttpSession session) {
-
         Student student = (Student) session.getAttribute("student");
         model.addAttribute("student", student);
 
-        // ✅ Pass whether attendance is open or not
-        model.addAttribute("attendanceOpen", attendanceService.isAttendanceOpen());
+        // ✅ Today’s date
+        LocalDate today = LocalDate.now();
+        model.addAttribute("today", today.toString());
+
+        String courseName = (student != null && student.getCourse() != null)
+                            ? student.getCourse().getName()
+                            : null;
+
+        boolean isOpen = (courseName != null) && AttendanceState.isAttendanceOpen(courseName);
+        model.addAttribute("attendanceOpen", isOpen);
 
         return "student-links/student-dashboard";
     }
@@ -44,19 +50,20 @@ public class StudentProfileController {
     public String showStudentattendance(Model model, HttpSession session) {
         Student student = (Student) session.getAttribute("student");
 
-        boolean canMark = false;
-
-        if (AttendanceState.attendanceOpen && AttendanceState.attendanceStartTime != null) {
-            LocalDateTime now = LocalDateTime.now();
-            if (now.isBefore(AttendanceState.attendanceStartTime.plusMinutes(30))) {
-                canMark = true; // ✅ still within 30 minutes
-            } else {
-                AttendanceState.attendanceOpen = false; // auto-close after 30 min
-            }
-        }
+        // ✅ Today’s date
         LocalDate today = LocalDate.now();
-	     model.addAttribute("today", today.toString());
+        model.addAttribute("today", today.toString());
 
+        boolean canMark = false;
+        String courseName = (student != null && student.getCourse() != null)
+                            ? student.getCourse().getName()
+                            : null;
+
+        if (courseName != null && AttendanceState.isAttendanceOpen(courseName)) {
+            canMark = true;
+        }
+
+        model.addAttribute("today", LocalDate.now().toString());
         model.addAttribute("canMark", canMark);
         model.addAttribute("student", student);
 
@@ -68,14 +75,15 @@ public class StudentProfileController {
                                  @RequestParam String status,
                                  RedirectAttributes redirectAttributes) {
         Student student = (Student) session.getAttribute("student");
-        if (student == null) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Student not logged in.");
+        if (student == null || student.getCourse() == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Student not logged in or course missing.");
             return "redirect:/student-attendance";
         }
 
-        // Check if window is open
-        if (!AttendanceState.attendanceOpen ||
-            AttendanceState.attendanceStartTime.plusMinutes(30).isBefore(LocalDateTime.now())) {
+        String courseName = student.getCourse().getName();
+
+        // ✅ Check if attendance window is open for this course
+        if (!AttendanceState.isAttendanceOpen(courseName)) {
             redirectAttributes.addFlashAttribute("errorMessage", "Attendance window closed!");
             return "redirect:/student-attendance";
         }
@@ -84,7 +92,7 @@ public class StudentProfileController {
         attendance.setDate(LocalDate.now());
         attendance.setStatus(status);
         attendance.setName(student.getName());
-        attendance.setCourse(student.getCourse() != null ? student.getCourse().getName() : "N/A");
+        attendance.setCourse(courseName);
         attendance.setStudent(student);
 
         attendanceService.saveAttendance(attendance);
@@ -92,6 +100,4 @@ public class StudentProfileController {
         redirectAttributes.addFlashAttribute("successMessage", "Attendance marked as " + status);
         return "redirect:/student-attendance";
     }
-
-
 }

@@ -7,10 +7,12 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.erp.model.Course;
+import com.erp.model.Faculty;
 import com.erp.model.Login;
 import com.erp.model.Student;
 import com.erp.services.FacultyService;
@@ -95,15 +97,14 @@ public class LoginController {
 	        session.setAttribute("role", dbUser.getRole());
 	        String role= (String) session.getAttribute("role");
 	        System.out.println(role);
-	        System.out.println(role);
-	        System.out.println(role);
+
 
 	    	//long totalStudents = studentService.countStudents();
 
 	        String course= dbUser.getFaculty().getCourse().getName();
 
 
-           session.setAttribute("course", course);
+           session.setAttribute("admin_course", course);
 
 	    List<Student> s1 =	studentService.getAllStudent();
 	    List<Student> s2 = new ArrayList<>();
@@ -145,6 +146,16 @@ public class LoginController {
 
 	    model.addAttribute("error", "Something went wrong");
 	    return "index";
+	}
+
+
+	@GetMapping("/register-student")
+	public String Registration( Model model)
+	{
+		 model.addAttribute("student", new Student());
+		 model.addAttribute("faculty", new Faculty());
+		return "registration";
+
 	}
 
 

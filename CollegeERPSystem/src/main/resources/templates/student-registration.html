@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Faculty Dashboard</title>
+  <link rel="stylesheet" href="../../dashboard.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" th:href="@{/student-form.css}">
+  
+  <style>
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px 30px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 8px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .full-width {
+      grid-column: span 2;
+    }
+
+    .submit-btn {
+      grid-column: span 2;
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 4px;
+      border: none;
+      background: #007bff;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header><u>Student Registration</u></header>
+
+  <div class="container">
+    <main class="main" id="main-content">
+      <form id="studentForm" th:action="@{${formAction}}" method="post"
+            style="width: 90%; margin:2%; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background: #f9f9f9;">
+        <h2 th:text="${title}" style="margin-bottom: 15px;text-align:center;"></h2>
+
+        <input type="hidden" name="id" th:value="${student.id}" />
+        <input type="hidden" name="roll_no" th:value="${student.roll_no}" />
+
+        <div class="form-grid">
+
+          <div class="form-group">
+            <label>Name:</label>
+            <input type="text" name="name" th:value="${student.name}" placeholder="Enter name" required />
+          </div>
+
+          <div class="form-group">
+            <label>Email:</label>
+            <input type="email" name="email" th:value="${student.email}" placeholder="Enter email" required />
+          </div>
+
+          <div class="form-group">
+            <label>Mobile:</label>
+            <input type="tel" name="mobile"
+                   th:value="${student.mobile}"
+                   placeholder="Enter 10-digit mobile"
+                   pattern="[0-9]{10}"
+                   maxlength="10"
+                   required
+                   title="Mobile number must be 10 digits" />
+          </div>
+
+          <div class="form-group">
+            <label>Gender:</label>
+            <select name="gender" required>
+              <option value="" disabled>Select Gender</option>
+              <option value="Male" th:selected="${student.gender == 'Male'}">Male</option>
+              <option value="Female" th:selected="${student.gender == 'Female'}">Female</option>
+              <option value="Other" th:selected="${student.gender == 'Other'}">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>DOB:</label>
+            <input type="date" name="dob" th:value="${student.dob}" required />
+          </div>
+
+          <div class="form-group">
+            <label>Choose Course:</label>
+            <select name="course" required>
+              <option value="" disabled>Select Course</option>
+              <option th:each="course : ${courses}"
+                      th:value="${course.id}"
+                      th:text="${course.name}">
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label>Profile Description:</label>
+            <textarea name="profile_desc" th:text="${student.profile_desc}" rows="3"
+                      placeholder="Enter description"></textarea>
+          </div>
+
+          <!-- Payment-integrated Save button -->
+          <button type="button" class="submit-btn" onclick="initiatePayment()">Save</button>
+
+        </div>
+      </form>
+    </main>
+  </div>
+  
+  <!-- Razorpay script -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+  function initiatePayment() {
+      const form = document.getElementById("studentForm");
+
+      const name = form.querySelector('[name="name"]').value;
+      const email = form.querySelector('[name="email"]').value;
+      const mobile = form.querySelector('[name="mobile"]').value;
+
+      if (!name || !email || !mobile) {
+          alert("Please fill all required fields before payment.");
+          return;
+      }
+
+      // Step 1️⃣: Create order from backend
+      fetch("/api/payment/create-order", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ amount: 50000 }) // ₹500.00 in paise
+      })
+      .then(res => res.json())
+      .then(order => {
+          var options = {
+              "key": order.razorpayKey,
+              "amount": order.amount,
+              "currency": order.currency,
+              "name": "College ERP",
+              "description": "Admission Fees",
+              "order_id": order.orderId,
+              "handler": function (response) {
+                  // Step 2️⃣: On successful payment, submit form
+                  submitFormAfterPayment(response);
+              },
+              "prefill": {
+                  "name": name,
+                  "email": email,
+                  "contact": mobile
+              },
+              "theme": { "color": "#3399cc" }
+          };
+          var rzp = new Razorpay(options);
+          rzp.open();
+      })
+      .catch(err => console.error("Error creating order:", err));
+  }
+
+  function submitFormAfterPayment(paymentResponse) {
+      const form = document.getElementById("studentForm");
+
+      // Add hidden fields for payment details
+      const pid = document.createElement("input");
+      pid.type = "hidden"; pid.name = "paymentId";
+      pid.value = paymentResponse.razorpay_payment_id;
+      form.appendChild(pid);
+
+      const oid = document.createElement("input");
+      oid.type = "hidden"; oid.name = "orderId";
+      oid.value = paymentResponse.razorpay_order_id;
+      form.appendChild(oid);
+
+      const sig = document.createElement("input");
+      sig.type = "hidden"; sig.name = "signature";
+      sig.value = paymentResponse.razorpay_signature;
+      form.appendChild(sig);
+
+      // Step 3️⃣: Submit form after successful payment
+      form.submit();
+  }
+  </script>
+
+</body>
+</html>
