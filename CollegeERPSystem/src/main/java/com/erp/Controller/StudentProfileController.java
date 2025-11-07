@@ -27,18 +27,20 @@ public class StudentProfileController {
     @Autowired
     private AttendanceService attendanceService;
 
+    // ✅ STUDENT ONLY — Dashboard
     @GetMapping("student-dashboard")
     public String showStudent(Model model, HttpSession session) {
+
+        if (!isStudent(session)) return "redirect:/index";
+
         Student student = (Student) session.getAttribute("student");
         model.addAttribute("student", student);
 
-        // ✅ Today’s date
-        LocalDate today = LocalDate.now();
-        model.addAttribute("today", today.toString());
+        model.addAttribute("today", LocalDate.now().toString());
 
         String courseName = (student != null && student.getCourse() != null)
-                            ? student.getCourse().getName()
-                            : null;
+                ? student.getCourse().getName()
+                : null;
 
         boolean isOpen = (courseName != null) && AttendanceState.isAttendanceOpen(courseName);
         model.addAttribute("attendanceOpen", isOpen);
@@ -46,35 +48,42 @@ public class StudentProfileController {
         return "student-links/student-dashboard";
     }
 
+    // ✅ STUDENT ONLY — Attendance page
     @GetMapping("student-attendance")
     public String showStudentattendance(Model model, HttpSession session) {
+
+        if (!isStudent(session)) return "redirect:/index";
+
         Student student = (Student) session.getAttribute("student");
 
-        // ✅ Today’s date
-        LocalDate today = LocalDate.now();
-        model.addAttribute("today", today.toString());
+        model.addAttribute("today", LocalDate.now().toString());
 
         boolean canMark = false;
+
         String courseName = (student != null && student.getCourse() != null)
-                            ? student.getCourse().getName()
-                            : null;
+                ? student.getCourse().getName()
+                : null;
 
         if (courseName != null && AttendanceState.isAttendanceOpen(courseName)) {
             canMark = true;
         }
 
-        model.addAttribute("today", LocalDate.now().toString());
         model.addAttribute("canMark", canMark);
         model.addAttribute("student", student);
 
         return "student-links/student-attendance";
     }
 
+    // ✅ STUDENT ONLY — Mark attendance
     @PostMapping("/student-attendance/mark")
     public String markAttendance(HttpSession session,
                                  @RequestParam String status,
                                  RedirectAttributes redirectAttributes) {
+
+        if (!isStudent(session)) return "redirect:/index";
+
         Student student = (Student) session.getAttribute("student");
+
         if (student == null || student.getCourse() == null) {
             redirectAttributes.addFlashAttribute("errorMessage", "Student not logged in or course missing.");
             return "redirect:/student-attendance";
@@ -82,7 +91,6 @@ public class StudentProfileController {
 
         String courseName = student.getCourse().getName();
 
-        // ✅ Check if attendance window is open for this course
         if (!AttendanceState.isAttendanceOpen(courseName)) {
             redirectAttributes.addFlashAttribute("errorMessage", "Attendance window closed!");
             return "redirect:/student-attendance";
@@ -99,5 +107,15 @@ public class StudentProfileController {
 
         redirectAttributes.addFlashAttribute("successMessage", "Attendance marked as " + status);
         return "redirect:/student-attendance";
+    }
+
+    // ✅ HELPER: Student check
+    private boolean isStudent(HttpSession session) {
+        if (session == null) return false;
+
+        Object user = session.getAttribute("loggedInUser");
+        String role = (String) session.getAttribute("role");
+
+        return user != null && "student".equals(role);
     }
 }

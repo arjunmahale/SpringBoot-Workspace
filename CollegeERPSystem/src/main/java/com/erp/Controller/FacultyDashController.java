@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,8 +23,6 @@ import com.erp.services.StudentService;
 import com.erp.services.courseService;
 import com.erp.state.AttendanceState;
 
-import jakarta.servlet.http.HttpSession;
-
 @Controller
 public class FacultyDashController {
 
@@ -32,11 +31,16 @@ public class FacultyDashController {
 
     @Autowired
     private courseService courseService;
+
     @Autowired
     private AttendanceService attendanceService;
 
+    // ✅ FACULTY ONLY — Faculty Dashboard
     @GetMapping("/faculty-dashboard")
     public String showFacultyDashboard(HttpSession session, Model model) {
+
+        if (!isFaculty(session)) return "redirect:/index";
+
         String user1 = (String) session.getAttribute("user");
         String admin_course = (String) session.getAttribute("admin_course");
 
@@ -47,12 +51,13 @@ public class FacultyDashController {
 
         long cnt = 0;
         for (Student stu : s1) {
-            if (stu.getCourse() != null && admin_course.equalsIgnoreCase(stu.getCourse().getName())) {
+            if (stu.getCourse() != null &&
+                admin_course.equalsIgnoreCase(stu.getCourse().getName())) {
                 s2.add(stu);
                 cnt++;
             }
         }
-        // ✅ Count of all students who marked attendance (excluding Not Marked)
+
         long attendanceMarkedCount = attendanceService.countAttendanceMarkedToday();
         model.addAttribute("attendancemarkedcount", attendanceMarkedCount);
 
@@ -63,57 +68,54 @@ public class FacultyDashController {
         return "faculty-links/faculty-dashboard";
     }
 
+    // ✅ FACULTY ONLY — Student list
     @GetMapping("/student-list")
     public String showStudentsToFaculty(HttpSession session, Model model) {
+
+        if (!isFaculty(session)) return "redirect:/index";
+
         String user1 = (String) session.getAttribute("user");
         String admin_course = (String) session.getAttribute("admin_course");
-        model.addAttribute("admin_course",admin_course);
+
+        model.addAttribute("admin_course", admin_course);
         model.addAttribute("user", user1);
 
-        List<Student> students = studentService.getAllStudent();
-        List<Student> s2 = new ArrayList<>();
+        List<Student> all = studentService.getAllStudent();
+        List<Student> filtered = new ArrayList<>();
 
-        for (Student stu : students) {
-            if (stu.getCourse() != null && admin_course.equalsIgnoreCase(stu.getCourse().getName())) {
-                s2.add(stu);
+        for (Student stu : all) {
+            if (stu.getCourse() != null &&
+                admin_course.equalsIgnoreCase(stu.getCourse().getName())) {
+                filtered.add(stu);
             }
         }
 
-        // ✅ Today’s date
-        LocalDate today = LocalDate.now();
-        model.addAttribute("today", today.toString());
+        model.addAttribute("today", LocalDate.now().toString());
+        model.addAttribute("students", filtered);
 
-        model.addAttribute("students", s2);
         return "faculty-links/student-list";
     }
 
- // ✅ Show today's attendance (default view)
+    // ✅ FACULTY ONLY — Show today's attendance
     @GetMapping("/attendance")
     public String showAttendance(HttpSession session, Model model) {
-        // ✅ Check if logged in
-        if (session.getAttribute("loggedInUser") == null) {
-            return "redirect:/";
-        }
+
+        if (!isFaculty(session)) return "redirect:/index";
 
         String admin_course = (String) session.getAttribute("admin_course");
         String user1 = (String) session.getAttribute("user");
 
         model.addAttribute("user", user1);
         model.addAttribute("course", admin_course);
+        model.addAttribute("today", LocalDate.now().toString());
 
-        // ✅ Today’s date
-        LocalDate today = LocalDate.now();
-        model.addAttribute("today", today.toString());
-
-        // ✅ Get students of this faculty's course
         List<Student> courseStudents = studentService.getAllStudent().stream()
                 .filter(stu -> stu.getCourse() != null &&
                                admin_course.equalsIgnoreCase(stu.getCourse().getName()))
                 .toList();
 
-        // ✅ Attendance map for today
         Map<Long, String> attendanceMap = new HashMap<>();
-        List<Attendance> todayAttendance = attendanceService.getByDate(today);
+        List<Attendance> todayAttendance = attendanceService.getByDate(LocalDate.now());
 
         for (Attendance att : todayAttendance) {
             if (att.getStudent().getCourse() != null &&
@@ -132,36 +134,27 @@ public class FacultyDashController {
         return "faculty-links/attendance";
     }
 
-
- // ✅ Show attendance by date (restricted to faculty’s course)
+    // ✅ FACULTY ONLY — Attendance by date
     @GetMapping("/attendance-by-date")
-    public String getAttendanceByDate(
-            @RequestParam("date")LocalDate date,
-            HttpSession session,
-            Model model) {
+    public String getAttendanceByDate(@RequestParam("date") LocalDate date,
+                                      HttpSession session,
+                                      Model model) {
 
-        if (session.getAttribute("loggedInUser") == null) {
-            return "redirect:/";
-        }
+        if (!isFaculty(session)) return "redirect:/index";
 
         String admin_course = (String) session.getAttribute("admin_course");
         String user1 = (String) session.getAttribute("user");
 
-        // ✅ Today’s date
-        LocalDate today = LocalDate.now();
-        model.addAttribute("today", today.toString());
-
+        model.addAttribute("today", LocalDate.now().toString());
         model.addAttribute("user", user1);
         model.addAttribute("course", admin_course);
         model.addAttribute("selectedDate", date.toString());
 
-        // ✅ Students of faculty’s course
         List<Student> studentsByCourse = studentService.getAllStudent().stream()
                 .filter(stu -> stu.getCourse() != null &&
                                admin_course.equalsIgnoreCase(stu.getCourse().getName()))
                 .toList();
 
-        // ✅ Attendance for selected date & faculty’s course
         Map<Long, String> attendanceMap = new HashMap<>();
         List<Attendance> attendanceList = attendanceService.getByCourseAndDate(admin_course, date);
 
@@ -179,24 +172,28 @@ public class FacultyDashController {
         return "faculty-links/attendance";
     }
 
-
-
+    // ✅ FACULTY ONLY — Allow attendance
     @GetMapping("/allow-attendance")
     public String allowAttendance(HttpSession session) {
+
+        if (!isFaculty(session)) return "redirect:/index";
+
         String courseName = (String) session.getAttribute("admin_course");
 
         if (courseName != null) {
             AttendanceState.openAttendance(courseName);
-            session.setAttribute("message", "Attendance is now open for students of course: " + courseName);
-        } else {
-            session.setAttribute("message", "No course assigned to faculty.");
+            session.setAttribute("message", "Attendance is now open for course: " + courseName);
         }
 
         return "redirect:/attendance";
     }
 
+    // ✅ FACULTY ONLY — Stop attendance
     @GetMapping("/attendance/stop")
     public String stopAttendance(HttpSession session) {
+
+        if (!isFaculty(session)) return "redirect:/index";
+
         String courseName = (String) session.getAttribute("admin_course");
 
         if (courseName != null) {
@@ -207,20 +204,25 @@ public class FacultyDashController {
         return "redirect:/attendance";
     }
 
+    // ✅ FACULTY ONLY — View all attendance for course
     @GetMapping("/total-attendance")
     public String showAllAttendance(HttpSession session, Model model) {
+
+        if (!isFaculty(session)) return "redirect:/index";
+
         String user1 = (String) session.getAttribute("user");
         String admin_course = (String) session.getAttribute("admin_course");
 
         model.addAttribute("today", LocalDate.now().toString());
         model.addAttribute("user", user1);
 
-        List<Student> s1 = studentService.getAllStudent();
-        List<Student> s2 = new ArrayList<>();
+        List<Student> allStudents = studentService.getAllStudent();
+        List<Student> filtered = new ArrayList<>();
 
-        for (Student stu : s1) {
-            if (stu.getCourse() != null && admin_course.equalsIgnoreCase(stu.getCourse().getName())) {
-                s2.add(stu);
+        for (Student stu : allStudents) {
+            if (stu.getCourse() != null &&
+                admin_course.equalsIgnoreCase(stu.getCourse().getName())) {
+                filtered.add(stu);
             }
         }
 
@@ -234,21 +236,26 @@ public class FacultyDashController {
             }
         }
 
-        model.addAttribute("students", s2);
+        model.addAttribute("students", filtered);
         model.addAttribute("attendanceMap", attendanceMap);
-        model.addAttribute("totalStudents", s2.size());
+        model.addAttribute("totalStudents", filtered.size());
 
         return "faculty-links/total-attendance";
     }
 
+    // ✅ FACULTY ONLY — Save attendance for a student
     @PostMapping("/attendance/save")
     public String saveAttendance(@RequestParam Long studentId,
                                  @RequestParam String status,
                                  @RequestParam String name,
                                  @RequestParam String date,
-                                 RedirectAttributes redirectAttributes) {
+                                 RedirectAttributes redirectAttributes,
+                                 HttpSession session) {
+
+        if (!isFaculty(session)) return "redirect:/index";
 
         Student student = studentService.getStudentById(studentId);
+
         if (student == null) {
             redirectAttributes.addFlashAttribute("errorMessage", "Student not found!");
             return "redirect:/student-attendance";
@@ -258,13 +265,23 @@ public class FacultyDashController {
         attendance.setDate(LocalDate.parse(date));
         attendance.setStatus(status);
         attendance.setName(student.getName());
-        attendance.setCourse(student.getCourse() != null ? student.getCourse().getName() : "N/A");
+        attendance.setCourse(student.getCourse() != null
+                ? student.getCourse().getName() : "N/A");
         attendance.setStudent(student);
 
         attendanceService.saveAttendance(attendance);
 
         redirectAttributes.addFlashAttribute("savedStudentId", studentId);
         redirectAttributes.addFlashAttribute("message", "Attendance saved successfully!");
+
         return "redirect:/student-attendance";
+    }
+
+    // ✅ Helper: Faculty check
+    private boolean isFaculty(HttpSession session) {
+        if (session == null) return false;
+        Object user = session.getAttribute("loggedInUser");
+        String role = (String) session.getAttribute("role");
+        return user != null && "faculty".equals(role);
     }
 }

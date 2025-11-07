@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.erp.model.Login;
-import com.erp.model.Student;
 import com.erp.repositories.LoginRepository;
 
 @Service
@@ -14,6 +13,11 @@ public class LoginService {
 
 	    public Login getUserByName(String username) {
 	        return loginRepo.findByName(username); // returns null if not found
+	    }
+	    
+	    // ✅ Find user by email only
+	    public Login getUserByEmail(String email) {
+	        return loginRepo.findByEmail(email);
 	    }
 	    
 	    public Login saveLogin(Login login) {

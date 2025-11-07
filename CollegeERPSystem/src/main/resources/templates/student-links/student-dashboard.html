@@ -5,6 +5,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <title>Student Dashboard</title>
   <link rel="stylesheet" href="dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
     .summary-cards {
       display: flex;
@@ -129,6 +130,52 @@
   <a href="#" style="display: block; padding: 10px; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 5px;">
     <i class="fas fa-file-invoice" style="margin-right: 10px;"></i> Reports
   </a>
+  
+   <!-- ✅ UPDATED STYLED LOGOUT WITH SWEETALERT2 -->
+  <a href="#" 
+     onclick="openLogoutConfirm(event)"
+     style="
+         display: block;
+         padding: 10px;
+         color: #ffffff;
+         text-decoration: none;
+         font-size: 14px;
+         margin-bottom: 5px;
+         background-color: #e74c3c;
+         border-radius: 6px;
+         font-weight: 600;
+         transition: 0.3s;
+         cursor: pointer;
+     "
+     onmouseover="this.style.backgroundColor='#c0392b';"
+     onmouseout="this.style.backgroundColor='#e74c3c';">
+      <i class="fas fa-sign-out-alt" style="margin-right: 10px;"></i> Logout
+  </a>
+  <!-- ✅ Isolated Logout SweetAlert Script -->
+<script>
+function openLogoutConfirm(event) {
+    event.preventDefault();
+
+    Swal.fire({
+        title: 'Logout Confirmation',
+        text: 'Are you sure you want to logout?',
+        icon: 'warning',
+        background: '#ffffff',
+        color: 'black',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, Logout',
+        cancelButtonText: 'Cancel',
+        confirmButtonColor: '#e74c3c',
+        cancelButtonColor: '#3085d6',
+        allowOutsideClick: false,
+        allowEscapeKey: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = '/logout';
+        }
+    });
+}
+</script>
 </nav>
 
 

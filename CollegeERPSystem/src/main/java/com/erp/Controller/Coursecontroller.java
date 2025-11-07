@@ -3,6 +3,7 @@ package com.erp.Controller;
 import java.time.LocalDate;
 import java.util.List;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,9 +27,13 @@ public class Coursecontroller {
     @Autowired
     private courseService courseServ;
 
-    // ✅ Show all courses
+    // ✅ Only admin allowed — session protected
     @GetMapping("/course-management")
-    public String showStudents(Model model) {
+    public String showStudents(Model model, HttpSession session) {
+
+        // ✅ Route protection
+        if (!isAdmin(session)) return "redirect:/index";
+
         LocalDate today = LocalDate.now();
         model.addAttribute("today", today.toString());
 
@@ -38,18 +43,24 @@ public class Coursecontroller {
         return "admin-links/course-management";
     }
 
-    // ✅ Open form to add new course
+    // ✅ Admin only
     @GetMapping("/add-course")
-    public String showCourseForm(Model model) {
+    public String showCourseForm(Model model, HttpSession session) {
+
+        if (!isAdmin(session)) return "redirect:/index";
+
         model.addAttribute("course", new Course());
         model.addAttribute("title", "Add New Course");
         model.addAttribute("formAction", "/save-course");
         return "admin-links/course-form";
     }
 
-    // ✅ Open form to update course
+    // ✅ Admin only
     @GetMapping("/update-course/{id}")
-    public String editCourseForm(@PathVariable Long id, Model model) {
+    public String editCourseForm(@PathVariable Long id, Model model, HttpSession session) {
+
+        if (!isAdmin(session)) return "redirect:/index";
+
         Course course = courseServ.getCourseById(id);
         model.addAttribute("course", course);
         model.addAttribute("title", "Update Course");
@@ -57,17 +68,27 @@ public class Coursecontroller {
         return "admin-links/course-form";
     }
 
-    // ✅ Save or update course
+    // ✅ Admin only
     @PostMapping("/save-course")
-    public String saveCourse(@ModelAttribute Course course, RedirectAttributes redirectAttributes) {
+    public String saveCourse(@ModelAttribute Course course,
+                             RedirectAttributes redirectAttributes,
+                             HttpSession session) {
+
+        if (!isAdmin(session)) return "redirect:/index";
+
         courseServ.savecourse(course);
         redirectAttributes.addFlashAttribute("message", "✅ Course saved successfully!");
         return "redirect:/course-management";
     }
 
-    // ✅ Delete course by ID
+    // ✅ Admin only
     @PostMapping("/delete-course")
-    public String deleteCourse(@RequestParam("id") Course course, RedirectAttributes redirectAttributes) {
+    public String deleteCourse(@RequestParam("id") Course course,
+                               RedirectAttributes redirectAttributes,
+                               HttpSession session) {
+
+        if (!isAdmin(session)) return "redirect:/index";
+
         try {
             courseServ.deletecourse(course);
             redirectAttributes.addFlashAttribute("message", "✅ Course deleted successfully!");
@@ -77,5 +98,13 @@ public class Coursecontroller {
             redirectAttributes.addFlashAttribute("error", "⚠️ Something went wrong while deleting course!");
         }
         return "redirect:/course-management";
+    }
+
+    // ✅ Helper method: Admin check
+    private boolean isAdmin(HttpSession session) {
+        if (session == null) return false;
+        Object user = session.getAttribute("loggedInUser");
+        Object role = session.getAttribute("role");
+        return (user != null && "admin".equals(role));
     }
 }
